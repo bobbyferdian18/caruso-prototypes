@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caruso Investor Portal – New Application</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #f5f6fa; color: #0a0a0a; font-size: 14px;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+
+        /* ─── TOPBAR ──────────────────────────────────────────── */
+        .topbar {
+            height: 56px; background: #1e293b;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px; flex-shrink: 0;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .topbar-logo {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .topbar-brand { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+        .topbar-check {
+            width: 20px; height: 20px; border-radius: 4px;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            display: flex; align-items: center; justify-content: center; margin-left: 2px;
+        }
+        .topbar-nav { display: flex; align-items: center; gap: 4px; }
+        .topbar-nav a {
+            color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500;
+            text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.15s;
+        }
+        .topbar-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .topbar-nav a.active { color: #fff; }
+        .notif-count {
+            font-size: 10px; background: #6366f1; color: #fff;
+            border-radius: 10px; padding: 1px 6px; font-weight: 700;
+            margin-left: 4px; position: relative; top: -1px;
+        }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        /* ─── BREADCRUMB ──────────────────────────────────────── */
+        .breadcrumb-bar {
+            font-size: 12px; color: #94a3b8; padding: 8px 32px; background: #f5f6fa;
+        }
+        .breadcrumb-bar a { color: #94a3b8; text-decoration: none; }
+        .breadcrumb-bar a:hover { text-decoration: underline; }
+        .breadcrumb-bar .current { color: #6366f1; font-weight: 500; }
+
+        /* ─── PAGE ────────────────────────────────────────────── */
+        .page-content { flex: 1; padding: 24px 32px 40px; max-width: 760px; }
+        .page-title { font-size: 22px; font-weight: 600; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 4px; }
+        .page-subtitle { font-size: 14px; color: #64748b; margin-bottom: 28px; }
+
+        /* ─── FORM SECTIONS ───────────────────────────────────── */
+        .form-section {
+            background: #fff; border-radius: 12px; border: 1px solid #e2e8f0;
+            padding: 24px; margin-bottom: 20px;
+        }
+        .form-section.adviser-section {
+            background: #f8f6ff; border-color: #e0dcf9;
+        }
+        .section-title {
+            font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 4px;
+        }
+        .section-subtitle {
+            font-size: 12px; color: #94a3b8; margin-bottom: 20px;
+        }
+        .section-note {
+            font-size: 12px; color: #7c7c9a; margin-top: 16px; padding-top: 12px;
+            border-top: 1px solid #eae7f7; display: flex; align-items: center; gap: 6px;
+        }
+        .adviser-section .section-note { border-top-color: #e0dcf9; }
+
+        /* Fields */
+        .field-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        }
+        .field-grid .full { grid-column: 1 / -1; }
+        .field {
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .field label {
+            font-size: 13px; font-weight: 500; color: #334155;
+        }
+        .field input, .field select, .field textarea {
+            height: 40px; border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 0 12px; font-size: 14px; color: #334155;
+            font-family: inherit; background: #fff; outline: none;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .field input[readonly] {
+            background: #f1eefc; color: #5b5280; border-color: #e0dcf9; cursor: default;
+        }
+        .field textarea {
+            height: 80px; padding: 10px 12px; resize: vertical;
+        }
+        .field select {
+            appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        /* Amount input */
+        .amount-wrapper {
+            position: relative;
+        }
+        .amount-wrapper .currency {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            font-size: 14px; color: #64748b; font-weight: 500;
+        }
+        .amount-wrapper input {
+            padding-left: 42px;
+        }
+
+        /* ─── FORM FOOTER ─────────────────────────────────────── */
+        .form-footer {
+            display: flex; align-items: center; justify-content: flex-end;
+            gap: 12px; padding-top: 8px;
+        }
+        .btn-secondary {
+            height: 40px; padding: 0 20px; background: #fff; border: 1px solid #e2e8f0;
+            border-radius: 8px; font-size: 14px; font-weight: 500; color: #334155;
+            cursor: pointer; font-family: inherit;
+        }
+        .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-primary {
+            height: 40px; padding: 0 22px; background: #6366f1; color: #fff;
+            border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        .btn-primary:hover { background: #4f46e5; }
+
+        /* ─── FOOTER ──────────────────────────────────────────── */
+        .portal-footer {
+            padding: 24px 32px; display: flex; align-items: center;
+            justify-content: space-between; font-size: 12px; color: #94a3b8;
+        }
+        .portal-footer a { color: #94a3b8; text-decoration: none; }
+        .portal-footer a:hover { color: #64748b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-logo">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="topbar-brand">Ventura</span>
+        <div class="topbar-check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+    </div>
+    <div class="topbar-nav">
+        <a href="#">Portfolio</a>
+        <a href="#" class="active">Invest</a>
+        <a href="#">Trade</a>
+        <a href="#">Document</a>
+        <a href="#">Transactions</a>
+        <a href="#">Notifications <span class="notif-count">99</span></a>
+    </div>
+    <div class="topbar-right">
+        <div class="avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+    </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+    <a href="#">Portfolio</a> &nbsp;›&nbsp; <a href="#">Bradshaw Investment Group</a> &nbsp;›&nbsp; <span class="current">New Application</span>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <h1 class="page-title">New Application</h1>
+    <p class="page-subtitle">Applying on behalf of Bradshaw Investment Group</p>
+
+    <!-- Section 1: Adviser Details (read-only) -->
+    <div class="form-section adviser-section">
+        <div class="section-title">Adviser Details</div>
+        <div class="section-subtitle">Pre-populated from your adviser profile</div>
+        <div class="field-grid">
+            <div class="field">
+                <label>Adviser Name</label>
+                <input type="text" value="Sarah Mitchell" readonly>
+            </div>
+            <div class="field">
+                <label>AFS Representative Number</label>
+                <input type="text" value="001234567" readonly>
+            </div>
+            <div class="field">
+                <label>Adviser Company</label>
+                <input type="text" value="Mitchell Wealth Partners" readonly>
+            </div>
+            <div class="field">
+                <label>Dealer Group</label>
+                <input type="text" value="Fortnum Financial Advisers" readonly>
+            </div>
+        </div>
+        <div class="section-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c7c9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            These details are from your adviser profile and cannot be edited here.
+        </div>
+    </div>
+
+    <!-- Section 2: Application Details -->
+    <div class="form-section">
+        <div class="section-title">Application Details</div>
+        <div class="section-subtitle">Select the fund and investment details</div>
+        <div class="field-grid">
+            <div class="field">
+                <label>Fund</label>
+                <select>
+                    <option selected>Ventura Growth Fund</option>
+                    <option>Ventura Income Fund</option>
+                    <option>Ventura Property Trust</option>
+                    <option>Ventura Credit Fund</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Unit Class</label>
+                <select>
+                    <option selected>Ordinary</option>
+                    <option>Class A</option>
+                    <option>Wholesale</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Investment Amount</label>
+                <div class="amount-wrapper">
+                    <span class="currency">AUD</span>
+                    <input type="text" placeholder="0.00">
+                </div>
+            </div>
+            <div class="field">
+                <label>Payment Method</label>
+                <select>
+                    <option>Select payment method...</option>
+                    <option>Bank Transfer</option>
+                    <option>BPAY</option>
+                    <option>Direct Debit</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Additional Information -->
+    <div class="form-section">
+        <div class="section-title">Additional Information</div>
+        <div class="section-subtitle">Optional details for this application</div>
+        <div class="field-grid">
+            <div class="field">
+                <label>Source of Funds</label>
+                <select>
+                    <option>Select source of funds...</option>
+                    <option>Employment income</option>
+                    <option>Business income</option>
+                    <option>Investment returns</option>
+                    <option>Superannuation</option>
+                    <option>Inheritance</option>
+                    <option>Sale of assets</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="field full">
+                <label>Notes</label>
+                <textarea placeholder="Add any additional notes for this application..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form footer -->
+    <div class="form-footer">
+        <button class="btn-secondary">Cancel</button>
+        <button class="btn-primary">Submit Application</button>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="portal-footer">
+    <span>Investor Portal by Caruso</span>
+    <div style="display:flex;gap:24px;">
+        <a href="#">[Manager Name] terms &amp; privacy</a>
+        <a href="#">Caruso terms &amp; privacy</a>
+    </div>
+</div>
+
+</body>
+</html>
