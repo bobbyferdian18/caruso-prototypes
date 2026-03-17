@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caruso – Base Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* SF Pro Text fonts: using system font stack (base64 fonts removed for GitHub) */
+    /* Full version with embedded fonts available locally */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, 'SF Pro Text', sans-serif;
+      background: #112c37;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP BAR ─────────────────────────────────────────────── */
+    .topbar {
+      background: #112c37;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px 0 0;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .topbar-logo-area {
+      width: 220px;
+      height: 60px;
+      background: #112c37;
+      display: flex;
+      align-items: center;
+      padding: 10px 10px 10px 16px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .topbar-logo-area img {
+      height: 30px;
+      width: auto;
+    }
+
+    .topbar-search {
+      background: rgba(104, 122, 144, 0.6);
+      border-radius: 6px;
+      height: 36px;
+      width: 380px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .topbar-search svg { flex-shrink: 0; opacity: 0.8; }
+
+    .topbar-search span {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: -0.05px;
+    }
+
+    .topbar-btn {
+      margin-left: 10px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 6px;
+      height: 36px;
+      background: #112c37;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .topbar-spacer {
+      flex: 1;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────── */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #112c37;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .workspace-content {
+      flex: 1;
+      overflow-y: auto;
+      background: white;
+      border-radius: 4px 0 0 0;
+    }
+
+    /* ─── SIDEBAR STYLES ─────────────────────────────────────────────── */
+    .sidebar-section-title {
+      font-size: 11px;
+      uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.45);
+      padding: 16px 16px 8px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 0 8px;
+      margin: 0;
+    }
+
+    .sidebar-nav-item {
+      padding: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      border-radius: 6px;
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .sidebar-nav-item:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .sidebar-nav-item.active {
+      background: #7f6df1;
+      color: white;
+    }
+
+    /* ─── TABLE STYLES ─────────────────────────────────────────────── */
+    .table-container {
+      padding: 24px;
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .table-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a0a0a;
+    }
+
+    .table-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn, .view-btn, .btn {
+      background: white;
+      border: 1px solid #d8dae5;
+      border-radius: 8px;
+      padding: 0 12px;
+      height: 36px;
+      font-size: 13px;
+      color: #0a0a0a;
+      cursor: pointer;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn.primary {
+      background: #7f6df1;
+      color: white;
+      border: none;
+      font-weight: 700;
+      border-radius: 6px;
+    }
+
+    .view-btn { height: 32px; }
+
+    .view-badge {
+      background: #d6e0ff;
+      color: #2952cc;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    thead {
+      background: #f9fafb;
+      border-bottom: 1px solid #f0f2f5;
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      uppercase;
+      letter-spacing: 0.5px;
+      color: #8c95a6;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0 16px;
+      height: 56px;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 13px;
+      color: #0a0a0a;
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Sticky columns */
+    th:first-child, td:first-child {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 2;
+    }
+
+    thead th:first-child {
+      background: #f9fafb;
+    }
+
+    th:first-child {
+      border-right: 1px solid #e6e8f0;
+    }
+
+    td:first-child {
+      border-right: 1px solid #e6e8f0;
+    }
+
+    /* Last column sticky */
+    th:last-child, td:last-child {
+      position: sticky;
+      right: 0;
+      background: white;
+      text-align: right;
+    }
+
+    thead th:last-child {
+      background: #f9fafb;
+    }
+
+    th:last-child::before,
+    td:last-child::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #e6e8f0;
+    }
+
+    th:last-child, td:last-child {
+      position: relative;
+    }
+
+    /* Badge styles */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.key-contact {
+      background: #ede9fd;
+      color: #7f6df1;
+    }
+
+    .badge.adviser {
+      background: #e7f5ee;
+      color: #2e7d57;
+    }
+
+    .badge.investor {
+      background: #e3f0fb;
+      color: #1a6ea8;
+    }
+
+    .badge.prospect {
+      background: #fef3e8;
+      color: #c07514;
+    }
+
+    /* Icon button */
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e0e4ea;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .icon-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #949AB0;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      font-size: 13px;
+      color: #8c95a6;
+      padding: 16px 24px 0;
+    }
+
+    .breadcrumb a {
+      color: #8c95a6;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .breadcrumb .active {
+      color: #7f6df1;
+      font-weight: 600;
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+      position: absolute;
+      background: white;
+      border: 1px solid #d8dae5;
+      border-radius: 8px;
+      min-width: 200px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: none;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-menu-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #0a0a0a;
+    }
+
+    .dropdown-menu-item:hover {
+      background: #f9fafb;
+    }
+
+    .dropdown-menu-item.divider {
+      border-top: 1px solid #e6e8f0;
+      padding: 0;
+      height: 0;
+      cursor: default;
+    }
+
+    .dropdown-menu-item.divider:hover {
+      background: transparent;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d8dae5;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c1c7d8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-logo-area">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
+      </svg>
+      <span style="color: white; font-size: 14px; font-weight: 600;">Caruso</span>
+    </div>
+    <div class="topbar-search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="7" cy="7" r="5.5" />
+        <path d="M11 11l3 3" />
+      </svg>
+      <span>Search</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn">Chat</button>
+    <button class="topbar-btn">+ Create</button>
+  </div>
+
+  <div class="main-container">
+    <aside class="sidebar">
+      <div class="sidebar-section-title">MENU</div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item active">Dashboard</li>
+        <li class="sidebar-nav-item">Prospects</li>
+        <li class="sidebar-nav-item">Holdings</li>
+        <li class="sidebar-nav-item">Reports</li>
+        <li class="sidebar-nav-item">Settings</li>
+      </ul>
+
+      <div class="sidebar-section-title" style="margin-top: 24px;">VIEWS</div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">Active Prospects</li>
+        <li class="sidebar-nav-item">Pipeline</li>
+        <li class="sidebar-nav-item">My Tasks</li>
+      </ul>
+    </aside>
+
+    <div class="content-area">
+      <div class="workspace-content">
+        <div class="table-container">
+          <div class="breadcrumb">
+            <a>Holdings</a>
+            <span> / </span>
+            <span class="active">Adviser View</span>
+          </div>
+
+          <div class="table-header">
+            <h2 class="table-title">Holdings</h2>
+            <div class="table-controls">
+              <button class="filter-btn">Role</button>
+              <button class="filter-btn">Tags</button>
+              <button class="view-btn">
+                <span>Views</span>
+                <span class="view-badge">3</span>
+              </button>
+              <button class="btn primary">Export</button>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Fund</th>
+                <th>Commitment</th>
+                <th>Capital Called</th>
+                <th>Capital Returned</th>
+                <th>Current Value</th>
+                <th>IRR</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>HC-001</td>
+                <td>Acme Capital Partners</td>
+                <td><span class="badge adviser">Adviser</span></td>
+                <td>Fund Alpha</td>
+                <td>$5,000,000</td>
+                <td>$2,500,000</td>
+                <td>$1,200,000</td>
+                <td>$4,500,000</td>
+                <td>12.5%</td>
+                <td style="text-align: right; position: relative;">
+                  <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>HC-002</td>
+                <td>Venture Growth LLC</td>
+                <td><span class="badge investor">Investor</span></td>
+                <td>Fund Beta</td>
+                <td>$3,200,000</td>
+                <td>$1,600,000</td>
+                <td>$800,000</td>
+                <td>$3,100,000</td>
+                <td>9.8%</td>
+                <td style="text-align: right; position: relative;">
+                  <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>HC-003</td>
+                <td>Strategic Holdings Inc</td>
+                <td><span class="badge key-contact">Key Contact</span></td>
+                <td>Fund Alpha</td>
+                <td>$8,500,000</td>
+                <td>$4,250,000</td>
+                <td>$2,100,000</td>
+                <td>$7,900,000</td>
+                <td>15.2%</td>
+                <td style="text-align: right; position: relative;">
+                  <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>HC-004</td>
+                <td>Pacific Investment Group</td>
+                <td><span class="badge prospect">Prospect</span></td>
+                <td>Fund Gamma</td>
+                <td>$2,800,000</td>
+                <td>$1,400,000</td>
+                <td>$500,000</td>
+                <td>$2,600,000</td>
+                <td>8.3%</td>
+                <td style="text-align: right; position: relative;">
+                  <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>HC-005</td>
+                <td>Global Equity Partners</td>
+                <td><span class="badge adviser">Adviser</span></td>
+                <td>Fund Beta</td>
+                <td>$6,100,000</td>
+                <td>$3,050,000</td>
+                <td>$1,500,000</td>
+                <td>$5,800,000</td>
+                <td>11.4%</td>
+                <td style="text-align: right; position: relative;">
+                  <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main style="display: none;">
+    <script>
+      // Dropdown menu handler
+      document.querySelectorAll('.icon-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var menu = this.nextElementSibling;
+          if (menu && menu.classList.contains('dropdown-menu')) {
+            menu.classList.toggle('show');
+          }
+        });
+      });
+
+      function closeMenus() {
+        document.querySelectorAll('.dropdown-menu.show').forEach(function(m) {
+          m.classList.remove('show');
+        });
+      }
+      document.addEventListener('click', closeMenus);
+    </script>
+
+  </main>
+</div>
+</body>
+</html>
