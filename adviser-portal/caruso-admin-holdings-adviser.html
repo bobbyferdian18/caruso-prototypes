@@ -73,214 +73,453 @@
       border: 1px solid rgba(255,255,255,0.7);
       border-radius: 6px;
       height: 36px;
-      background: #112c37;
-      color: white;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 0 16px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      cursor: pointer;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.05px;
       white-space: nowrap;
     }
 
-    .topbar-spacer {
-      flex: 1;
+    .topbar-btn:hover { background: rgba(255,255,255,0.1); }
+
+    .topbar-spacer { flex: 1; margin-left: 10px; }
+
+    .topbar-account {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
-    /* ─── LAYOUT ─────────────────────────────────────────────── */
-    .main-container {
+    .topbar-tenant {
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 6px;
+      height: 36px;
+      padding: 0 14px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #dcf2ea;
+      color: #317159;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* ─── BODY LAYOUT ─────────────────────────────────────────── */
+    .layout {
       display: flex;
       flex: 1;
-      overflow: hidden;
+      min-height: 0;
     }
 
+    /* ─── LEFT SIDEBAR ────────────────────────────────────────── */
     .sidebar {
       width: 220px;
       background: #112c37;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      overflow-y: auto;
       flex-shrink: 0;
+      padding: 12px 10px;
       display: flex;
       flex-direction: column;
+      gap: 0;
+      overflow-y: auto;
+      min-height: calc(100vh - 60px);
     }
 
-    .content-area {
+    .nav-section-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 36px;
+      padding: 0 10px;
+      margin-top: 6px;
+    }
+
+    .nav-section-label span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d2cbff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-section-label svg { opacity: 0.7; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: -0.05px;
+      white-space: nowrap;
+      position: relative;
+      transition: background 0.15s;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.08); }
+
+    .nav-item.active {
+      background: #7f6df1;
+      color: #fff;
+    }
+
+    .nav-badge {
+      position: absolute;
+      right: 10px;
+      background: #dcf2ea;
+      color: #317159;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 1px 6px;
+      letter-spacing: 0.2px;
+    }
+
+    /* ─── MAIN CONTENT ────────────────────────────────────────── */
+    .main {
       flex: 1;
+      background: #fff;
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      border-radius: 4px 0 0 0;
       overflow: hidden;
     }
 
-    .workspace-content {
-      flex: 1;
-      overflow-y: auto;
-      background: white;
-      border-radius: 4px 0 0 0;
+    /* Page header breadcrumb */
+    .page-header {
+      height: 46px;
+      border-bottom: 1px solid #e6e8f0;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      background: #fff;
     }
 
-    /* ─── SIDEBAR STYLES ─────────────────────────────────────────────── */
-    .sidebar-section-title {
-      font-size: 11px;
-      uppercase;
-      letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.45);
-      padding: 16px 16px 8px;
-      font-weight: 600;
-    }
-
-    .sidebar-nav {
-      list-style: none;
-      padding: 0 8px;
-      margin: 0;
-    }
-
-    .sidebar-nav-item {
-      padding: 8px;
-      cursor: pointer;
+    .breadcrumb {
       font-size: 13px;
-      color: rgba(255,255,255,0.9);
+      color: #425a70;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb .current {
+      font-weight: 600;
+      color: #7f6df1;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      height: 56px;
+      border-bottom: 1px solid #e6e8f0;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 12px;
+      background: #fff;
+    }
+
+    .search-box {
+      border: 1px solid #e0e4ea;
       border-radius: 6px;
-      margin-bottom: 4px;
+      height: 34px;
+      width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      background: #fafafa;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      color: #425a70;
+      outline: none;
+      width: 100%;
+    }
+
+    .search-box input::placeholder { color: #aab2bd; }
+
+    .filter-btn {
+      border: 1px solid #d8dae5;
+      border-radius: 8px;
+      height: 36px;
+      padding: 0 16px;
+      font-size: 13px;
+      color: #474d66;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .filter-btn:hover { background: #f8f9fb; }
+
+    .toolbar-spacer { flex: 1; }
+
+    .create-btn {
+      background: #7f6df1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      height: 34px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       white-space: nowrap;
     }
 
-    .sidebar-nav-item:hover {
-      background: rgba(255,255,255,0.05);
-    }
+    .create-btn:hover { background: #6c5be0; }
 
-    .sidebar-nav-item.active {
-      background: #7f6df1;
-      color: white;
-    }
-
-    /* ─── TABLE STYLES ─────────────────────────────────────────────── */
-    .table-container {
-      padding: 24px;
-    }
-
-    .table-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .table-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #0a0a0a;
-    }
-
-    .table-controls {
-      display: flex;
-      gap: 8px;
-    }
-
-    .filter-btn, .view-btn, .btn {
-      background: white;
-      border: 1px solid #d8dae5;
-      border-radius: 8px;
-      padding: 0 12px;
-      height: 36px;
-      font-size: 13px;
-      color: #0a0a0a;
-      cursor: pointer;
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn.primary {
-      background: #7f6df1;
-      color: white;
-      border: none;
-      font-weight: 700;
-      border-radius: 6px;
-    }
-
-    .view-btn { height: 32px; }
-
-    .view-badge {
-      background: #d6e0ff;
-      color: #2952cc;
-      border-radius: 8px;
-      padding: 4px 8px;
-      font-size: 11px;
-      font-weight: 600;
+    /* ─── TABLE ───────────────────────────────────────────────── */
+    .table-wrap {
+      flex: 1;
+      overflow: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
+      font-size: 13px;
     }
 
-    thead {
-      background: #f9fafb;
-      border-bottom: 1px solid #f0f2f5;
+    thead tr {
+      border-bottom: 1px solid #e6e8f0;
+      background: #fff;
     }
 
-    th {
-      padding: 12px 16px;
+    thead th {
       text-align: left;
+      padding: 10px 16px;
       font-size: 11px;
       font-weight: 600;
-      uppercase;
-      letter-spacing: 0.5px;
       color: #8c95a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       white-space: nowrap;
+      position: sticky;
+      top: 0;
+      background: #f9fafb;
+      z-index: 1;
+      border-bottom: 1px solid #e6e8f0;
     }
 
-    td {
-      padding: 0 16px;
-      height: 56px;
+    thead th.sortable { cursor: pointer; }
+    thead th.sortable:hover { color: #425a70; }
+    thead th svg { vertical-align: middle; margin-left: 3px; }
+
+    tbody tr {
       border-bottom: 1px solid #f0f2f5;
-      font-size: 13px;
+      transition: background 0.1s;
+      cursor: pointer;
+    }
+
+    tbody tr:hover { background: #f8f9fb; }
+
+    tbody td {
+      padding: 11px 16px;
       color: #0a0a0a;
+      font-size: 13px;
+      white-space: nowrap;
       vertical-align: middle;
     }
 
-    tbody tr:last-child td {
-      border-bottom: none;
+    tbody td.muted { color: #0a0a0a; font-size: 13px; }
+
+    /* Email button — no dropdown icon */
+    .email-btn {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 12px;
+      background: #fff;
+      border: 1px solid #d8dae5;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #696f8c;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .email-btn:hover { background: #f8f9fb; }
+
+    /* Tasks button — white border, blue count badge */
+    .tasks-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 32px;
+      padding: 0 14px;
+      background: #fff;
+      border: 1px solid #d8dae5;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #0a0a0a;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tasks-btn:hover { background: #f8f9fb; }
+    .tasks-btn .task-count {
+      background: #d6e0ff;
+      color: #2952cc;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 2px 7px;
+      line-height: 1;
     }
 
-    /* Sticky columns */
-    th:first-child, td:first-child {
+    /* Investing entities button — same style as tasks */
+    .entities-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 32px;
+      padding: 0 14px;
+      background: #fff;
+      border: 1px solid #d8dae5;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #0a0a0a;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .entities-btn:hover { background: #f8f9fb; }
+    .entities-btn .entity-count {
+      background: #d6e0ff;
+      color: #2952cc;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 2px 7px;
+      line-height: 1;
+    }
+
+    /* Role / tag badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 0 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .badge-key    { background: #ede9fd; color: #7f6df1; }
+    .badge-adviser{ background: #e7f5ee; color: #2e7d57; }
+    .badge-investor { background: #e3f0fb; color: #1a6ea8; }
+    .badge-prospect { background: #fef3e8; color: #c07514; }
+
+    /* View pill */
+    .view-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f4f5f7;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: #425a70;
+      font-weight: 500;
+    }
+
+    .view-pill .count {
+      background: #dde1e8;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+
+    /* Table badges */
+    .tbl-badge {
+      display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+      border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+    }
+    .tbl-badge-green { background: #e7f5ee; color: #2e7d57; }
+    .tbl-badge-grey { background: #f0f2f5; color: #6b7280; }
+
+    /* ID column — sticky left */
+    thead th:first-child,
+    tbody td:first-child {
       position: sticky;
       left: 0;
-      background: white;
       z-index: 2;
+      padding-left: 24px;
+      padding-right: 24px;
+      min-width: 80px;
     }
-
     thead th:first-child {
       background: #f9fafb;
-    }
-
-    th:first-child {
       border-right: 1px solid #e6e8f0;
     }
-
-    td:first-child {
+    tbody td:first-child {
+      background: #fff;
       border-right: 1px solid #e6e8f0;
     }
-
-    /* Last column sticky */
-    th:last-child, td:last-child {
-      position: sticky;
-      right: 0;
-      background: white;
-      text-align: right;
+    tbody tr:hover td:first-child {
+      background: #f8f9fb;
     }
 
+    /* ⋯ action column — sticky right */
+    .add-cell,
     thead th:last-child {
-      background: #f9fafb;
+      width: 72px;
+      min-width: 72px;
+      text-align: center;
+      position: sticky !important;
+      right: 0;
+      z-index: 2;
+      padding-left: 16px;
+      padding-right: 24px;
     }
-
-    th:last-child::before,
-    td:last-child::before {
+    .add-cell { background: #fff; }
+    thead th:last-child { background: #f9fafb; }
+    tbody tr:hover .add-cell { background: #f8f9fb; }
+    .add-cell::before,
+    thead th:last-child::before {
       content: '';
       position: absolute;
       left: 0;
@@ -290,329 +529,895 @@
       background: #e6e8f0;
     }
 
-    th:last-child, td:last-child {
-      position: relative;
-    }
-
-    /* Badge styles */
-    .badge {
+    .add-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid #e0e4ea;
+      background: #fff;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 32px;
-      padding: 0 10px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      uppercase;
-      white-space: nowrap;
+      color: #8896a5;
     }
 
-    .badge.key-contact {
-      background: #ede9fd;
-      color: #7f6df1;
-    }
+    .add-btn:hover { background: #f0f2f5; color: #425a70; }
 
-    .badge.adviser {
-      background: #e7f5ee;
-      color: #2e7d57;
-    }
-
-    .badge.investor {
-      background: #e3f0fb;
-      color: #1a6ea8;
-    }
-
-    .badge.prospect {
-      background: #fef3e8;
-      color: #c07514;
-    }
-
-    /* Icon button */
-    .icon-btn {
-      width: 32px;
-      height: 32px;
+    /* ─── PAGINATION ──────────────────────────────────────────── */
+    .pagination {
+      height: 60px;
+      border-top: 1px solid #e6e8f0;
       display: flex;
       align-items: center;
-      justify-content: center;
-      border: 1px solid #e0e4ea;
-      border-radius: 6px;
-      background: white;
+      padding: 0 24px;
+      gap: 12px;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .pagination .results-label {
+      font-size: 12px;
+      color: #425a70;
+    }
+
+    .pagination-spacer { flex: 1; }
+
+    .per-page-label {
+      font-size: 12px;
+      color: #425a70;
+    }
+
+    .per-page-select {
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      height: 32px;
+      padding: 0 8px;
+      font-size: 12px;
+      color: #425a70;
+      background: #fff;
       cursor: pointer;
+      outline: none;
     }
 
-    .icon-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: #949AB0;
-    }
-
-    /* Breadcrumb */
-    .breadcrumb {
-      font-size: 13px;
-      color: #8c95a6;
-      padding: 16px 24px 0;
-    }
-
-    .breadcrumb a {
-      color: #8c95a6;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .breadcrumb .active {
-      color: #7f6df1;
-      font-weight: 600;
-    }
-
-    /* Dropdown menu */
-    .dropdown-menu {
-      position: absolute;
-      background: white;
-      border: 1px solid #d8dae5;
+    .page-btn {
+      border: none;
+      background: transparent;
+      height: 36px;
+      padding: 0 14px;
       border-radius: 8px;
-      min-width: 200px;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      display: none;
-    }
-
-    .dropdown-menu.show {
-      display: block;
-    }
-
-    .dropdown-menu-item {
-      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       color: #0a0a0a;
     }
 
-    .dropdown-menu-item:hover {
-      background: #f9fafb;
-    }
+    .page-btn:hover { background: #f4f5f7; }
+    .page-btn.next { background: #f5f5f5; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .dropdown-menu-item.divider {
-      border-top: 1px solid #e6e8f0;
-      padding: 0;
-      height: 0;
-      cursor: default;
-    }
-
-    .dropdown-menu-item.divider:hover {
-      background: transparent;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #d8dae5;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #c1c7d8;
-    }
+    /* ─── RESPONSIVE SCROLLBAR ────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 99px; }
   </style>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="topbar-logo-area">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo-area">
+    <!-- Caruso logo (Mono Dark) -->
+    <svg width="120" height="28" viewBox="0 0 151 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5098 0.863125C16.465 -0.012644 17.8386 -0.243916 19.0254 0.270351L24.9375 2.8309C25.5363 3.10231 25.9316 3.70125 25.9316 4.36801V9.87289C25.9316 9.92366 25.9542 9.97498 26.0049 9.99203L29.9277 11.7039L29.9219 11.7157H29.9277C30.5268 11.9869 30.9228 12.5859 30.9229 13.2528V17.4579C30.9229 18.1587 30.6229 18.8258 30.1143 19.3006L15.0576 33.244C14.3455 33.9053 13.3053 34.0804 12.418 33.6961L5.98535 30.9041C5.38639 30.6328 4.99123 30.0339 4.99121 29.367V23.8563C4.99121 23.8054 4.96786 23.7541 4.91699 23.7371L0.995117 22.0252C0.395994 21.7539 0 21.1541 0 20.4871V15.8807C0.00011497 15.4174 0.19829 14.9657 0.542969 14.6493L15.5098 0.863125ZM95.8994 6.86605C96.1392 6.86618 96.327 7.04757 96.3271 7.29379V19.3582C96.3272 22.1535 98.098 23.9764 100.744 23.9764C103.39 23.9764 105.252 22.1146 105.252 19.1766V6.86605H108.969V6.87289C109.209 6.87306 109.396 7.05427 109.396 7.30062V27.5692H105.849C105.609 27.5692 105.421 27.3878 105.421 27.1414V25.0204C104.305 26.9142 102.23 27.9588 99.7002 27.9588C95.1405 27.9588 92.124 24.6437 92.124 19.7987V6.86605H95.8994ZM119.508 6.67172C123.231 6.67172 126.344 8.58482 127.551 11.8602L124.671 13.2284C124.457 13.3321 124.217 13.2419 124.101 13.0282C123.199 11.2899 121.46 10.2127 119.469 10.2127H119.463C117.582 10.2127 116.421 11.1534 116.421 12.5868C116.421 14.0201 117.738 14.6237 119.016 14.9998L122.329 15.9793C125.669 16.9716 127.551 19.0465 127.551 21.8612C127.551 25.4739 124.495 27.9588 119.994 27.9588C115.837 27.9587 112.477 25.7269 111.245 22.2635L114.145 20.8954C114.346 20.7918 114.585 20.8955 114.702 21.0965C115.824 23.2107 117.757 24.488 119.994 24.4881C121.985 24.4881 123.38 23.496 123.38 21.9588C123.38 20.4931 121.959 19.8573 120.682 19.5135L117.484 18.6053C113.956 17.587 112.264 15.5119 112.264 12.7684C112.264 9.11689 115.337 6.67183 119.508 6.67172ZM48.707 6.67172C52.832 6.67178 56.4058 9.00031 57.6641 12.3924L54.3369 13.9422C54.123 14.046 53.8767 13.9422 53.7793 13.7284V13.7157C52.8518 11.8348 50.9835 10.6151 48.707 10.6151V10.6024C45.2111 10.6024 42.6622 13.3909 42.6621 17.2694C42.6621 21.148 45.2111 23.9627 48.707 23.9627C51.1585 23.9627 53.0652 22.5687 53.9668 20.4286L57.3076 22.0243C57.5213 22.1282 57.6187 22.3875 57.5215 22.6014C56.1594 25.6756 52.7022 27.9324 48.707 27.9325C42.6622 27.9325 38.2326 23.3017 38.2324 17.244C38.2324 11.1861 42.6297 6.67172 48.707 6.67172ZM139.258 6.67758C145.186 6.67758 149.843 11.0818 149.843 17.2889C149.843 23.4958 145.14 27.9325 139.258 27.9325C133.375 27.9324 128.647 23.4179 128.646 17.2889C128.646 11.1597 133.297 6.67767 139.258 6.67758ZM68.3984 6.71664C73.1591 6.71664 76.5058 9.58339 76.5059 13.7537V27.1414C76.5056 27.3811 76.3178 27.5691 76.0781 27.5692H72.4912V24.9881C70.9605 26.7781 68.7292 27.783 65.9404 27.783C61.8478 27.783 59.1045 25.4997 59.1045 22.0037C59.1046 18.7609 61.2644 16.3868 65.9082 15.5955L72.3027 14.5516V13.7606C72.3027 11.7824 70.7005 10.3621 68.2812 10.3621C66.2126 10.3623 64.5651 11.4513 63.709 13.0985C63.5988 13.2995 63.3527 13.3968 63.1387 13.2996L60.0381 11.7371C61.1991 8.79901 64.5721 6.70395 68.4053 6.70395L68.3984 6.71664ZM89.9844 6.89145C90.2241 6.89168 90.4121 7.07385 90.4121 7.32016V10.7186H87.7402C84.9513 10.7186 83.0889 12.5154 83.0889 15.6805V27.5692H79.1719C79.0163 27.5692 78.8869 27.4395 78.8867 27.284V6.93734H82.4727C82.7126 6.93734 82.9012 7.11873 82.9014 7.36508V9.73227C83.9262 7.70894 85.7881 6.89145 88.2461 6.89145H89.9844ZM23.626 10.3475C22.7951 9.98578 21.8339 10.1553 21.167 10.7713L7.46094 23.4666C7.35369 23.5628 7.37633 23.749 7.51758 23.8055L11.6885 25.6248C12.8754 26.1448 14.2489 25.9079 15.2041 25.0262L28.4531 12.7723L28.4473 12.7616C28.5547 12.6655 28.5319 12.4782 28.3906 12.4217L23.626 10.3475ZM66.7314 18.8065C64.5004 19.1762 63.502 20.2983 63.502 21.8289C63.502 23.3596 64.7992 24.4364 66.6152 24.4364C70.0072 24.4362 72.3095 22.0105 72.3096 18.9168V17.8338L66.7314 18.8065ZM139.258 10.6278C135.691 10.6279 133.07 13.4558 133.07 17.2889C133.07 21.1219 135.691 23.9822 139.258 23.9823C142.78 23.9823 145.445 21.1349 145.445 17.2889C145.445 13.4427 142.825 10.6278 139.258 10.6278ZM18.6289 1.47934C17.7983 1.11792 16.8377 1.28742 16.1709 1.90316L2.45898 14.6034C2.35159 14.6994 2.37432 14.8867 2.51562 14.9432V14.9315L6.68652 16.7518C7.87343 17.2717 9.24699 17.0339 10.2021 16.1522L23.4502 3.89828C23.5575 3.79661 23.5356 3.61021 23.3945 3.55355L18.6289 1.47934Z" fill="white"/>
+    </svg>
+    <!-- collapse chevron -->
+    <button style="background:transparent;border:none;cursor:pointer;opacity:0.5;padding:4px;border-radius:5px;" title="Collapse sidebar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
       </svg>
-      <span style="color: white; font-size: 14px; font-weight: 600;">Caruso</span>
-    </div>
-    <div class="topbar-search">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="7" cy="7" r="5.5" />
-        <path d="M11 11l3 3" />
-      </svg>
-      <span>Search</span>
-    </div>
-    <div class="topbar-spacer"></div>
-    <button class="topbar-btn">Chat</button>
-    <button class="topbar-btn">+ Create</button>
+    </button>
   </div>
 
-  <div class="main-container">
-    <aside class="sidebar">
-      <div class="sidebar-section-title">MENU</div>
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-item active">Dashboard</li>
-        <li class="sidebar-nav-item">Prospects</li>
-        <li class="sidebar-nav-item">Holdings</li>
-        <li class="sidebar-nav-item">Reports</li>
-        <li class="sidebar-nav-item">Settings</li>
-      </ul>
+  <!-- search -->
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <span>Search Caruso</span>
+  </div>
 
-      <div class="sidebar-section-title" style="margin-top: 24px;">VIEWS</div>
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-item">Active Prospects</li>
-        <li class="sidebar-nav-item">Pipeline</li>
-        <li class="sidebar-nav-item">My Tasks</li>
-      </ul>
-    </aside>
+  <!-- chat -->
+  <button class="topbar-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    Chat
+  </button>
 
-    <div class="content-area">
-      <div class="workspace-content">
-        <div class="table-container">
-          <div class="breadcrumb">
-            <a>Holdings</a>
-            <span> / </span>
-            <span class="active">Adviser View</span>
+  <!-- create -->
+  <button class="topbar-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Create
+  </button>
+
+  <div class="topbar-spacer"></div>
+
+  <div class="topbar-account">
+    <div class="topbar-tenant">Ventura</div>
+    <div class="topbar-divider"></div>
+    <div class="avatar">BP</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <nav class="sidebar">
+    <!-- CRM -->
+    <div class="nav-section-label">
+      <span>CRM</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-item">Contacts</div>
+    <div class="nav-item active">Investing Entities</div>
+    <div class="nav-item">Adviser Companies</div>
+    <div class="nav-item">Dealer Groups</div>
+    <div class="nav-item">Tasks</div>
+    <div class="nav-item">Activity</div>
+    <div class="nav-item">Communications</div>
+
+    <!-- REGISTRY -->
+    <div class="nav-section-label" style="margin-top:8px;">
+      <span>Registry</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-item">Funds</div>
+    <div class="nav-item">Capital Raises</div>
+    <div class="nav-item">Applications</div>
+
+    <!-- FINANCE -->
+    <div class="nav-section-label" style="margin-top:8px;">
+      <span>Finance</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-item">
+      Deposits
+      <span class="nav-badge">20</span>
+    </div>
+    <div class="nav-item">Distributions</div>
+    <div class="nav-item">Transactions</div>
+
+    <!-- DATA & REPORTING -->
+    <div class="nav-section-label" style="margin-top:8px;">
+      <span>Data &amp; Reporting</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-item">Reports</div>
+    <div class="nav-item">Statements</div>
+    <div class="nav-item">File Converter</div>
+    <div class="nav-item">Audit Log</div>
+    <div class="nav-item">Imports</div>
+
+    <!-- SETTINGS -->
+    <div class="nav-section-label" style="margin-top:8px;">
+      <span>Settings</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-item">Teammates</div>
+    <div class="nav-item">Configurations</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <style>
+      /* Entity header */
+      .entity-banner { padding: 20px 24px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+      .entity-id { display: flex; align-items: center; gap: 14px; }
+      .entity-avatar {
+        width: 44px; height: 44px; border-radius: 50%; background: #ede9fd; color: #7f6df1;
+        font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+      }
+      .entity-name { font-size: 16px; font-weight: 600; color: #0a0a0a; }
+      .entity-sub { font-size: 12px; color: #8c95a6; margin-top: 2px; }
+      .entity-actions { display: flex; gap: 8px; align-items: center; }
+      .entity-actions button {
+        height: 32px; padding: 0 12px; background: #fff; border: 1px solid #d8dae5;
+        border-radius: 6px; font-size: 12px; color: #474d66; cursor: pointer;
+        font-family: 'SF Pro Text', -apple-system, sans-serif; white-space: nowrap;
+      }
+      .entity-actions button:hover { background: #f8f9fb; }
+      .entity-actions .icon-btn {
+        width: 32px; padding: 0; display: flex; align-items: center; justify-content: center;
+      }
+
+      /* Summary grid */
+      .summary-grid {
+        display: grid; grid-template-columns: repeat(6, 1fr);
+        column-gap: 16px; row-gap: 24px;
+        padding: 24px 24px; border-bottom: 1px solid #e6e8f0;
+      }
+      .summary-item {}
+      .summary-label { font-size: 10px; font-weight: 600; color: #8c95a6; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+      .summary-value { font-size: 13px; color: #0a0a0a; display: flex; align-items: center; gap: 6px; }
+      .summary-value .badge-sm {
+        display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+        border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      }
+      .badge-blue-sm { background: #e3f0fb; color: #1a6ea8; }
+      .badge-count-sm {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 20px; height: 20px; padding: 0 6px; background: #d6e0ff;
+        color: #2952cc; border-radius: 10px; font-size: 11px; font-weight: 600;
+      }
+
+      /* Tab bar */
+      .tab-bar {
+        display: flex; align-items: center; gap: 0; padding: 0 24px;
+        border-bottom: 1px solid #e6e8f0; overflow-x: auto;
+      }
+      .tab-bar a {
+        padding: 10px 14px; font-size: 13px; color: #8c95a6; text-decoration: none;
+        border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s;
+      }
+      .tab-bar a:hover { color: #474d66; }
+      .tab-bar a.active { color: #7f6df1; border-bottom-color: #7f6df1; font-weight: 500; }
+      .tab-bar .tab-count {
+        font-size: 10px; background: #d6e0ff; color: #2952cc;
+        border-radius: 8px; padding: 1px 6px; font-weight: 600; margin-left: 4px;
+      }
+
+      /* Info alert */
+      .info-alert {
+        margin: 16px 24px 0; padding: 10px 14px; border-radius: 6px;
+        background: #e8f1fd; border: 1px solid #b3d0f5; color: #1a4f8a;
+        font-size: 13px; display: flex; align-items: center; gap: 8px;
+      }
+
+      /* Adviser link in table */
+      .adviser-link { color: #7f6df1; cursor: pointer; font-weight: 400; }
+      .adviser-link:hover { text-decoration: underline; }
+      .adviser-none { color: #8c95a6; }
+
+      /* Three-dot menu */
+      .dot-menu-btn {
+        width: 32px; height: 32px; border: 1px solid #e0e4ea; border-radius: 6px;
+        background: #fff; cursor: pointer; display: inline-flex; align-items: center;
+        justify-content: center; font-size: 16px; color: #8c95a6; position: relative;
+      }
+      .dot-menu-btn:hover { background: #f0f2f5; }
+      .dot-dropdown {
+        display: none; position: fixed; width: 180px;
+        background: #fff; border: 1px solid #e0e4ea; border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 200; padding: 4px 0;
+      }
+      .dot-dropdown.show { display: block; }
+      .dot-dropdown a {
+        display: block; padding: 8px 14px; font-size: 13px; color: #474d66;
+        text-decoration: none; cursor: pointer;
+      }
+      .dot-dropdown a:hover { background: #f8f9fb; }
+      .dot-dropdown .sep { height: 1px; background: #f0f2f5; margin: 4px 0; }
+      .dot-dropdown a.assign-action { color: #7f6df1; }
+      .dot-dropdown a.remove-action { color: #c0392b; }
+
+      /* ─── CONFIRM DIALOG ─────────────────────────────── */
+      .confirm-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 300;
+        justify-content: center;
+        align-items: center;
+      }
+      .confirm-overlay.show { display: flex; }
+      .confirm-dialog {
+        background: #fff;
+        border-radius: 12px;
+        padding: 32px;
+        width: 420px;
+        max-width: 90%;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        text-align: center;
+      }
+      .confirm-icon { margin-bottom: 16px; }
+      .confirm-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #0a0a0a;
+        margin: 0 0 8px;
+      }
+      .confirm-desc {
+        font-size: 13px;
+        color: #474d66;
+        margin: 0 0 12px;
+        line-height: 1.5;
+      }
+      .confirm-list {
+        text-align: left;
+        font-size: 13px;
+        color: #474d66;
+        margin: 0 0 12px;
+        padding-left: 20px;
+        line-height: 1.8;
+      }
+      .confirm-note {
+        font-size: 12px;
+        color: #8c95a6;
+        margin: 0 0 24px;
+      }
+      .confirm-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+      .btn-danger {
+        height: 36px;
+        padding: 0 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        font-family: 'SF Pro Text', -apple-system, sans-serif;
+        background: #c0392b;
+        color: #fff;
+      }
+      .btn-danger:hover { background: #a93226; }
+
+      /* ─── SIDE SHEET ─────────────────────────────────── */
+      .sheet-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.35);
+        z-index: 100;
+        justify-content: flex-end;
+      }
+      .sheet-overlay.show { display: flex; }
+      .sheet {
+        width: 590px;
+        max-width: 100%;
+        height: 100%;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+        animation: slideIn 0.2s ease-out;
+      }
+      @keyframes slideIn {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      .sheet-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        background: #7f6df1;
+        flex-shrink: 0;
+      }
+      .sheet-header h2 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+      }
+      .sheet-close {
+        width: 28px; height: 28px;
+        border-radius: 6px;
+        border: none;
+        background: rgba(255,255,255,0.2);
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      .sheet-close:hover { background: rgba(255,255,255,0.3); }
+      .sheet-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+      }
+      .sheet-footer {
+        padding: 16px 24px;
+        border-top: 1px solid #e6e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        flex-shrink: 0;
+        background: #fff;
+      }
+      .sheet-field {
+        margin-bottom: 16px;
+      }
+      .sheet-field label {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        color: #8c95a6;
+        margin-bottom: 6px;
+      }
+      .sheet-field select,
+      .sheet-field input {
+        width: 100%;
+        height: 36px;
+        border: 1px solid #d8dae5;
+        border-radius: 6px;
+        padding: 0 12px;
+        font-size: 13px;
+        color: #0a0a0a;
+        font-family: 'SF Pro Text', -apple-system, sans-serif;
+        outline: none;
+      }
+      .sheet-field select:focus,
+      .sheet-field input:focus { border-color: #7f6df1; }
+      .sheet-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .sheet-section-title {
+        font-size: 11px; font-weight: 600; color: #8c95a6; text-transform: uppercase;
+        letter-spacing: 0.5px; margin: 24px 0 12px; padding-bottom: 8px;
+        border-bottom: 1px solid #f0f2f5;
+      }
+      .sheet-section-title:first-child { margin-top: 0; }
+      .sheet-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
+      .sheet-row-label { color: #8c95a6; }
+      .sheet-row-value { color: #0a0a0a; text-align: right; }
+      .sheet-badge {
+        display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+        border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      }
+      .sheet-badge-green { background: #e7f5ee; color: #2e7d57; }
+      .sheet-badge-blue { background: #e3f0fb; color: #1a6ea8; }
+
+      .sheet-footer-left { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+      .remove-link { color: #c0392b; font-size: 13px; cursor: pointer; background: none; border: none; font-family: inherit; }
+      .remove-link:hover { text-decoration: underline; }
+
+      /* Assign sheet - search results */
+      .adviser-search-input {
+        width: 100%; height: 36px; border: 1px solid #d8dae5; border-radius: 6px;
+        padding: 0 12px 0 36px; font-size: 13px; color: #0a0a0a; outline: none;
+        font-family: 'SF Pro Text', -apple-system, sans-serif;
+        background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238c95a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 12px center no-repeat;
+      }
+      .adviser-search-input:focus { border-color: #7f6df1; }
+      .adviser-result {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px; border: 1px solid #e6e8f0; border-radius: 8px; margin-top: 10px;
+        cursor: pointer; transition: all 0.15s;
+      }
+      .adviser-result:hover { border-color: #7f6df1; background: #faf9ff; }
+      .adviser-result.selected { border-color: #7f6df1; background: #faf9ff; }
+      .adviser-result-info {}
+      .adviser-result-name { font-size: 13px; font-weight: 500; color: #0a0a0a; }
+      .adviser-result-sub { font-size: 12px; color: #8c95a6; margin-top: 2px; }
+      .adviser-result-check {
+        width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d8dae5;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .adviser-result.selected .adviser-result-check {
+        background: #7f6df1; border-color: #7f6df1;
+      }
+    </style>
+
+    <!-- BREADCRUMB -->
+    <div class="page-header">
+      <nav class="breadcrumb">
+        <span>Investing Entities</span>
+        <span>›</span>
+        <span class="current">Lana Kamffer</span>
+      </nav>
+    </div>
+
+    <!-- ENTITY HEADER -->
+    <div class="entity-banner">
+      <div class="entity-id">
+        <div class="entity-avatar">LK</div>
+        <div>
+          <div class="entity-name">Lana Kamffer</div>
+          <div class="entity-sub">ID: 99</div>
+        </div>
+      </div>
+      <div class="entity-actions">
+        <button class="icon-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#474d66" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button>Create task</button>
+        <button>Add note</button>
+        <button>Add document</button>
+        <button>Send email</button>
+        <button>Impersonate key account</button>
+      </div>
+    </div>
+
+    <!-- SUMMARY GRID -->
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-label">No. Tasks</div>
+        <div class="summary-value">View <span class="badge-count-sm">3</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Investing Entity Type</div>
+        <div class="summary-value"><span class="summary-value badge-sm badge-blue-sm">Individual</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Key Account</div>
+        <div class="summary-value">Lana Kamffer</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Certificates</div>
+        <div class="summary-value">Safe Harbour</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Risk Profile</div>
+        <div class="summary-value">No Rating</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">No. Holdings</div>
+        <div class="summary-value">View <span class="badge-count-sm">4</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Portfolio Value</div>
+        <div class="summary-value">NZD 395,986.89</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Tags</div>
+        <div class="summary-value" style="color:#8c95a6;">Add Tags</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">No. Related Parties</div>
+        <div class="summary-value">View <span class="badge-count-sm">1</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Pinned Notes</div>
+        <div class="summary-value">View <span class="badge-count-sm">0</span></div>
+      </div>
+    </div>
+
+    <!-- TAB BAR -->
+    <div class="tab-bar">
+      <a href="#">Activity</a>
+      <a href="#">Tasks <span class="tab-count">3</span></a>
+      <a href="#">Documents</a>
+      <a href="#">Notes</a>
+      <a href="#">Accounts</a>
+      <a href="#">Related Parties</a>
+      <a href="#">Governing Docs</a>
+      <a href="#">Bank Accounts</a>
+      <a href="#">Certificates</a>
+      <a href="#" class="active">Holdings</a>
+      <a href="#">Orders</a>
+      <a href="#">Transactions</a>
+      <a href="#">Distributions</a>
+      <a href="#">Details</a>
+    </div>
+
+    <!-- INFO ALERT -->
+    <div class="info-alert">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a4f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Distribution payments will be made into the bank account that was nominated at the time of processing.
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8c95a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search">
+      </div>
+      <button class="filter-btn" style="font-weight:500;">Status (2)</button>
+      <button class="filter-btn">Fund</button>
+      <button class="filter-btn">Class</button>
+      <span style="font-size:13px; color:#7f6df1; cursor:pointer; margin-left:4px;">Clear all</span>
+      <div class="toolbar-spacer"></div>
+    </div>
+
+    <!-- HOLDINGS TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" style="min-width:70px;">ID <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Date created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Fund <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th>Class</th>
+            <th style="min-width:130px;">Adviser</th>
+            <th class="sortable">No. Units <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th>Class Holding %</th>
+            <th class="sortable">Capital Committed <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Capital Contributed <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Holding Value <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Total Distributed <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th class="sortable">Capital Returned <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th>Distribution Bank Account</th>
+            <th>Redemption Bank Account</th>
+            <th class="sortable">Distributions <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+            <th>Reinvestment</th>
+            <th>Net Distributions Withheld</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1243</td>
+            <td>14 Jan 2026</td>
+            <td>Global Holdings De...</td>
+            <td>Ordinary</td>
+            <td><span class="adviser-link" onclick="showViewSheet()">Sarah Mitchell</span></td>
+            <td>2</td>
+            <td>0.00%</td>
+            <td>NZD 2.00</td>
+            <td>NZD 0.00</td>
+            <td>NZD 2.00</td>
+            <td>NZD 0.00</td>
+            <td>NZD 0.00</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><span class="tbl-badge tbl-badge-green">Enabled</span></td>
+            <td>No</td>
+            <td>NZD 0.00</td>
+            <td class="add-cell">
+              <button class="dot-menu-btn" onclick="toggleMenu(event, 'menu1')">⋯</button>
+              <div class="dot-dropdown" id="menu1">
+                <a href="#">Holding Statement</a>
+                <a href="#">Request unit transfer</a>
+                <a href="#">Create redemption request</a>
+                <a href="#">Update holding settings</a>
+                <div class="sep"></div>
+                <a href="#" class="assign-action" onclick="showAssignSheet(); closeMenus();">Change adviser</a>
+                <a href="#" class="remove-action" onclick="showRemoveConfirm(); closeMenus();">Remove adviser</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>481</td>
+            <td>03 Dec 2024</td>
+            <td>UC 101</td>
+            <td>ord4</td>
+            <td><span class="adviser-link" onclick="showViewSheet()">Sarah Mitchell</span></td>
+            <td>500</td>
+            <td>11.11%</td>
+            <td>NZD 365.00</td>
+            <td>NZD 418.00</td>
+            <td>NZD 1,006.17</td>
+            <td>NZD 1,111.11</td>
+            <td>NZD 0.00</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><span class="tbl-badge tbl-badge-grey">Disabled</span></td>
+            <td>No</td>
+            <td>NZD 0.00</td>
+            <td class="add-cell">
+              <button class="dot-menu-btn" onclick="toggleMenu(event, 'menu2')">⋯</button>
+              <div class="dot-dropdown" id="menu2">
+                <a href="#">Holding Statement</a>
+                <a href="#">Request unit transfer</a>
+                <a href="#">Create redemption request</a>
+                <a href="#">Update holding settings</a>
+                <div class="sep"></div>
+                <a href="#" class="assign-action" onclick="showAssignSheet(); closeMenus();">Change adviser</a>
+                <a href="#" class="remove-action" onclick="showRemoveConfirm(); closeMenus();">Remove adviser</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>413</td>
+            <td>04 Nov 2024</td>
+            <td>Fund that has parti...</td>
+            <td>FTHPU Or...</td>
+            <td><span class="adviser-none">—</span></td>
+            <td>320.08</td>
+            <td>0.62%</td>
+            <td>NZD 328.32</td>
+            <td>NZD 328.32</td>
+            <td>NZD 394,978.72</td>
+            <td>NZD 0.00</td>
+            <td>NZD 6,170.00</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><strong style="font-weight:600;">Default:</strong> 5555-5555-5555-...</td>
+            <td><span class="tbl-badge tbl-badge-green">Enabled</span></td>
+            <td>No</td>
+            <td>NZD 0.00</td>
+            <td class="add-cell">
+              <button class="dot-menu-btn" onclick="toggleMenu(event, 'menu3')">⋯</button>
+              <div class="dot-dropdown" id="menu3">
+                <a href="#">Holding Statement</a>
+                <a href="#">Request unit transfer</a>
+                <a href="#">Create redemption request</a>
+                <a href="#">Update holding settings</a>
+                <div class="sep"></div>
+                <a href="#" class="assign-action" onclick="showAssignSheet(); closeMenus();">Assign adviser</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <span class="results-label">1 to 3 of 3 results</span>
+      <div class="pagination-spacer"></div>
+      <span class="per-page-label">Results per page:</span>
+      <select class="per-page-select"><option>20</option></select>
+      <button class="page-btn" disabled>‹ Previous</button>
+      <button class="page-btn" disabled>Next ›</button>
+    </div>
+
+    <!-- ========== SIDE SHEET: VIEW ADVISER ========== -->
+    <div class="sheet-overlay" id="viewSheet" onclick="if(event.target===this)closeViewSheet()">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h2>Adviser details</h2>
+          <button class="sheet-close" onclick="closeViewSheet()">×</button>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-section-title" style="margin-top:0;">Adviser Profile</div>
+          <div class="sheet-row"><span class="sheet-row-label">Adviser Name</span><span class="sheet-row-value">Sarah Mitchell</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">AFS Representative Number</span><span class="sheet-row-value">001234567</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Adviser Code</span><span class="sheet-row-value">SM-001</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Default Authority Type</span><span class="sheet-row-value">Read-only</span></div>
+
+          <div class="sheet-section-title">Company &amp; Dealer Group</div>
+          <div class="sheet-row"><span class="sheet-row-label">Adviser Company</span><span class="sheet-row-value">Mitchell Wealth Partners</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">ABN</span><span class="sheet-row-value">12 345 678 901</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Dealer Group</span><span class="sheet-row-value">Fortnum Financial Advisers</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">AFSL Number</span><span class="sheet-row-value">227247</span></div>
+
+          <div class="sheet-section-title">Authority &amp; Access</div>
+          <div class="sheet-row"><span class="sheet-row-label">Authority Type</span><span class="sheet-row-value"><span class="sheet-badge sheet-badge-blue">Read only</span></span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Portal Login</span><span class="sheet-row-value"><span class="sheet-badge sheet-badge-green">Enabled</span></span></div>
+
+          <div class="sheet-section-title">Fee Configuration</div>
+          <div class="sheet-row"><span class="sheet-row-label">Fee Type</span><span class="sheet-row-value">OASF (Ongoing Service Fee)</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">OASF Rate</span><span class="sheet-row-value">1.00% p.a.</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Distribution Frequency</span><span class="sheet-row-value">Quarterly</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">GST Treatment</span><span class="sheet-row-value">Exempt</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Effective From</span><span class="sheet-row-value">14 Jan 2026</span></div>
+          <div class="sheet-row"><span class="sheet-row-label">Fee Status</span><span class="sheet-row-value"><span class="sheet-badge sheet-badge-green">Active</span></span></div>
+        </div>
+        <div class="sheet-footer">
+          <div class="sheet-footer-left">
+            <button class="remove-link">Remove adviser</button>
+            <button class="btn-secondary" onclick="closeViewSheet()">Close</button>
           </div>
-
-          <div class="table-header">
-            <h2 class="table-title">Holdings</h2>
-            <div class="table-controls">
-              <button class="filter-btn">Role</button>
-              <button class="filter-btn">Tags</button>
-              <button class="view-btn">
-                <span>Views</span>
-                <span class="view-badge">3</span>
-              </button>
-              <button class="btn primary">Export</button>
-            </div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Fund</th>
-                <th>Commitment</th>
-                <th>Capital Called</th>
-                <th>Capital Returned</th>
-                <th>Current Value</th>
-                <th>IRR</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>HC-001</td>
-                <td>Acme Capital Partners</td>
-                <td><span class="badge adviser">Adviser</span></td>
-                <td>Fund Alpha</td>
-                <td>$5,000,000</td>
-                <td>$2,500,000</td>
-                <td>$1,200,000</td>
-                <td>$4,500,000</td>
-                <td>12.5%</td>
-                <td style="text-align: right; position: relative;">
-                  <button class="icon-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>HC-002</td>
-                <td>Venture Growth LLC</td>
-                <td><span class="badge investor">Investor</span></td>
-                <td>Fund Beta</td>
-                <td>$3,200,000</td>
-                <td>$1,600,000</td>
-                <td>$800,000</td>
-                <td>$3,100,000</td>
-                <td>9.8%</td>
-                <td style="text-align: right; position: relative;">
-                  <button class="icon-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>HC-003</td>
-                <td>Strategic Holdings Inc</td>
-                <td><span class="badge key-contact">Key Contact</span></td>
-                <td>Fund Alpha</td>
-                <td>$8,500,000</td>
-                <td>$4,250,000</td>
-                <td>$2,100,000</td>
-                <td>$7,900,000</td>
-                <td>15.2%</td>
-                <td style="text-align: right; position: relative;">
-                  <button class="icon-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>HC-004</td>
-                <td>Pacific Investment Group</td>
-                <td><span class="badge prospect">Prospect</span></td>
-                <td>Fund Gamma</td>
-                <td>$2,800,000</td>
-                <td>$1,400,000</td>
-                <td>$500,000</td>
-                <td>$2,600,000</td>
-                <td>8.3%</td>
-                <td style="text-align: right; position: relative;">
-                  <button class="icon-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>HC-005</td>
-                <td>Global Equity Partners</td>
-                <td><span class="badge adviser">Adviser</span></td>
-                <td>Fund Beta</td>
-                <td>$6,100,000</td>
-                <td>$3,050,000</td>
-                <td>$1,500,000</td>
-                <td>$5,800,000</td>
-                <td>11.4%</td>
-                <td style="text-align: right; position: relative;">
-                  <button class="icon-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
-  </div>
 
-  <main style="display: none;">
+    <!-- ========== SIDE SHEET: ASSIGN ADVISER ========== -->
+    <div class="sheet-overlay" id="assignSheet" onclick="if(event.target===this)closeAssignSheet()">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h2>Assign adviser</h2>
+          <button class="sheet-close" onclick="closeAssignSheet()">×</button>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-section-title" style="margin-top:0;">Select Adviser</div>
+          <div class="sheet-field" style="margin-bottom:0;">
+            <label>Adviser</label>
+            <select>
+              <option value="" disabled>Select an adviser...</option>
+              <option selected>Sarah Mitchell — Mitchell Wealth Partners (001234567)</option>
+              <option>James Cooper — Cooper Advisory Group (004567890)</option>
+              <option>Emma Whitfield — Whitfield Partners (007891234)</option>
+            </select>
+          </div>
+
+          <div class="sheet-section-title">Access Type</div>
+          <div class="sheet-field">
+            <label>Authority Type</label>
+            <select>
+              <option>Read-only</option>
+              <option>Full</option>
+              <option>Comms-only</option>
+            </select>
+            <span style="display:block; font-size:11px; color:#8c95a6; margin-top:4px;">Pre-populated from adviser's default. Can be overridden per holding.</span>
+          </div>
+
+          <div class="sheet-section-title">Fee Configuration</div>
+          <div class="sheet-field-row">
+            <div class="sheet-field">
+              <label>Fee Type</label>
+              <select>
+                <option>OASF (Ongoing Service Fee)</option>
+                <option>Rebate</option>
+                <option>Both (OASF + Rebate)</option>
+                <option>None</option>
+              </select>
+            </div>
+            <div class="sheet-field">
+              <label>OASF Rate (% p.a.)</label>
+              <input type="text" value="1.00" placeholder="0.00">
+            </div>
+          </div>
+          <div class="sheet-field-row">
+            <div class="sheet-field">
+              <label>Distribution Frequency</label>
+              <select>
+                <option>Quarterly</option>
+                <option>Monthly</option>
+                <option>Annually</option>
+              </select>
+            </div>
+            <div class="sheet-field">
+              <label>GST Treatment</label>
+              <select>
+                <option>Exempt</option>
+                <option>Inclusive</option>
+                <option>Exclusive</option>
+              </select>
+            </div>
+          </div>
+          <div class="sheet-field">
+            <label>Effective From</label>
+            <input type="date" value="2026-03-18">
+            <span style="display:block; font-size:11px; color:#8c95a6; margin-top:4px;">Fees will accrue from this date forward. Configured per issuance on the Fees tab.</span>
+          </div>
+        </div>
+        <div class="sheet-footer">
+          <button class="btn-secondary" onclick="closeAssignSheet()">Cancel</button>
+          <button class="btn-primary">Assign</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== CONFIRM DIALOG: REMOVE ADVISER ========== -->
+    <div class="confirm-overlay" id="removeConfirm" onclick="if(event.target===this)closeRemoveConfirm()">
+      <div class="confirm-dialog">
+        <div class="confirm-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3 class="confirm-title">Remove adviser from holding</h3>
+        <p class="confirm-desc">Are you sure you want to remove <strong>Sarah Mitchell</strong> from this holding? This will:</p>
+        <ul class="confirm-list">
+          <li>Stop adviser fees accruing from today</li>
+          <li>Revoke portal access to this holding</li>
+        </ul>
+        <p class="confirm-note">Any outstanding accrued fees will still be processed.</p>
+        <div class="confirm-actions">
+          <button class="btn-secondary" onclick="closeRemoveConfirm()">Cancel</button>
+          <button class="btn-danger" onclick="closeRemoveConfirm()">Remove adviser</button>
+        </div>
+      </div>
+    </div>
+
     <script>
-      // Dropdown menu handler
-      document.querySelectorAll('.icon-btn').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var menu = this.nextElementSibling;
-          if (menu && menu.classList.contains('dropdown-menu')) {
-            menu.classList.toggle('show');
-          }
-        });
-      });
-
+      function showViewSheet() { document.getElementById('viewSheet').classList.add('show'); closeMenus(); }
+      function closeViewSheet() { document.getElementById('viewSheet').classList.remove('show'); }
+      function showAssignSheet() { document.getElementById('assignSheet').classList.add('show'); closeMenus(); }
+      function closeAssignSheet() { document.getElementById('assignSheet').classList.remove('show'); }
+      function showRemoveConfirm() { document.getElementById('removeConfirm').classList.add('show'); }
+      function closeRemoveConfirm() { document.getElementById('removeConfirm').classList.remove('show'); }
+      function toggleMenu(e, id) {
+        e.stopPropagation();
+        closeMenus();
+        var menu = document.getElementById(id);
+        var btn = e.currentTarget;
+        var rect = btn.getBoundingClientRect();
+        /* Move dropdown to body so it escapes sticky stacking context */
+        document.body.appendChild(menu);
+        menu.style.top = (rect.bottom + 4) + 'px';
+        menu.style.left = (rect.right - 180) + 'px';
+        menu.classList.add('show');
+      }
       function closeMenus() {
-        document.querySelectorAll('.dropdown-menu.show').forEach(function(m) {
+        document.querySelectorAll('.dot-dropdown.show').forEach(function(m) {
           m.classList.remove('show');
         });
       }
