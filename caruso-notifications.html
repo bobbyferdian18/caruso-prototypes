@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caruso – Notifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, 'SF Pro Text', sans-serif;
+      background: #112c37;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP BAR ─── */
+    .topbar { background: #112c37; height: 60px; display: flex; align-items: center; padding: 0 24px 0 0; gap: 0; flex-shrink: 0; }
+    .topbar-logo-area { width: 220px; height: 60px; background: #112c37; display: flex; align-items: center; padding: 10px 10px 10px 16px; gap: 12px; flex-shrink: 0; }
+    .topbar-search { background: rgba(104,122,144,0.6); border-radius: 6px; height: 36px; width: 380px; display: flex; align-items: center; gap: 8px; padding: 0 12px; cursor: pointer; }
+    .topbar-search svg { flex-shrink: 0; opacity: 0.8; }
+    .topbar-search span { font-size: 14px; color: rgba(255,255,255,0.75); }
+    .topbar-btn { margin-left: 10px; border: 1px solid rgba(255,255,255,0.7); border-radius: 6px; height: 36px; padding: 0 14px; display: flex; align-items: center; gap: 6px; cursor: pointer; background: transparent; color: #fff; font-size: 14px; font-weight: 700; white-space: nowrap; }
+    .topbar-btn:hover { background: rgba(255,255,255,0.1); }
+    .topbar-spacer { flex: 1; margin-left: 10px; }
+    .topbar-account { display: flex; align-items: center; gap: 16px; }
+    .topbar-tenant { border: 1px solid rgba(255,255,255,0.7); border-radius: 6px; height: 36px; padding: 0 14px; color: #fff; font-size: 14px; font-weight: 500; display: flex; align-items: center; }
+    .topbar-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.3); }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: #dcf2ea; color: #317159; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+    /* ─── LAYOUT ─── */
+    .layout { display: flex; flex: 1; min-height: 0; }
+    .sidebar { width: 220px; background: #112c37; flex-shrink: 0; padding: 12px 10px; display: flex; flex-direction: column; gap: 0; overflow-y: auto; min-height: calc(100vh - 60px); }
+    .nav-section-label { display: flex; align-items: center; gap: 5px; height: 36px; padding: 0 10px; margin-top: 6px; }
+    .nav-section-label span { font-size: 11px; font-weight: 600; color: #d2cbff; text-transform: uppercase; letter-spacing: 0.5px; }
+    .nav-section-label svg { opacity: 0.7; }
+    .nav-item { display: flex; align-items: center; height: 36px; padding: 0 10px; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); letter-spacing: -0.05px; white-space: nowrap; position: relative; transition: background 0.15s; }
+    .nav-item:hover { background: rgba(255,255,255,0.08); }
+    .nav-item.active { background: #7f6df1; color: #fff; }
+    .nav-badge { position: absolute; right: 10px; background: #dcf2ea; color: #317159; font-size: 11px; font-weight: 600; border-radius: 8px; padding: 1px 6px; }
+
+    /* ─── MAIN ─── */
+    .main { flex: 1; background: #fff; display: flex; flex-direction: column; min-width: 0; border-radius: 4px 0 0 0; overflow: hidden; }
+
+    /* ─── NOTIFICATION PAGE ─── */
+    .notif-page { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+    .notif-page-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 0; }
+    .notif-page-title { font-size: 20px; font-weight: 600; color: #0a0a0a; display: flex; align-items: center; gap: 10px; }
+    .notif-count-badge { background: #c0392b; color: #fff; font-size: 12px; font-weight: 700; border-radius: 10px; padding: 2px 10px; }
+    .notif-actions { display: flex; gap: 8px; }
+    .notif-actions button { height: 34px; padding: 0 14px; border: 1px solid #d8dae5; border-radius: 6px; font-size: 13px; color: #474d66; background: #fff; cursor: pointer; font-family: inherit; }
+    .notif-actions button:hover { background: #f8f9fb; }
+
+    /* Filter bar */
+    .notif-filter-bar { display: flex; align-items: center; gap: 10px; padding: 16px 24px; border-bottom: 1px solid #e6e8f0; }
+    .notif-search { width: 260px; height: 36px; border: 1px solid #d8dae5; border-radius: 8px; padding: 0 12px 0 36px; font-size: 13px; color: #0a0a0a; font-family: inherit; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238c95a6' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 12px center; outline: none; }
+    .notif-search::placeholder { color: #8c95a6; }
+    .notif-search:focus { border-color: #7f6df1; }
+    .filter-btn { height: 36px; padding: 0 14px; border: 1px solid #d8dae5; border-radius: 8px; font-size: 13px; color: #0a0a0a; background: #fff; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+    .filter-btn:hover { background: #f8f9fb; }
+    .filter-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* Notification table */
+    .notif-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .notif-table thead tr { border-bottom: 1px solid #e6e8f0; background: #fff; }
+    .notif-table thead th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; color: #8c95a6; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; background: #f9fafb; border-bottom: 1px solid #e6e8f0; }
+    .notif-table tbody tr { border-bottom: 1px solid #f0f2f5; transition: background 0.1s; cursor: pointer; }
+    .notif-table tbody tr:hover { background: #f8f9fb; }
+    .notif-table tbody tr.unread { background: #fafbff; }
+    .notif-table tbody tr.unread td.msg-cell { font-weight: 600; }
+    .notif-table tbody tr.unread:hover { background: #f0f2ff; }
+    .notif-table tbody td { padding: 0 16px; height: 56px; color: #0a0a0a; font-size: 13px; white-space: nowrap; vertical-align: middle; }
+
+    .notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #7f6df1; display: inline-block; }
+    .notif-unread-dot.read { background: transparent; }
+
+    /* Type badge */
+    .type-badge { height: 24px; display: inline-flex; align-items: center; border-radius: 4px; font-size: 10px; font-weight: 600; padding: 0 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .type-badge.error { background: #fdf2f2; color: #c0392b; }
+    .type-badge.task { background: #ede9fd; color: #7f6df1; }
+
+    /* View button in table */
+    .view-link { font-size: 12px; color: #7f6df1; text-decoration: none; border: 1px solid #d8dae5; border-radius: 6px; padding: 5px 12px; white-space: nowrap; display: inline-block; }
+    .view-link:hover { background: #f8f9fb; }
+
+    /* Message cell truncate */
+    .msg-cell { max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Bell icon */
+    .bell-btn { position: relative; background: transparent; border: none; cursor: pointer; padding: 8px; margin-left: 10px; }
+    .bell-badge { position: absolute; top: 2px; right: 2px; background: #7f6df1; color: #fff; font-size: 9px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* Bell dropdown */
+    .bell-dropdown { position: absolute; top: calc(100% + 8px); right: 0; width: 400px; background: #fff; border: 1px solid #d8dae5; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); overflow: hidden; z-index: 50; display: none; }
+    .bell-dd-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 8px; }
+    .bell-dd-header span { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #8c95a6; letter-spacing: 0.5px; }
+    .bell-dd-header a { font-size: 12px; color: #7f6df1; text-decoration: none; }
+    .bell-dd-item { padding: 12px 16px; border-bottom: 1px solid #f0f2f5; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+    .bell-dd-item:hover { background: #f8f9fb; }
+    .bell-dd-item.unread { background: #fafbff; }
+    .bell-dd-item.unread .bell-dd-msg { font-weight: 600; }
+    .bell-dd-dot { width: 7px; height: 7px; border-radius: 50%; background: #7f6df1; flex-shrink: 0; }
+    .bell-dd-dot.read { background: transparent; }
+    .bell-dd-badge { height: 20px; display: inline-flex; align-items: center; border-radius: 4px; font-size: 9px; font-weight: 600; padding: 0 6px; text-transform: uppercase; letter-spacing: 0.3px; flex-shrink: 0; }
+    .bell-dd-badge.error { background: #fdf2f2; color: #c0392b; }
+    .bell-dd-badge.task { background: #ede9fd; color: #7f6df1; }
+    .bell-dd-body { flex: 1; min-width: 0; }
+    .bell-dd-msg { font-size: 13px; color: #0a0a0a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bell-dd-time { font-size: 11px; color: #8c95a6; flex-shrink: 0; }
+    .bell-dd-view { font-size: 12px; color: #7f6df1; text-decoration: none; border: 1px solid #d8dae5; border-radius: 6px; padding: 4px 10px; flex-shrink: 0; white-space: nowrap; }
+    .bell-dd-view:hover { background: #f8f9fb; }
+    .bell-dd-footer { text-align: center; padding: 12px; border-top: 1px solid #f0f2f5; }
+    .bell-dd-footer a { font-size: 13px; color: #7f6df1; text-decoration: none; font-weight: 500; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo-area">
+    <svg width="120" height="28" viewBox="0 0 151 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5098 0.863125C16.465 -0.012644 17.8386 -0.243916 19.0254 0.270351L24.9375 2.8309C25.5363 3.10231 25.9316 3.70125 25.9316 4.36801V9.87289C25.9316 9.92366 25.9542 9.97498 26.0049 9.99203L29.9277 11.7039L29.9219 11.7157H29.9277C30.5268 11.9869 30.9228 12.5859 30.9229 13.2528V17.4579C30.9229 18.1587 30.6229 18.8258 30.1143 19.3006L15.0576 33.244C14.3455 33.9053 13.3053 34.0804 12.418 33.6961L5.98535 30.9041C5.38639 30.6328 4.99123 30.0339 4.99121 29.367V23.8563C4.99121 23.8054 4.96786 23.7541 4.91699 23.7371L0.995117 22.0252C0.395994 21.7539 0 21.1541 0 20.4871V15.8807C0.00011497 15.4174 0.19829 14.9657 0.542969 14.6493L15.5098 0.863125ZM95.8994 6.86605C96.1392 6.86618 96.327 7.04757 96.3271 7.29379V19.3582C96.3272 22.1535 98.098 23.9764 100.744 23.9764C103.39 23.9764 105.252 22.1146 105.252 19.1766V6.86605H108.969V6.87289C109.209 6.87306 109.396 7.05427 109.396 7.30062V27.5692H105.849C105.609 27.5692 105.421 27.3878 105.421 27.1414V25.0204C104.305 26.9142 102.23 27.9588 99.7002 27.9588C95.1405 27.9588 92.124 24.6437 92.124 19.7987V6.86605H95.8994ZM119.508 6.67172C123.231 6.67172 126.344 8.58482 127.551 11.8602L124.671 13.2284C124.457 13.3321 124.217 13.2419 124.101 13.0282C123.199 11.2899 121.46 10.2127 119.469 10.2127H119.463C117.582 10.2127 116.421 11.1534 116.421 12.5868C116.421 14.0201 117.738 14.6237 119.016 14.9998L122.329 15.9793C125.669 16.9716 127.551 19.0465 127.551 21.8612C127.551 25.4739 124.495 27.9588 119.994 27.9588C115.837 27.9587 112.477 25.7269 111.245 22.2635L114.145 20.8954C114.346 20.7918 114.585 20.8955 114.702 21.0965C115.824 23.2107 117.757 24.488 119.994 24.4881C121.985 24.4881 123.38 23.496 123.38 21.9588C123.38 20.4931 121.959 19.8573 120.682 19.5135L117.484 18.6053C113.956 17.587 112.264 15.5119 112.264 12.7684C112.264 9.11689 115.337 6.67183 119.508 6.67172ZM48.707 6.67172C52.832 6.67178 56.4058 9.00031 57.6641 12.3924L54.3369 13.9422C54.123 14.046 53.8767 13.9422 53.7793 13.7284V13.7157C52.8518 11.8348 50.9835 10.6151 48.707 10.6151V10.6024C45.2111 10.6024 42.6622 13.3909 42.6621 17.2694C42.6621 21.148 45.2111 23.9627 48.707 23.9627C51.1585 23.9627 53.0652 22.5687 53.9668 20.4286L57.3076 22.0243C57.5213 22.1282 57.6187 22.3875 57.5215 22.6014C56.1594 25.6756 52.7022 27.9324 48.707 27.9325C42.6622 27.9325 38.2326 23.3017 38.2324 17.244C38.2324 11.1861 42.6297 6.67172 48.707 6.67172ZM139.258 6.67758C145.186 6.67758 149.843 11.0818 149.843 17.2889C149.843 23.4958 145.14 27.9325 139.258 27.9325C133.375 27.9324 128.647 23.4179 128.646 17.2889C128.646 11.1597 133.297 6.67767 139.258 6.67758ZM68.3984 6.71664C73.1591 6.71664 76.5058 9.58339 76.5059 13.7537V27.1414C76.5056 27.3811 76.3178 27.5691 76.0781 27.5692H72.4912V24.9881C70.9605 26.7781 68.7292 27.783 65.9404 27.783C61.8478 27.783 59.1045 25.4997 59.1045 22.0037C59.1046 18.7609 61.2644 16.3868 65.9082 15.5955L72.3027 14.5516V13.7606C72.3027 11.7824 70.7005 10.3621 68.2812 10.3621C66.2126 10.3623 64.5651 11.4513 63.709 13.0985C63.5988 13.2995 63.3527 13.3968 63.1387 13.2996L60.0381 11.7371C61.1991 8.79901 64.5721 6.70395 68.4053 6.70395L68.3984 6.71664ZM89.9844 6.89145C90.2241 6.89168 90.4121 7.07385 90.4121 7.32016V10.7186H87.7402C84.9513 10.7186 83.0889 12.5154 83.0889 15.6805V27.5692H79.1719C79.0163 27.5692 78.8869 27.4395 78.8867 27.284V6.93734H82.4727C82.7126 6.93734 82.9012 7.11873 82.9014 7.36508V9.73227C83.9262 7.70894 85.7881 6.89145 88.2461 6.89145H89.9844ZM23.626 10.3475C22.7951 9.98578 21.8339 10.1553 21.167 10.7713L7.46094 23.4666C7.35369 23.5628 7.37633 23.749 7.51758 23.8055L11.6885 25.6248C12.8754 26.1448 14.2489 25.9079 15.2041 25.0262L28.4531 12.7723L28.4473 12.7616C28.5547 12.6655 28.5319 12.4782 28.3906 12.4217L23.626 10.3475ZM66.7314 18.8065C64.5004 19.1762 63.502 20.2983 63.502 21.8289C63.502 23.3596 64.7992 24.4364 66.6152 24.4364C70.0072 24.4362 72.3095 22.0105 72.3096 18.9168V17.8338L66.7314 18.8065ZM139.258 10.6278C135.691 10.6279 133.07 13.4558 133.07 17.2889C133.07 21.1219 135.691 23.9822 139.258 23.9823C142.78 23.9823 145.445 21.1349 145.445 17.2889C145.445 13.4427 142.825 10.6278 139.258 10.6278ZM18.6289 1.47934C17.7983 1.11792 16.8377 1.28742 16.1709 1.90316L2.45898 14.6034C2.35159 14.6994 2.37432 14.8867 2.51562 14.9432V14.9315L6.68652 16.7518C7.87343 17.2717 9.24699 17.0339 10.2021 16.1522L23.4502 3.89828C23.5575 3.79661 23.5356 3.61021 23.3945 3.55355L18.6289 1.47934Z" fill="white"/>
+    </svg>
+    <button style="background:transparent;border:none;cursor:pointer;opacity:0.5;padding:4px;border-radius:5px;" title="Collapse sidebar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+  </div>
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search Caruso</span>
+  </div>
+  <button class="topbar-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Chat
+  </button>
+  <button class="topbar-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Create
+  </button>
+
+  <!-- Bell notification -->
+  <div style="position:relative;margin-left:10px;">
+    <button class="bell-btn" onclick="toggleBell(event)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="bell-badge">7</span>
+    </button>
+    <div class="bell-dropdown" id="bellDropdown">
+      <div class="bell-dd-header">
+        <span>Notifications</span>
+        <a href="#" onclick="event.preventDefault();">Mark all as read</a>
+      </div>
+
+      <div class="bell-dd-item unread">
+        <span class="bell-dd-dot"></span>
+        <span class="bell-dd-badge" style="background:#fdf2f2;color:#c0392b;">Error</span>
+        <div class="bell-dd-body"><div class="bell-dd-msg">Batch #1042 — 3 of 6 failed</div></div>
+        <span class="bell-dd-time">15m</span>
+        <a href="#" class="bell-dd-view" onclick="event.preventDefault();">View</a>
+      </div>
+
+      <div class="bell-dd-item unread">
+        <span class="bell-dd-dot"></span>
+        <span class="bell-dd-badge" style="background:#ede9fd;color:#7f6df1;">Task</span>
+        <div class="bell-dd-body"><div class="bell-dd-msg">Review KYC documents for Henderson Family Trust</div></div>
+        <span class="bell-dd-time">32m</span>
+        <a href="#" class="bell-dd-view" onclick="event.preventDefault();">View</a>
+      </div>
+
+      <div class="bell-dd-item unread">
+        <span class="bell-dd-dot"></span>
+        <span class="bell-dd-badge" style="background:#fdf2f2;color:#c0392b;">Error</span>
+        <div class="bell-dd-body"><div class="bell-dd-msg">Batch #1087 — 8 of 500 failed</div></div>
+        <span class="bell-dd-time">48m</span>
+        <a href="#" class="bell-dd-view" onclick="event.preventDefault();">View</a>
+      </div>
+
+      <div class="bell-dd-item unread">
+        <span class="bell-dd-dot"></span>
+        <span class="bell-dd-badge" style="background:#ede9fd;color:#7f6df1;">Task</span>
+        <div class="bell-dd-body"><div class="bell-dd-msg">Complete AML check for Sakura Investments Ltd — overdue</div></div>
+        <span class="bell-dd-time">2h</span>
+        <a href="#" class="bell-dd-view" onclick="event.preventDefault();">View</a>
+      </div>
+
+      <div class="bell-dd-item unread">
+        <span class="bell-dd-dot"></span>
+        <span class="bell-dd-badge" style="background:#fdf2f2;color:#c0392b;">Error</span>
+        <div class="bell-dd-body"><div class="bell-dd-msg">Order #2847 failed</div></div>
+        <span class="bell-dd-time">3h</span>
+        <a href="#" class="bell-dd-view" onclick="event.preventDefault();">View</a>
+      </div>
+
+      <div class="bell-dd-footer"><a href="#">View all notifications</a></div>
+    </div>
+  </div>
+
+  <div class="topbar-spacer"></div>
+  <div class="topbar-account">
+    <div class="topbar-tenant">Ventura</div>
+    <div class="topbar-divider"></div>
+    <div class="avatar">BP</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="nav-section-label"><span>CRM</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="nav-item">Contacts</div>
+    <div class="nav-item">Investing Entities</div>
+    <div class="nav-item">Adviser Companies</div>
+    <div class="nav-item">Dealer Groups</div>
+    <div class="nav-item">Tasks</div>
+    <div class="nav-item">Activity</div>
+    <div class="nav-item">Communications</div>
+
+    <div class="nav-section-label" style="margin-top:8px;"><span>Registry</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="nav-item">Funds</div>
+    <div class="nav-item">Capital Raises</div>
+    <div class="nav-item">Applications</div>
+
+    <div class="nav-section-label" style="margin-top:8px;"><span>Finance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="nav-item">Deposits<span class="nav-badge">20</span></div>
+    <div class="nav-item">Distributions</div>
+    <div class="nav-item">Transactions</div>
+
+    <div class="nav-section-label" style="margin-top:8px;"><span>Data &amp; Reporting</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="nav-item">Reports</div>
+    <div class="nav-item">Statements</div>
+    <div class="nav-item">File Converter</div>
+    <div class="nav-item">Audit Log</div>
+    <div class="nav-item">Imports</div>
+
+    <div class="nav-section-label" style="margin-top:8px;"><span>Settings</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d2cbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="nav-item">Teammates</div>
+    <div class="nav-item">Configurations</div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="notif-page">
+
+      <!-- Page header -->
+      <div class="notif-page-header">
+        <div class="notif-page-title">
+          Notifications
+          <span class="notif-count-badge">5</span>
+        </div>
+        <div class="notif-actions">
+          <button onclick="markAllRead()">Mark all as read</button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="notif-filter-bar">
+        <input type="text" class="notif-search" placeholder="Search" oninput="filterSearch(this.value)">
+        <button class="filter-btn" onclick="toggleFilterDropdown(this,'type')">Type <svg viewBox="0 0 20 20" fill="#8c95a6"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>
+        <button class="filter-btn" onclick="toggleFilterDropdown(this,'status')">Status <svg viewBox="0 0 20 20" fill="#8c95a6"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>
+      </div>
+
+      <!-- Notification table -->
+      <div style="flex:1;overflow:auto;">
+      <table class="notif-table">
+        <thead>
+          <tr>
+            <th style="width:32px;"></th>
+            <th>Type</th>
+            <th>Notification</th>
+            <th>Associated record</th>
+            <th>Time</th>
+            <th style="width:70px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="unread" data-type="error" data-status="unread">
+            <td><span class="notif-unread-dot"></span></td>
+            <td><span class="type-badge error">Error</span></td>
+            <td class="msg-cell">Batch #1042 — 3 of 6 failed · Timeout error</td>
+            <td>Ventura Opportunity Fund</td>
+            <td style="color:#8c95a6;">15 min ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr class="unread" data-type="task" data-status="unread">
+            <td><span class="notif-unread-dot"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Review KYC documents for Henderson Family Trust</td>
+            <td>Ventura Opportunity Fund</td>
+            <td style="color:#8c95a6;">32 min ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr class="unread" data-type="error" data-status="unread">
+            <td><span class="notif-unread-dot"></span></td>
+            <td><span class="type-badge error">Error</span></td>
+            <td class="msg-cell">Batch #1087 — 8 of 500 failed · Authentication error</td>
+            <td>Ventura Opportunity Fund</td>
+            <td style="color:#8c95a6;">48 min ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr class="unread" data-type="task" data-status="unread">
+            <td><span class="notif-unread-dot"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Complete AML check for Sakura Investments Ltd — overdue</td>
+            <td>Ventura Opportunity Fund</td>
+            <td style="color:#8c95a6;">2 hr ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr class="unread" data-type="error" data-status="unread">
+            <td><span class="notif-unread-dot"></span></td>
+            <td><span class="type-badge error">Error</span></td>
+            <td class="msg-cell">Order #2847 failed · Unexpected server error</td>
+            <td>Ventura Opportunity Fund</td>
+            <td style="color:#8c95a6;">3 hr ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr data-type="task" data-status="read">
+            <td><span class="notif-unread-dot read"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Verify bank account for Rob Thomas — completed</td>
+            <td>Rob Thomas</td>
+            <td style="color:#8c95a6;">6 hr ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr data-type="task" data-status="read">
+            <td><span class="notif-unread-dot read"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Follow up with Landen Capital on data gaps</td>
+            <td>Landen Capital Fund</td>
+            <td style="color:#8c95a6;">Yesterday</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr data-type="error" data-status="read">
+            <td><span class="notif-unread-dot read"></span></td>
+            <td><span class="type-badge error">Error</span></td>
+            <td class="msg-cell">Batch #1038 — 1 of 12 failed · Authentication error</td>
+            <td>FMT PIE Fund</td>
+            <td style="color:#8c95a6;">Yesterday</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr data-type="task" data-status="read">
+            <td><span class="notif-unread-dot read"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Review subscription documents for Oceanic Capital Partners</td>
+            <td>Oceanic Growth Fund</td>
+            <td style="color:#8c95a6;">2 days ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+          <tr data-type="task" data-status="read">
+            <td><span class="notif-unread-dot read"></span></td>
+            <td><span class="type-badge task">Task</span></td>
+            <td class="msg-cell">Prepare quarterly distribution report — Ventura Growth Fund</td>
+            <td>Ventura Growth Fund</td>
+            <td style="color:#8c95a6;">3 days ago</td>
+            <td><a href="#" class="view-link" onclick="event.preventDefault();">View</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <!-- Pagination -->
+      <div style="padding: 16px 24px; font-size: 12px; color: #8c95a6;">1 to 10 of 10 results</div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleBell(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('bellDropdown');
+  dd.style.display = dd.style.display === 'none' || !dd.style.display ? 'block' : 'none';
+}
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('bellDropdown');
+  if (dd && !dd.contains(e.target)) dd.style.display = 'none';
+});
+
+function getRows() { return document.querySelectorAll('.notif-table tbody tr'); }
+
+var activeTypeFilter = 'all';
+var activeStatusFilter = 'all';
+var activeSearch = '';
+
+function applyFilters() {
+  getRows().forEach(row => {
+    var matchType = activeTypeFilter === 'all' || row.dataset.type === activeTypeFilter;
+    var matchStatus = activeStatusFilter === 'all' || row.dataset.status === activeStatusFilter;
+    var matchSearch = !activeSearch || row.textContent.toLowerCase().includes(activeSearch.toLowerCase());
+    row.style.display = (matchType && matchStatus && matchSearch) ? '' : 'none';
+  });
+}
+
+function filterSearch(val) {
+  activeSearch = val;
+  applyFilters();
+}
+
+function toggleFilterDropdown(btn, filterName) {
+  document.querySelectorAll('.filter-dd').forEach(d => d.remove());
+
+  var dd = document.createElement('div');
+  dd.className = 'filter-dd';
+  dd.style.cssText = 'position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid #d8dae5;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.08);min-width:140px;z-index:100;padding:4px 0;';
+
+  var options = filterName === 'type'
+    ? [['all','All'],['error','Error'],['task','Task']]
+    : [['all','All'],['unread','Unread'],['read','Read']];
+  var activeVal = filterName === 'type' ? activeTypeFilter : activeStatusFilter;
+
+  options.forEach(function(opt) {
+    var item = document.createElement('div');
+    item.textContent = opt[1];
+    item.style.cssText = 'padding:8px 14px;font-size:13px;cursor:pointer;color:#0a0a0a;';
+    if (opt[0] === activeVal) item.style.cssText += 'color:#7f6df1;font-weight:600;';
+    item.onmouseenter = function() { this.style.background = '#f8f9fb'; };
+    item.onmouseleave = function() { this.style.background = ''; };
+    item.onclick = function(e) {
+      e.stopPropagation();
+      if (filterName === 'type') activeTypeFilter = opt[0];
+      else activeStatusFilter = opt[0];
+      applyFilters();
+      dd.remove();
+      btn.childNodes[0].textContent = opt[0] === 'all' ? (filterName === 'type' ? 'Type ' : 'Status ') : opt[1] + ' ';
+    };
+    dd.appendChild(item);
+  });
+
+  btn.style.position = 'relative';
+  btn.appendChild(dd);
+
+  setTimeout(function() {
+    document.addEventListener('click', function handler(e) {
+      if (!dd.contains(e.target)) { dd.remove(); document.removeEventListener('click', handler); }
+    });
+  }, 0);
+}
+
+function markAllRead() {
+  document.querySelectorAll('.notif-table tbody tr.unread').forEach(row => {
+    row.classList.remove('unread');
+    row.dataset.status = 'read';
+    row.querySelector('.notif-unread-dot').classList.add('read');
+    var mc = row.querySelector('.msg-cell');
+    if (mc) mc.style.fontWeight = '400';
+  });
+  document.querySelector('.notif-count-badge').style.display = 'none';
+  document.querySelector('.bell-badge').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
