@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caruso Investor Portal – Holding Detail</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #f5f6fa; color: #0a0a0a; font-size: 14px;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+
+        /* ─── TOPBAR ──────────────────────────────────────────── */
+        .topbar {
+            height: 56px; background: #1e293b;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px; flex-shrink: 0;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .topbar-logo {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .topbar-brand { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+        .topbar-check {
+            width: 20px; height: 20px; border-radius: 4px;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            display: flex; align-items: center; justify-content: center; margin-left: 2px;
+        }
+        .topbar-nav { display: flex; align-items: center; gap: 4px; }
+        .topbar-nav a {
+            color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500;
+            text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.15s;
+        }
+        .topbar-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .topbar-nav a.active { color: #fff; }
+        .notif-count {
+            font-size: 10px; background: #6366f1; color: #fff;
+            border-radius: 10px; padding: 1px 6px; font-weight: 700;
+            margin-left: 4px; position: relative; top: -1px;
+        }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        /* ─── BREADCRUMB ──────────────────────────────────────── */
+        .breadcrumb-bar {
+            font-size: 12px; color: #94a3b8; padding: 8px 32px; background: #f5f6fa;
+        }
+        .breadcrumb-bar a { color: #94a3b8; text-decoration: none; }
+        .breadcrumb-bar a:hover { text-decoration: underline; }
+        .breadcrumb-bar .current { color: #6366f1; font-weight: 500; }
+
+        /* ─── PAGE ────────────────────────────────────────────── */
+        .page-content { flex: 1; padding: 24px 32px 40px; }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; color: #6366f1; text-decoration: none; margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Holding header */
+        .holding-header { margin-bottom: 24px; }
+        .holding-header h1 {
+            font-size: 22px; font-weight: 600; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 4px;
+        }
+        .holding-header .sub { font-size: 14px; color: #64748b; display: flex; align-items: center; gap: 8px; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; height: 24px; padding: 0 10px;
+            border-radius: 4px; font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .status-active { background: #e7f5ee; color: #2e7d57; }
+
+        .access-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            height: 24px; padding: 0 10px; border-radius: 4px;
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .access-readonly { background: #e3f0fb; color: #1a6ea8; }
+        .access-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a6ea8; }
+
+        /* Read-only banner */
+        .readonly-banner {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; border-radius: 8px; margin-bottom: 24px;
+            background: #e8f1fd; border: 1px solid #b3d0f5; color: #1a4f8a; font-size: 13px;
+        }
+        .readonly-banner svg { flex-shrink: 0; }
+
+        /* ─── KEY FIGURES ─────────────────────────────────────── */
+        .figures-row {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px;
+        }
+        .figure-card {
+            background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 20px;
+        }
+        .figure-label { font-size: 11px; font-weight: 500; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
+        .figure-value { font-size: 18px; font-weight: 600; color: #0f172a; font-variant-numeric: tabular-nums; }
+        .figure-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+        /* ─── SUB NAV ─────────────────────────────────────────── */
+        .sub-nav {
+            display: flex; align-items: center; gap: 0;
+            border-bottom: 1px solid #e2e8f0; margin-bottom: 24px;
+        }
+        .sub-nav a {
+            padding: 12px 20px; font-size: 14px; font-weight: 500;
+            color: #64748b; text-decoration: none; border-bottom: 2px solid transparent;
+            transition: all 0.15s; margin-bottom: -1px;
+        }
+        .sub-nav a:hover { color: #334155; }
+        .sub-nav a.active { color: #6366f1; border-bottom-color: #6366f1; }
+        .sub-nav .nav-count {
+            font-size: 11px; background: #f1f5f9; color: #64748b;
+            border-radius: 10px; padding: 1px 7px; font-weight: 600; margin-left: 6px;
+        }
+        .sub-nav a.active .nav-count { background: #ede9fe; color: #6366f1; }
+
+        /* ─── TABLE ───────────────────────────────────────────── */
+        .table-card {
+            background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;
+        }
+        .table-header-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-bottom: 1px solid #f1f5f9;
+        }
+        .table-title { font-size: 14px; font-weight: 600; color: #0f172a; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            text-align: left; padding: 12px 20px; font-size: 12px; font-weight: 500;
+            color: #64748b; border-bottom: 1px solid #e2e8f0; background: #fafbfc;
+            white-space: nowrap;
+        }
+        tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.1s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #f8fafc; }
+        tbody td {
+            padding: 14px 20px; font-size: 13px; color: #334155;
+            vertical-align: middle; white-space: nowrap;
+        }
+        td.value { font-variant-numeric: tabular-nums; }
+
+        /* Transaction type badges */
+        .txn-badge {
+            display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+            border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
+        }
+        .txn-application  { background: #ede9fe; color: #7c3aed; }
+        .txn-distribution  { background: #e7f5ee; color: #2e7d57; }
+        .txn-redemption    { background: #fef2f2; color: #dc2626; }
+        .txn-switch        { background: #e0f2fe; color: #0284c7; }
+        .txn-fee           { background: #fef3c7; color: #d97706; }
+
+        /* ─── DISTRIBUTION HISTORY ────────────────────────────── */
+        .section-gap { margin-top: 28px; }
+
+        /* ─── FOOTER ──────────────────────────────────────────── */
+        .portal-footer {
+            padding: 24px 32px; display: flex; align-items: center;
+            justify-content: space-between; font-size: 12px; color: #94a3b8;
+        }
+        .portal-footer a { color: #94a3b8; text-decoration: none; }
+        .portal-footer a:hover { color: #64748b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-logo">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="topbar-brand">Ventura</span>
+        <div class="topbar-check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+    </div>
+    <div class="topbar-nav">
+        <a href="#" class="active">Portfolio</a>
+        <a href="#">Invest</a>
+        <a href="#">Trade</a>
+        <a href="#">Document</a>
+        <a href="#">Transactions</a>
+        <a href="#">Notifications <span class="notif-count">99</span></a>
+    </div>
+    <div class="topbar-right">
+        <div class="avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+    </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+    <a href="caruso-portal-dashboard.html">Portfolio</a> &nbsp;›&nbsp;
+    <a href="caruso-portal-entities.html">Account Summary</a> &nbsp;›&nbsp;
+    <a href="caruso-portal-holdings.html">Chen Family Superannuation</a> &nbsp;›&nbsp;
+    <span class="current">Ventura Growth Fund · Ordinary</span>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-content">
+
+    <!-- Back link -->
+    <a href="caruso-portal-holdings.html" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to holdings
+    </a>
+
+    <!-- Holding header -->
+    <div class="holding-header">
+        <h1>Ventura Growth Fund</h1>
+        <div class="sub">
+            Unit Class: <strong style="color:#0f172a; font-weight:500;">Ordinary</strong>
+            <span style="color:#e2e8f0">|</span>
+            Entity: <strong style="color:#0f172a; font-weight:500;">Chen Family Superannuation</strong>
+            <span style="color:#e2e8f0">|</span>
+            <span class="status-badge status-active">Active</span>
+            <span class="access-badge access-readonly"><span class="access-dot"></span> Read only</span>
+        </div>
+    </div>
+
+    <!-- Read-only banner -->
+    <div class="readonly-banner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a4f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Read-only access — you can view this holding but cannot initiate transactions. Contact your fund administrator to request changes.
+    </div>
+
+    <!-- Key figures -->
+    <div class="figures-row">
+        <div class="figure-card">
+            <div class="figure-label">Units Held</div>
+            <div class="figure-value">125,432.88</div>
+        </div>
+        <div class="figure-card">
+            <div class="figure-label">Unit Price</div>
+            <div class="figure-value">$1.0842</div>
+            <div class="figure-sub">As at 14 Mar 2026</div>
+        </div>
+        <div class="figure-card">
+            <div class="figure-label">Current Value</div>
+            <div class="figure-value">$135,984.40</div>
+        </div>
+        <div class="figure-card">
+            <div class="figure-label">Cost Base</div>
+            <div class="figure-value">$125,000.00</div>
+        </div>
+        <div class="figure-card">
+            <div class="figure-label">Unrealised Gain</div>
+            <div class="figure-value" style="color:#2e7d57;">+$10,984.40</div>
+            <div class="figure-sub" style="color:#2e7d57;">+8.79%</div>
+        </div>
+    </div>
+
+    <!-- Sub-nav for holding detail -->
+    <div class="sub-nav">
+        <a href="#" class="active">Transactions <span class="nav-count">8</span></a>
+        <a href="#">Distributions <span class="nav-count">4</span></a>
+        <a href="#">Documents</a>
+    </div>
+
+    <!-- Transaction history -->
+    <div class="table-card">
+        <div class="table-header-bar">
+            <span class="table-title">Transaction History</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Units</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>14 Mar 2026</td>
+                    <td><span class="txn-badge txn-distribution">Distribution</span></td>
+                    <td>Quarterly distribution (Q4 2025)</td>
+                    <td class="value">—</td>
+                    <td class="value">—</td>
+                    <td class="value" style="color:#2e7d57;">+AUD 3,245.80</td>
+                    <td class="value">125,432.8810</td>
+                </tr>
+                <tr>
+                    <td>1 Jan 2026</td>
+                    <td><span class="txn-badge txn-distribution">Distribution</span></td>
+                    <td>Quarterly distribution (Q3 2025)</td>
+                    <td class="value">—</td>
+                    <td class="value">—</td>
+                    <td class="value" style="color:#2e7d57;">+AUD 2,980.50</td>
+                    <td class="value">125,432.8810</td>
+                </tr>
+                <tr>
+                    <td>15 Nov 2025</td>
+                    <td><span class="txn-badge txn-application">Application</span></td>
+                    <td>Additional investment</td>
+                    <td class="value">+25,000.0000</td>
+                    <td class="value">1.0500</td>
+                    <td class="value">AUD 26,250.00</td>
+                    <td class="value">125,432.8810</td>
+                </tr>
+                <tr>
+                    <td>1 Oct 2025</td>
+                    <td><span class="txn-badge txn-distribution">Distribution</span></td>
+                    <td>Quarterly distribution (Q2 2025)</td>
+                    <td class="value">—</td>
+                    <td class="value">—</td>
+                    <td class="value" style="color:#2e7d57;">+AUD 2,650.20</td>
+                    <td class="value">100,432.8810</td>
+                </tr>
+                <tr>
+                    <td>18 Aug 2025</td>
+                    <td><span class="txn-badge txn-fee">Adviser Fee</span></td>
+                    <td>Ongoing adviser service fee — Q2 2025</td>
+                    <td class="value">—</td>
+                    <td class="value">—</td>
+                    <td class="value" style="color:#dc2626;">−AUD 312.50</td>
+                    <td class="value">100,432.8810</td>
+                </tr>
+                <tr>
+                    <td>1 Jul 2025</td>
+                    <td><span class="txn-badge txn-distribution">Distribution</span></td>
+                    <td>Quarterly distribution (Q1 2025)</td>
+                    <td class="value">—</td>
+                    <td class="value">—</td>
+                    <td class="value" style="color:#2e7d57;">+AUD 2,340.00</td>
+                    <td class="value">100,432.8810</td>
+                </tr>
+                <tr>
+                    <td>12 May 2025</td>
+                    <td><span class="txn-badge txn-switch">Switch In</span></td>
+                    <td>Switch from Ventura Income Fund (Class A)</td>
+                    <td class="value">+15,432.8810</td>
+                    <td class="value">1.0320</td>
+                    <td class="value">AUD 15,926.73</td>
+                    <td class="value">100,432.8810</td>
+                </tr>
+                <tr>
+                    <td>1 Mar 2025</td>
+                    <td><span class="txn-badge txn-application">Application</span></td>
+                    <td>Initial investment</td>
+                    <td class="value">+85,000.0000</td>
+                    <td class="value">1.0000</td>
+                    <td class="value">AUD 85,000.00</td>
+                    <td class="value">85,000.0000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="portal-footer">
+    <span>Investor Portal by Caruso</span>
+    <div style="display:flex;gap:24px;">
+        <a href="#">[Manager Name] terms &amp; privacy</a>
+        <a href="#">Caruso terms &amp; privacy</a>
+    </div>
+</div>
+
+</body>
+</html>
