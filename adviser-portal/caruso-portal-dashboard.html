@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caruso Investor Portal – Portfolio Overview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #f5f6fa; color: #0a0a0a; font-size: 14px;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        .topbar { height: 56px; background: #1e293b; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; flex-shrink: 0; }
+        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .topbar-logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); display: flex; align-items: center; justify-content: center; }
+        .topbar-brand { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+        .topbar-check { width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; margin-left: 2px; }
+        .topbar-nav { display: flex; align-items: center; gap: 4px; }
+        .topbar-nav a { color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.15s; }
+        .topbar-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .topbar-nav a.active { color: #fff; }
+        .notif-count { font-size: 10px; background: #6366f1; color: #fff; border-radius: 10px; padding: 1px 6px; font-weight: 700; margin-left: 4px; position: relative; top: -1px; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .avatar { width: 34px; height: 34px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .breadcrumb-bar { font-size: 12px; color: #94a3b8; padding: 8px 32px; background: #f5f6fa; }
+        .breadcrumb-bar .current { color: #6366f1; font-weight: 500; }
+        .page-content { flex: 1; padding: 24px 32px 40px; }
+        .page-title { font-size: 22px; font-weight: 600; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 20px; }
+        .tab-bar { display: flex; align-items: center; gap: 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 28px; }
+        .tab-bar a { padding: 12px 20px; font-size: 14px; font-weight: 500; color: #64748b; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.15s; margin-bottom: -1px; }
+        .tab-bar a:hover { color: #334155; }
+        .tab-bar a.active { color: #6366f1; border-bottom-color: #6366f1; }
+        .tab-count { font-size: 11px; background: #f1f5f9; color: #64748b; border-radius: 10px; padding: 1px 7px; font-weight: 600; margin-left: 6px; }
+        .tab-bar a.active .tab-count { background: #ede9fe; color: #6366f1; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px 24px; }
+        .stat-label { font-size: 12px; font-weight: 500; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .stat-value { font-size: 24px; font-weight: 600; color: #0f172a; letter-spacing: -0.5px; }
+        .stat-sub { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 28px; }
+        .chart-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; }
+        .chart-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 20px; }
+        .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 180px; padding-top: 8px; }
+        .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .bar { width: 100%; border-radius: 6px 6px 0 0; min-height: 8px; transition: opacity 0.15s; }
+        .bar:hover { opacity: 0.8; }
+        .bar-label { font-size: 11px; color: #94a3b8; white-space: nowrap; }
+        .bar-value { font-size: 11px; font-weight: 600; color: #334155; }
+        .donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .donut { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#6366f1 0% 62.5%, #818cf8 62.5% 87.5%, #c7d2fe 87.5% 100%); position: relative; }
+        .donut::after { content: ''; position: absolute; inset: 36px; border-radius: 50%; background: #fff; }
+        .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
+        .donut-center .big { font-size: 22px; font-weight: 600; color: #0f172a; }
+        .donut-center .small { font-size: 11px; color: #94a3b8; }
+        .legend { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #334155; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+        .legend-value { margin-left: auto; font-weight: 500; font-variant-numeric: tabular-nums; }
+        .activity-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; }
+        .activity-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 16px; }
+        .activity-list { list-style: none; }
+        .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .activity-icon.green { background: #e7f5ee; color: #2e7d57; }
+        .activity-icon.blue { background: #e3f0fb; color: #1a6ea8; }
+        .activity-icon.purple { background: #ede9fe; color: #7c3aed; }
+        .activity-text { color: #334155; line-height: 1.5; }
+        .activity-text strong { font-weight: 500; color: #0f172a; }
+        .activity-date { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .portal-footer { padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #94a3b8; }
+        .portal-footer a { color: #94a3b8; text-decoration: none; }
+        .portal-footer a:hover { color: #64748b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="topbar-brand">Ventura</span>
+    </div>
+    <div class="topbar-nav">
+        <a href="#" class="active">Portfolio</a><a href="#">Invest</a><a href="#">Trade</a><a href="#">Document</a><a href="#">Transactions</a><a href="#">Notifications <span class="notif-count">99</span></a>
+    </div>
+    <div class="topbar-right"><div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
+</div>
+<div class="breadcrumb-bar"><span class="current">Portfolio</span> · Level 1</div>
+<div class="page-content">
+    <h1 class="page-title">Account Summary</h1>
+    <div class="tab-bar">
+        <a href="#" class="active">Overview</a>
+        <a href="caruso-portal-entities.html">Entities <span class="tab-count">8</span></a>
+    </div>
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Total Portfolio Value</div><div class="stat-value">$13,320,000</div><div class="stat-sub">AUD · across 8 entities</div></div>
+        <div class="stat-card"><div class="stat-label">Accounts</div><div class="stat-value">3</div><div class="stat-sub">Mark Hurley, Tom Chen, Jane Bradshaw</div></div>
+        <div class="stat-card"><div class="stat-label">Total Holdings</div><div class="stat-value">25</div><div class="stat-sub">Across 8 investing entities</div></div>
+        <div class="stat-card"><div class="stat-label">Access Breakdown</div><div class="stat-value">5 Full · 3 Read only</div><div class="stat-sub">8 entities total</div></div>
+    </div>
+    <div class="charts-row">
+        <div class="chart-card">
+            <div class="chart-title">Portfolio Value by Account</div>
+            <div class="bar-chart">
+                <div class="bar-group"><div class="bar-value">$6.52M</div><div class="bar" style="height:140px; background: #6366f1;"></div><div class="bar-label">Mark Hurley</div></div>
+                <div class="bar-group"><div class="bar-value">$2.80M</div><div class="bar" style="height:60px; background: #818cf8;"></div><div class="bar-label">Tom Chen</div></div>
+                <div class="bar-group"><div class="bar-value">$4.02M</div><div class="bar" style="height:86px; background: #a5b4fc;"></div><div class="bar-label">Jane Bradshaw</div></div>
+            </div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Entities by Type</div>
+            <div class="donut-wrap">
+                <div class="donut" style="position:relative;"><div class="donut-center"><span class="big">8</span><span class="small">entities</span></div></div>
+                <div class="legend">
+                    <div class="legend-item"><span class="legend-dot" style="background:#6366f1;"></span>Company<span class="legend-value">3</span></div>
+                    <div class="legend-item"><span class="legend-dot" style="background:#818cf8;"></span>Trust<span class="legend-value">2</span></div>
+                    <div class="legend-item"><span class="legend-dot" style="background:#c7d2fe;"></span>Individual / Partnership<span class="legend-value">3</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="activity-card">
+        <div class="activity-title">Recent Activity</div>
+        <ul class="activity-list">
+            <li class="activity-item"><div class="activity-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><div><div class="activity-text"><strong>Distribution processed</strong> — Ventura Growth Fund paid AUD 12,450.00 to Whisky Ventures Limited</div><div class="activity-date">14 Mar 2026</div></div></li>
+            <li class="activity-item"><div class="activity-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="activity-text"><strong>New document</strong> — Quarterly statement (Q4 2025) available for Mark Hurley Family Trust</div><div class="activity-date">10 Mar 2026</div></div></li>
+            <li class="activity-item"><div class="activity-icon purple"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div><div><div class="activity-text"><strong>Application approved</strong> — Bradshaw Investment Group's application to Ventura Credit Fund confirmed</div><div class="activity-date">7 Mar 2026</div></div></li>
+            <li class="activity-item"><div class="activity-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><div><div class="activity-text"><strong>Distribution processed</strong> — Ventura Income Fund paid AUD 8,200.00 to Chen Family Superannuation</div><div class="activity-date">3 Mar 2026</div></div></li>
+        </ul>
+    </div>
+</div>
+<div class="portal-footer"><span>Investor Portal by Caruso</span><div style="display:flex;gap:24px;"><a href="#">[Manager Name] terms &amp; privacy</a><a href="#">Caruso terms &amp; privacy</a></div></div>
+</body>
+</html>
