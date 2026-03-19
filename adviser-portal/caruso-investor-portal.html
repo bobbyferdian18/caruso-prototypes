@@ -1,1850 +1,1365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Investor Portal – Ventura</title>
-  <style>
-    /* Font: Using system -apple-system stack as SF Pro Text fallback */
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif, -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 13px;
-      color: #1e2332;
-      background: #ffffff;
-      min-height: 100vh;
-    }
-
-    /* ─── TOP NAV BAR ─── */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: #042246;
-      display: flex;
-      align-items: center;
-      padding: 0 32px;
-      z-index: 50;
-      transition: background 0.25s ease;
-      gap: 16px;
-    }
-
-    .topbar-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px;
-      flex-shrink: 0;
-    }
-
-    .topbar-logo svg { height: 29px; width: auto; }
-
-    .topbar-switcher {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 4px;
-      width: 20px; height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      position: relative;
-    }
-    .topbar-switcher svg { width: 10px; height: 10px; }
-    .topbar-switcher:hover { background: rgba(255,255,255,0.1); }
-
-    .topbar-spacer { flex: 1; }
-
-    /* Horizontal nav links */
-    .topbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      height: 60px;
-    }
-    .topbar-nav a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 60px;
-      padding: 0 16px;
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color 0.15s;
-    }
-    .topbar-nav a.active {
-      color: #ffffff;
-      background: rgba(255,255,255,0.1);
-    }
-    .topbar-nav a:hover { color: #ffffff; }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* ─── SIDEBAR ─── */
-    .sidebar {
-      position: fixed;
-      left: 0; top: 60px; bottom: 0;
-      width: 220px;
-      background: #112c37;
-      overflow-y: auto;
-      z-index: 40;
-      padding: 24px 0;
-    }
-
-    .sidebar-section {
-      margin-bottom: 32px;
-      padding: 0 16px;
-    }
-    .sidebar-section-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 12px;
-    }
-
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-nav a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      font-size: 13px;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .sidebar-nav a:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .sidebar-nav a.active {
-      background: #7f6df1;
-      color: #ffffff;
-    }
-
-    .sidebar-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      height: 20px;
-      padding: 0 6px;
-      font-size: 11px;
-      font-weight: 600;
-      background: rgba(255,255,255,0.2);
-      border-radius: 10px;
-      color: #ffffff;
-    }
-
-    /* ─── MAIN CONTENT ─── */
-    .main-container {
-      margin-left: 220px;
-      margin-top: 60px;
-      min-height: calc(100vh - 60px);
-      background: #f9f9f9;
-      border-radius: 4px 0 0 0;
-    }
-
-    .page {
-      display: none;
-    }
-    .page.active {
-      display: block;
-    }
-
-    /* ─── BREADCRUMBS ─── */
-    .breadcrumb {
-      padding: 16px 32px;
-      font-size: 13px;
-      color: #8c95a6;
-      background: #ffffff;
-      border-bottom: 1px solid #e6e8f0;
-    }
-    .breadcrumb span {
-      margin: 0 6px;
-      color: #8c95a6;
-    }
-    .breadcrumb a {
-      color: #7f6df1;
-      text-decoration: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .breadcrumb a:hover {
-      text-decoration: underline;
-    }
-
-    /* ─── HEADER / TOOLBAR ─── */
-    .page-header {
-      padding: 32px;
-      background: #ffffff;
-      border-bottom: 1px solid #e6e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .page-header h1 {
-      font-size: 24px;
-      font-weight: 600;
-      color: #0a0a0a;
-    }
-
-    .page-header-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    /* ─── FILTERS / TOOLBAR ─── */
-    .filters {
-      padding: 20px 32px;
-      background: #ffffff;
-      border-bottom: 1px solid #e6e8f0;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .search-box {
-      position: relative;
-      flex: 1;
-      max-width: 300px;
-      height: 36px;
-    }
-    .search-box input {
-      width: 100%;
-      height: 100%;
-      padding: 0 12px;
-      border: 1px solid #d8dae5;
-      border-radius: 6px;
-      font-size: 13px;
-      background: #ffffff;
-      box-shadow: none;
-    }
-    .search-box input::placeholder {
-      color: #8c95a6;
-    }
-    .search-box input:focus {
-      outline: none;
-      border-color: #7f6df1;
-      box-shadow: 0 0 0 2px rgba(127, 109, 241, 0.1);
-    }
-
-    .filter-button {
-      padding: 0 12px;
-      height: 36px;
-      background: #ffffff;
-      border: 1px solid #d8dae5;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #0a0a0a;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .filter-button:hover {
-      background: #f9fafb;
-    }
-    .filter-button.active {
-      background: #7f6df1;
-      color: #ffffff;
-      border-color: #7f6df1;
-    }
-
-    /* ─── VIEW TOGGLE (PILL TABS) ─── */
-    .view-toggle {
-      display: inline-flex;
-      gap: 4px;
-      background: #f0f2f5;
-      border-radius: 8px;
-      padding: 4px;
-    }
-    .view-toggle-btn {
-      padding: 6px 12px;
-      border: none;
-      background: transparent;
-      font-size: 13px;
-      color: #8c95a6;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .view-toggle-btn.active {
-      background: #ffffff;
-      color: #0a0a0a;
-      font-weight: 600;
-    }
-
-    /* ─── TABLE ─── */
-    .table-container {
-      padding: 0 32px;
-      background: #ffffff;
-      overflow-x: auto;
-      margin: 20px 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    table thead {
-      background: #f9fafb;
-      border-bottom: 1px solid #e6e8f0;
-    }
-
-    table th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #8c95a6;
-      white-space: nowrap;
-    }
-
-    table td {
-      padding: 16px;
-      border-bottom: 1px solid #f0f2f5;
-      vertical-align: middle;
-      height: 56px;
-    }
-
-    table tbody tr:hover {
-      background: #fafbfc;
-    }
-
-    /* Sticky first column */
-    table th:first-child, table td:first-child {
-      position: sticky;
-      left: 0;
-      background: inherit;
-      z-index: 10;
-      border-right: 1px solid #e6e8f0;
-    }
-    table thead th:first-child {
-      background: #f9fafb;
-    }
-    table tbody tr:hover td:first-child {
-      background: #fafbfc;
-    }
-
-    /* Sticky last column */
-    table th:last-child, table td:last-child {
-      position: sticky;
-      right: 0;
-      background: inherit;
-      z-index: 10;
-    }
-    table thead th:last-child {
-      background: #f9fafb;
-    }
-    table tbody tr:hover td:last-child {
-      background: #fafbfc;
-    }
-    table tbody td:last-child::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: #e6e8f0;
-    }
-
-    /* ─── BADGE / LABELS ─── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      white-space: nowrap;
-      height: 32px;
-    }
-
-    .badge.key-contact {
-      background: #ede9fd;
-      color: #7f6df1;
-    }
-    .badge.adviser {
-      background: #e7f5ee;
-      color: #2e7d57;
-    }
-    .badge.investor {
-      background: #e3f0fb;
-      color: #1a6ea8;
-    }
-    .badge.prospect {
-      background: #fef3e8;
-      color: #c07514;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      white-space: nowrap;
-      height: 24px;
-    }
-
-    .status-complete {
-      background: #e7f5ee;
-      color: #2e7d57;
-    }
-    .status-pending {
-      background: #fef3e8;
-      color: #c07514;
-    }
-    .status-processing {
-      background: #e3f0fb;
-      color: #1a6ea8;
-    }
-    .status-cancelled {
-      background: #fce8e8;
-      color: #c03744;
-    }
-
-    /* ─── BUTTON ─── */
-    .btn {
-      padding: 0 12px;
-      height: 32px;
-      border: 1px solid #d8dae5;
-      border-radius: 6px;
-      background: #ffffff;
-      color: #0a0a0a;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .btn:hover {
-      background: #f9fafb;
-    }
-    .btn.primary {
-      background: #7f6df1;
-      color: #ffffff;
-      border-color: #7f6df1;
-      font-weight: 700;
-    }
-    .btn.primary:hover {
-      background: #6b5bc7;
-    }
-
-    /* ─── PAGINATION ─── */
-    .pagination {
-      padding: 20px 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #ffffff;
-      border-top: 1px solid #e6e8f0;
-    }
-
-    .pagination-info {
-      font-size: 13px;
-      color: #8c95a6;
-    }
-
-    .pagination-controls {
-      display: flex;
-      gap: 8px;
-    }
-
-    /* ─── DETAILS PAGE ─── */
-    .details-container {
-      padding: 32px;
-      background: #ffffff;
-      margin: 20px 32px;
-      border-radius: 8px;
-    }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      margin-bottom: 32px;
-    }
-
-    .detail-section {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .detail-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #8c95a6;
-    }
-
-    .detail-value {
-      font-size: 14px;
-      color: #0a0a0a;
-      font-weight: 400;
-    }
-
-    .detail-value.large {
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    /* ─── MODAL ─── */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 32px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 25px rgba(0,0,0,0.15);
-    }
-
-    .modal-header {
-      margin-bottom: 20px;
-    }
-
-    .modal-header h2 {
-      font-size: 20px;
-      font-weight: 600;
-      color: #0a0a0a;
-    }
-
-    .modal-body {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .modal-footer {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #8c95a6;
-    }
-
-    /* ─── DROPDOWN ─── */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-toggle {
-      padding: 0 12px;
-      height: 36px;
-      background: #ffffff;
-      border: 1px solid #d8dae5;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #0a0a0a;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 4px;
-      background: #ffffff;
-      border: 1px solid #d8dae5;
-      border-radius: 6px;
-      min-width: 200px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
-
-    .dropdown-menu.active {
-      display: block;
-    }
-
-    .dropdown-item {
-      padding: 10px 16px;
-      font-size: 13px;
-      color: #0a0a0a;
-      cursor: pointer;
-      border-bottom: 1px solid #f0f2f5;
-      transition: background 0.15s;
-    }
-
-    .dropdown-item:last-child {
-      border-bottom: none;
-    }
-
-    .dropdown-item:hover {
-      background: #f9fafb;
-    }
-
-    .dropdown-item.active {
-      background: #f0f2f5;
-      color: #7f6df1;
-      font-weight: 600;
-    }
-
-    /* ─── SUBHEADER (GROUPING) ─── */
-    .subheader {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      background: #f9fafb;
-      border-bottom: 1px solid #e6e8f0;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #8c95a6;
-      height: 56px;
-    }
-
-    .subheader-icon {
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .subheader-icon img {
-      width: 16px;
-      height: 16px;
-      border-radius: 3px;
-    }
-
-    /* ─── NO DATA STATE ─── */
-    .no-data {
-      padding: 60px 32px;
-      text-align: center;
-      color: #8c95a6;
-      font-size: 14px;
-    }
-
-    /* ─── SPACER ─── */
-    .spacer {
-      height: 40px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Investor Portal – Ventura</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif, -apple-system, BlinkMacSystemFont, sans-serif;
+font-size: 13px;
+color: #1e2332;
+background: #ffffff;
+min-height: 100vh;
+}
+.topbar {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: 60px;
+background: #042246;
+display: flex;
+align-items: center;
+padding: 0 32px;
+z-index: 50;
+transition: background 0.25s ease;
+gap: 16px;
+}
+.topbar-logo {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px;
+flex-shrink: 0;
+}
+.topbar-logo svg { height: 29px; width: auto; }
+.topbar-switcher {
+background: transparent;
+border: 1px solid rgba(255,255,255,0.2);
+border-radius: 4px;
+width: 20px; height: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+flex-shrink: 0;
+position: relative;
+}
+.topbar-switcher svg { width: 10px; height: 10px; }
+.topbar-switcher:hover { background: rgba(255,255,255,0.1); }
+.topbar-spacer { flex: 1; }
+.topbar-nav {
+display: flex;
+align-items: center;
+gap: 0;
+height: 60px;
+}
+.topbar-nav a {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 60px;
+padding: 0 16px;
+font-size: 14px;
+font-weight: 500;
+color: rgba(255,255,255,0.5);
+text-decoration: none;
+white-space: nowrap;
+transition: color 0.15s;
+position: relative;
+box-sizing: border-box;
+}
+.topbar-nav a:hover { color: rgba(255,255,255,0.8); }
+.topbar-nav a.active { color: #ffffff; }
+.topbar-nav .notif-badge {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+background: #f97316;
+color: #fff;
+font-size: 12px;
+font-weight: 500;
+min-width: 20px;
+height: 20px;
+border-radius: 9999px;
+padding: 0 4px;
+margin-left: 8px;
+}
+.topbar-avatar {
+width: 28px; height: 28px;
+border-radius: 50%;
+background: #ccc;
+flex-shrink: 0;
+}
+.topbar-right {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.sidebar {
+position: fixed;
+left: 0; top: 60px; bottom: 0;
+width: 220px;
+background: #042246;
+z-index: 40;
+padding: 24px 16px;
+overflow-y: auto;
+}
+.sidebar-section {
+margin-bottom: 32px;
+}
+.sidebar-label {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: rgba(255,255,255,0.45);
+margin-bottom: 8px;
+}
+.sidebar-item {
+font-size: 13px;
+color: white;
+cursor: pointer;
+padding: 8px 12px;
+border-radius: 6px;
+margin-bottom: 4px;
+transition: background 0.15s;
+}
+.sidebar-item:hover { background: rgba(255,255,255,0.1); }
+.sidebar-item.active {
+background: #6366f1;
+font-weight: 500;
+}
+.sidebar-item-badge {
+display: inline-block;
+background: rgba(255,255,255,0.2);
+color: white;
+font-size: 11px;
+padding: 2px 6px;
+border-radius: 12px;
+margin-left: 8px;
+}
+.main-container {
+margin-top: 60px;
+margin-left: 220px;
+height: 100vh;
+overflow: hidden;
+}
+.content {
+height: 100%;
+overflow-y: auto;
+}
+.page {
+display: none;
+height: 100%;
+overflow-y: auto;
+}
+.page.active {
+display: block;
+}
+.page-header {
+padding: 32px 40px;
+border-bottom: 1px solid #e5e7eb;
+background: #f9fafb;
+}
+.page-title {
+font-size: 24px;
+font-weight: 600;
+color: #1e2332;
+margin-bottom: 8px;
+}
+.page-subtitle {
+font-size: 14px;
+color: #6b7280;
+}
+.page-content {
+padding: 32px 40px;
+}
+.controls-row {
+display: flex;
+align-items: center;
+gap: 16px;
+margin-bottom: 24px;
+}
+.search-bar {
+padding: 8px 12px;
+border: 1px solid #d1d5db;
+border-radius: 6px;
+font-size: 13px;
+flex: 1;
+max-width: 300px;
+}
+.filter-button {
+padding: 8px 16px;
+border: 1px solid #d1d5db;
+border-radius: 6px;
+background: white;
+font-size: 13px;
+cursor: pointer;
+}
+.filter-button:hover { background: #f3f4f6; }
+.table {
+width: 100%;
+border-collapse: collapse;
+font-size: 13px;
+}
+.table th {
+background: #f3f4f6;
+padding: 12px 16px;
+text-align: left;
+font-weight: 600;
+color: #6b7280;
+font-size: 12px;
+border-bottom: 1px solid #e5e7eb;
+}
+.table td {
+padding: 12px 16px;
+border-bottom: 1px solid #e5e7eb;
+}
+.table tr:hover { background: #fafafa; }
+.table-actions {
+display: flex;
+gap: 8px;
+}
+.btn-small {
+padding: 6px 12px;
+border: 1px solid #d1d5db;
+border-radius: 4px;
+background: white;
+font-size: 12px;
+cursor: pointer;
+}
+.btn-small:hover { background: #f3f4f6; }
+.badge {
+display: inline-block;
+padding: 4px 8px;
+border-radius: 4px;
+font-size: 11px;
+font-weight: 500;
+text-transform: uppercase;
+white-space: nowrap;
+}
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-yellow { background: #fef3c7; color: #b45309; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-purple { background: #f3e8ff; color: #6b21a8; }
+.modal {
+display: none;
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0,0,0,0.5);
+z-index: 100;
+align-items: center;
+justify-content: center;
+}
+.modal.active {
+display: flex;
+}
+.modal-content {
+background: white;
+border-radius: 12px;
+padding: 32px;
+max-width: 800px;
+width: 90%;
+max-height: 90vh;
+overflow-y: auto;
+box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.modal-header {
+font-size: 20px;
+font-weight: 600;
+margin-bottom: 24px;
+border-bottom: 1px solid #e5e7eb;
+padding-bottom: 16px;
+}
+.modal-section {
+margin-bottom: 24px;
+}
+.modal-section-label {
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+color: #6b7280;
+margin-bottom: 8px;
+}
+.modal-section-value {
+font-size: 14px;
+color: #1e2332;
+}
+.section-divider {
+height: 1px;
+background: #e5e7eb;
+margin: 24px 0;
+}
+.button-primary {
+background: #6366f1;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 6px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+margin-top: 24px;
+}
+.button-primary:hover { background: #4f46e5; }
+.button-primary:active { background: #4338ca; }
+.close-modal {
+position: absolute;
+top: 16px;
+right: 16px;
+width: 32px;
+height: 32px;
+border: none;
+background: transparent;
+cursor: pointer;
+font-size: 24px;
+color: #6b7280;
+}
+.close-modal:hover { color: #1e2332; }
+.dropdown-menu {
+position: absolute;
+top: 100%;
+left: 0;
+background: white;
+border: 1px solid #d1d5db;
+border-radius: 6px;
+box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+min-width: 200px;
+z-index: 1000;
+}
+.dropdown-menu.hidden {
+display: none;
+}
+.dropdown-item {
+padding: 10px 16px;
+font-size: 13px;
+color: #1e2332;
+cursor: pointer;
+border-bottom: 1px solid #f3f4f6;
+}
+.dropdown-item:hover {
+background: #f9fafb;
+}
+.dropdown-item:last-child {
+border-bottom: none;
+}
+.breadcrumb-row {
+padding: 16px 40px;
+background: white;
+border-bottom: 1px solid #e5e7eb;
+font-size: 13px;
+color: #6b7280;
+}
+.breadcrumb-row a {
+color: #6366f1;
+text-decoration: none;
+cursor: pointer;
+}
+.breadcrumb-row a:hover {
+text-decoration: underline;
+}
+.tabs-container {
+border-bottom: 1px solid #e5e7eb;
+background: white;
+}
+.tabs {
+display: flex;
+gap: 32px;
+padding: 0 40px;
+height: 56px;
+align-items: center;
+}
+.tab {
+font-size: 14px;
+color: #6b7280;
+cursor: pointer;
+padding-bottom: 12px;
+border-bottom: 2px solid transparent;
+margin-bottom: -1px;
+transition: all 0.15s;
+}
+.tab:hover { color: #1e2332; }
+.tab.active {
+color: #6366f1;
+border-bottom-color: #6366f1;
+}
+.tab-content {
+padding: 32px 40px;
+}
+.entity-detail-modal {
+width: 90%;
+max-width: 900px;
+background: white;
+border-radius: 12px;
+box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.entity-detail-header {
+padding: 24px 32px;
+border-bottom: 1px solid #e5e7eb;
+position: relative;
+}
+.entity-detail-title {
+font-size: 20px;
+font-weight: 600;
+color: #1e2332;
+margin-bottom: 8px;
+}
+.entity-detail-subtitle {
+font-size: 13px;
+color: #6b7280;
+}
+.entity-detail-body {
+padding: 32px;
+}
+.entity-info-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 32px 48px;
+margin-bottom: 32px;
+}
+.entity-info-row {
+}
+.entity-info-label {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+color: #6b7280;
+margin-bottom: 4px;
+letter-spacing: 0.5px;
+}
+.entity-info-value {
+font-size: 14px;
+color: #1e2332;
+}
+.info-divider {
+height: 1px;
+background: #e5e7eb;
+margin: 32px 0;
+}
+.tabs-section {
+margin-top: 32px;
+}
+.tabs-horizontal {
+display: flex;
+gap: 24px;
+padding-bottom: 16px;
+border-bottom: 1px solid #e5e7eb;
+}
+.tabs-horizontal-item {
+font-size: 13px;
+color: #6b7280;
+cursor: pointer;
+padding-bottom: 12px;
+border-bottom: 2px solid transparent;
+margin-bottom: -1px;
+transition: all 0.15s;
+}
+.tabs-horizontal-item:hover { color: #1e2332; }
+.tabs-horizontal-item.active {
+color: #6366f1;
+border-bottom-color: #6366f1;
+}
+.account-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 12px 0;
+border-bottom: 1px solid #e5e7eb;
+}
+.account-row:last-child {
+border-bottom: none;
+}
+.account-name {
+font-weight: 500;
+color: #1e2332;
+}
+.account-value {
+font-size: 12px;
+color: #6b7280;
+}
+.info-row {
+display: grid;
+grid-template-columns: 200px 1fr;
+gap: 32px;
+margin-bottom: 16px;
+}
+.info-label {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+color: #6b7280;
+}
+.info-value {
+font-size: 13px;
+color: #1e2332;
+}
+.button-secondary {
+background: white;
+color: #6366f1;
+padding: 10px 20px;
+border: 1px solid #6366f1;
+border-radius: 6px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+margin-right: 12px;
+}
+.button-secondary:hover { background: #f3e8ff; }
+.modal-footer {
+padding: 24px 32px;
+border-top: 1px solid #e5e7eb;
+background: #f9fafb;
+display: flex;
+justify-content: flex-end;
+gap: 12px;
+border-radius: 0 0 12px 12px;
+}
+.holdings-list {
+list-style: none;
+padding: 0;
+}
+.holdings-item {
+padding: 16px;
+border: 1px solid #e5e7eb;
+border-radius: 6px;
+margin-bottom: 12px;
+background: white;
+cursor: pointer;
+transition: all 0.15s;
+}
+.holdings-item:hover {
+background: #f9fafb;
+border-color: #d1d5db;
+}
+.holding-fund {
+font-weight: 500;
+color: #1e2332;
+margin-bottom: 4px;
+}
+.holding-details {
+font-size: 12px;
+color: #6b7280;
+}
+.holding-details span { margin-right: 16px; }
+.holding-value {
+font-size: 14px;
+font-weight: 600;
+color: #1e2332;
+margin-top: 8px;
+}
+.documents-list {
+list-style: none;
+padding: 0;
+}
+.document-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+border: 1px solid #e5e7eb;
+border-radius: 6px;
+margin-bottom: 12px;
+background: white;
+cursor: pointer;
+transition: all 0.15s;
+}
+.document-item:hover {
+background: #f9fafb;
+border-color: #d1d5db;
+}
+.document-info {
+flex: 1;
+}
+.document-name {
+font-weight: 500;
+color: #1e2332;
+margin-bottom: 4px;
+}
+.document-meta {
+font-size: 12px;
+color: #6b7280;
+}
+.document-meta span { margin-right: 16px; }
+.document-download {
+padding: 6px 12px;
+border: 1px solid #d1d5db;
+border-radius: 4px;
+background: white;
+font-size: 12px;
+cursor: pointer;
+white-space: nowrap;
+}
+.document-download:hover { background: #f3f4f6; }
+.status-row {
+padding: 16px;
+background: #f3f4f6;
+border-radius: 6px;
+margin-bottom: 16px;
+}
+.status-label {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+color: #6b7280;
+margin-bottom: 4px;
+}
+.status-value {
+font-size: 14px;
+color: #1e2332;
+}
+</style>
 </head>
 <body>
-  <!-- TOPBAR -->
-  <div class="topbar" id="topbar">
-    <div class="topbar-logo">
-      <svg viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="20" cy="20" r="15" fill="#ffffff" opacity="0.9"/>
-        <circle cx="20" cy="20" r="8" fill="none" stroke="#ffffff" stroke-width="2"/>
-        <text x="50" y="26" font-size="20" font-weight="bold" fill="#ffffff">CARUSO</text>
-      </svg>
-    </div>
-    <button class="topbar-switcher" id="fundManagerSwitcher" title="Switch fund manager">
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-        <path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 14a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm3-7a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-      </svg>
-    </button>
-    <div class="topbar-spacer"></div>
-    <div class="topbar-nav" id="topbarNav">
-      <!-- Nav items populated by JS -->
-    </div>
-    <div class="topbar-right">
-      <button class="btn" style="border: 1px solid rgba(255,255,255,0.3); color: #ffffff;">Chat</button>
-      <button class="btn primary" style="background: #7f6df1; border-color: #7f6df1;">Create</button>
-    </div>
-  </div>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <!-- Sidebar populated by JS -->
-  </div>
-
-  <!-- MAIN -->
-  <div class="main-container">
-    <!-- PORTFOLIO / INVESTMENTS PAGE -->
-    <div id="portfolioPage" class="page active">
-      <div class="breadcrumb">
-        <span>Portfolio</span>
-      </div>
-      <div class="page-header">
-        <h1>Portfolio</h1>
-        <div class="page-header-actions">
-          <button class="btn">+ New Investment</button>
-        </div>
-      </div>
-
-      <!-- FM-specific: Show full nav + holdings table -->
-      <div id="fmPortfolioView">
-        <div class="filters">
-          <div class="search-box">
-            <input type="text" id="portfolioSearch" placeholder="Search holdings..." />
-          </div>
-          <div class="dropdown">
-            <button class="dropdown-toggle" id="statusToggle">Status</button>
-            <div class="dropdown-menu" id="statusMenu">
-              <div class="dropdown-item active" data-status="">All</div>
-              <div class="dropdown-item" data-status="full">Full Access</div>
-              <div class="dropdown-item" data-status="read">Read Only</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Fund</th>
-                <th>Class</th>
-                <th>Investing Entity</th>
-                <th>No. Units</th>
-                <th>Unit Value</th>
-                <th>Holding Value</th>
-                <th>Access</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <!-- Rows populated by JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <div class="pagination">
-          <span class="pagination-info" id="paginationInfo">Showing 1-10 of 13 holdings</span>
-          <div class="pagination-controls">
-            <button class="btn" id="prevBtn" onclick="previousPage()">← Previous</button>
-            <button class="btn" id="nextBtn" onclick="nextPage()">Next →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Caruso view: Show summary/detailed/grouped tabs -->
-      <div id="carusoPortfolioView" style="display: none;">
-        <div class="filters">
-          <div class="view-toggle" id="viewToggle">
-            <button class="view-toggle-btn active" data-view="summary" onclick="switchView('summary')">Summary</button>
-            <button class="view-toggle-btn" data-view="detailed" onclick="switchView('detailed')">Detailed</button>
-            <button class="view-toggle-btn" data-view="grouped" onclick="switchView('grouped')">Grouped</button>
-          </div>
-        </div>
-
-        <!-- SUMMARY VIEW -->
-        <div id="summaryView" class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Fund Manager</th>
-                <th>Holdings</th>
-                <th>Consolidated Value</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody id="summaryTableBody">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- DETAILED VIEW -->
-        <div id="detailedView" class="table-container" style="display: none;">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 150px;">Fund Manager</th>
-                <th>Fund</th>
-                <th>Class</th>
-                <th>Investing Entity</th>
-                <th>No. Units</th>
-                <th>Unit Value</th>
-                <th>Holding Value</th>
-                <th>Access</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody id="detailedTableBody">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- GROUPED VIEW -->
-        <div id="groupedView" class="table-container" style="display: none;">
-          <table>
-            <thead>
-              <tr>
-                <th>Fund</th>
-                <th>Class</th>
-                <th>Investing Entity</th>
-                <th>No. Units</th>
-                <th>Holding Value</th>
-                <th>Access</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody id="groupedTableBody">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- INVEST PAGE -->
-    <div id="investPage" class="page">
-      <div class="breadcrumb">
-        <span>Invest</span>
-      </div>
-      <div class="page-header">
-        <h1>Invest</h1>
-      </div>
-      <div class="details-container">
-        <p>Invest page coming soon...</p>
-      </div>
-    </div>
-
-    <!-- DOCUMENTS PAGE -->
-    <div id="documentsPage" class="page">
-      <div class="breadcrumb">
-        <span>Documents</span>
-      </div>
-      <div class="page-header">
-        <h1>Documents</h1>
-      </div>
-
-      <div class="filters">
-        <div class="search-box">
-          <input type="text" id="docsSearch" placeholder="Search documents..." />
-        </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle" id="fundToggle">Fund</button>
-          <div class="dropdown-menu" id="fundMenu">
-            <div class="dropdown-item active" data-value="">All Funds</div>
-            <!-- Populated by JS -->
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle" id="categoryToggle">Category</button>
-          <div class="dropdown-menu" id="categoryMenu">
-            <div class="dropdown-item active" data-value="">All Categories</div>
-            <div class="dropdown-item" data-value="prospectus">Prospectus</div>
-            <div class="dropdown-item" data-value="report">Report</div>
-            <div class="dropdown-item" data-value="policy">Policy</div>
-          </div>
-        </div>
-        <div class="dropdown" id="fmFilterContainer" style="display: none;">
-          <button class="dropdown-toggle" id="fmDocFilter">Fund Manager</button>
-          <div class="dropdown-menu" id="fmDocMenu">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Title</th>
-              <th>Fund</th>
-              <th>Class</th>
-              <th>Category</th>
-              <th>Size</th>
-              <th>View</th>
-            </tr>
-          </thead>
-          <tbody id="docsTableBody">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pagination">
-        <span class="pagination-info" id="docsPaginationInfo">Showing results...</span>
-      </div>
-    </div>
-
-    <!-- TRANSACTIONS PAGE -->
-    <div id="transactionsPage" class="page">
-      <div class="breadcrumb">
-        <span>Transactions</span>
-      </div>
-      <div class="page-header">
-        <h1>Transactions</h1>
-      </div>
-
-      <div class="filters">
-        <div class="search-box">
-          <input type="text" id="txSearch" placeholder="Search transactions..." />
-        </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle" id="fundTxToggle">Fund</button>
-          <div class="dropdown-menu" id="fundTxMenu">
-            <div class="dropdown-item active" data-value="">All Funds</div>
-            <!-- Populated by JS -->
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle" id="typeTxToggle">Type</button>
-          <div class="dropdown-menu" id="typeTxMenu">
-            <div class="dropdown-item active" data-value="">All Types</div>
-            <div class="dropdown-item" data-value="investment">Investment</div>
-            <div class="dropdown-item" data-value="distribution">Distribution</div>
-            <div class="dropdown-item" data-value="fee">Fee</div>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="dropdown-toggle" id="statusTxToggle">Status</button>
-          <div class="dropdown-menu" id="statusTxMenu">
-            <div class="dropdown-item active" data-value="">All Status</div>
-            <div class="dropdown-item" data-value="complete">Complete</div>
-            <div class="dropdown-item" data-value="pending">Pending</div>
-            <div class="dropdown-item" data-value="processing">Processing</div>
-            <div class="dropdown-item" data-value="cancelled">Cancelled</div>
-          </div>
-        </div>
-        <div class="dropdown" id="fmTxFilterContainer" style="display: none;">
-          <button class="dropdown-toggle" id="fmTxFilter">Fund Manager</button>
-          <div class="dropdown-menu" id="fmTxMenu">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Fund</th>
-              <th>Class</th>
-              <th>No. Units</th>
-              <th>Price/Unit</th>
-              <th>Value</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="txTableBody">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pagination">
-        <span class="pagination-info" id="txPaginationInfo">Showing results...</span>
-      </div>
-    </div>
-
-    <!-- HOLDING DETAIL PAGE -->
-    <div id="holdingDetailPage" class="page">
-      <div class="breadcrumb">
-        <span><a onclick="backToPortfolio()">Portfolio</a></span>
-        <span>&gt;</span>
-        <span id="holdingDetailBreadcrumb"></span>
-      </div>
-      <div class="page-header">
-        <h1 id="holdingDetailTitle"></h1>
-      </div>
-      <div class="details-container">
-        <h2 style="margin-bottom: 20px; font-size: 16px; font-weight: 600;">Holding Details</h2>
-        <div class="details-grid">
-          <div class="detail-section">
-            <div class="detail-label">Fund</div>
-            <div class="detail-value" id="detailFund"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Class</div>
-            <div class="detail-value" id="detailClass"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Investing Entity</div>
-            <div class="detail-value" id="detailEntity"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">No. Units</div>
-            <div class="detail-value" id="detailUnits"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Unit Value</div>
-            <div class="detail-value large" id="detailUnitValue"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Holding Value</div>
-            <div class="detail-value large" id="detailHoldingValue"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Access Level</div>
-            <div class="detail-value" id="detailAccess"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FUND MANAGER DETAIL PAGE -->
-    <div id="fundManagerDetailPage" class="page">
-      <div class="breadcrumb">
-        <span><a onclick="backToPortfolio()">Portfolio</a></span>
-        <span>&gt;</span>
-        <span id="fmDetailBreadcrumb"></span>
-      </div>
-      <div class="page-header">
-        <h1 id="fmDetailTitle"></h1>
-      </div>
-      <div class="details-container">
-        <h2 style="margin-bottom: 20px; font-size: 16px; font-weight: 600;">Fund Manager Summary</h2>
-        <div class="details-grid">
-          <div class="detail-section">
-            <div class="detail-label">Total Holdings</div>
-            <div class="detail-value large" id="fmTotalHoldings"></div>
-          </div>
-          <div class="detail-section">
-            <div class="detail-label">Consolidated Value</div>
-            <div class="detail-value large" id="fmConsolidatedValue"></div>
-          </div>
-        </div>
-        <h2 style="margin-bottom: 20px; font-size: 16px; font-weight: 600; margin-top: 40px;">Holdings in this Fund Manager</h2>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Fund</th>
-                <th>Class</th>
-                <th>Investing Entity</th>
-                <th>No. Units</th>
-                <th>Unit Value</th>
-                <th>Holding Value</th>
-                <th>Access</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody id="fmHoldingsTable">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODALS -->
-  <div id="fundSwitcherModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeFundSwitcher()">×</button>
-      <div class="modal-header">
-        <h2>Switch Fund Manager</h2>
-      </div>
-      <div class="modal-body" id="fundSwitcherBody">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ─────────────────────────────────────────────────────────────────
-    // DATA
-    // ─────────────────────────────────────────────────────────────────
-
-    const fundManagers = {
-      caruso: {
-        name: 'Caruso',
-        color: '#112c37',
-        holdings: [],
-        documents: [],
-        transactions: []
-      },
-      ventura: {
-        name: 'Ventura',
-        color: '#042246',
-        holdings: [
-          { id: 'h1', fund: 'Tech Innovation Fund', class: 'A', entity: 'Entity A', units: 10000, unitValue: 45.50, access: 'full' },
-          { id: 'h2', fund: 'Tech Innovation Fund', class: 'B', entity: 'Entity B', units: 5000, unitValue: 42.00, access: 'read' },
-          { id: 'h3', fund: 'Growth Fund', class: 'A', entity: 'Entity C', units: 2500, unitValue: 65.75, access: 'full' },
-          { id: 'h4', fund: 'Growth Fund', class: 'B', entity: 'Entity D', units: 1200, unitValue: 62.50, access: 'read' },
-          { id: 'h5', fund: 'Emerging Markets', class: 'A', entity: 'Entity E', units: 8000, unitValue: 28.25, access: 'full' },
-          { id: 'h6', fund: 'Emerging Markets', class: 'B', entity: 'Entity F', units: 3500, unitValue: 26.80, access: 'read' }
-        ],
-        documents: [
-          { date: '2026-03-15', title: 'Q1 2026 Report', fund: 'Tech Innovation Fund', class: 'A', category: 'Report', size: '2.4 MB' },
-          { date: '2026-03-10', title: 'Fund Prospectus', fund: 'Tech Innovation Fund', class: 'A', category: 'Prospectus', size: '1.2 MB' },
-          { date: '2026-03-05', title: 'Investment Policy Statement', fund: 'Tech Innovation Fund', class: 'A', category: 'Policy', size: '0.8 MB' },
-          { date: '2026-02-28', title: 'Fund Performance Report', fund: 'Growth Fund', class: 'A', category: 'Report', size: '1.8 MB' },
-          { date: '2026-02-20', title: 'Growth Fund Prospectus', fund: 'Growth Fund', class: 'A', category: 'Prospectus', size: '1.5 MB' },
-          { date: '2026-02-15', title: 'Risk Management Policy', fund: 'Growth Fund', class: 'A', category: 'Policy', size: '0.9 MB' },
-          { date: '2026-01-31', title: 'Emerging Markets Report', fund: 'Emerging Markets', class: 'A', category: 'Report', size: '2.1 MB' },
-          { date: '2026-01-25', title: 'Emerging Markets Prospectus', fund: 'Emerging Markets', class: 'A', category: 'Prospectus', size: '1.3 MB' }
-        ],
-        transactions: [
-          { date: '2026-03-18', type: 'Investment', fund: 'Tech Innovation Fund', class: 'A', units: 500, pricePerUnit: 45.50, value: 22750, status: 'complete' },
-          { date: '2026-03-15', type: 'Distribution', fund: 'Tech Innovation Fund', class: 'A', units: 1000, pricePerUnit: 45.50, value: 45500, status: 'complete' },
-          { date: '2026-03-10', type: 'Investment', fund: 'Growth Fund', class: 'A', units: 200, pricePerUnit: 65.75, value: 13150, status: 'pending' },
-          { date: '2026-03-05', type: 'Fee', fund: 'Growth Fund', class: 'A', units: 0, pricePerUnit: 0, value: 500, status: 'processing' },
-          { date: '2026-02-28', type: 'Investment', fund: 'Emerging Markets', class: 'A', units: 1500, pricePerUnit: 28.25, value: 42375, status: 'complete' },
-          { date: '2026-02-20', type: 'Distribution', fund: 'Emerging Markets', class: 'A', units: 800, pricePerUnit: 28.25, value: 22600, status: 'complete' },
-          { date: '2026-02-15', type: 'Investment', fund: 'Tech Innovation Fund', class: 'B', units: 400, pricePerUnit: 42.00, value: 16800, status: 'cancelled' },
-          { date: '2026-01-31', type: 'Distribution', fund: 'Growth Fund', class: 'B', units: 600, pricePerUnit: 62.50, value: 37500, status: 'complete' }
-        ]
-      },
-      mackersy: {
-        name: 'Mackersy Property',
-        color: '#1a1a2e',
-        holdings: [
-          { id: 'h7', fund: 'Real Estate Fund A', class: 'A', entity: 'Entity G', units: 500, unitValue: 1200.00, access: 'full' },
-          { id: 'h8', fund: 'Real Estate Fund A', class: 'B', entity: 'Entity H', units: 250, unitValue: 1150.00, access: 'read' },
-          { id: 'h9', fund: 'Real Estate Fund B', class: 'A', entity: 'Entity I', units: 1000, unitValue: 850.00, access: 'full' },
-          { id: 'h10', fund: 'Real Estate Fund B', class: 'B', entity: 'Entity J', units: 600, unitValue: 820.00, access: 'read' }
-        ],
-        documents: [
-          { date: '2026-03-12', title: 'Property Report March', fund: 'Real Estate Fund A', class: 'A', category: 'Report', size: '3.1 MB' },
-          { date: '2026-03-01', title: 'Real Estate Fund A Prospectus', fund: 'Real Estate Fund A', class: 'A', category: 'Prospectus', size: '2.0 MB' },
-          { date: '2026-02-25', title: 'Property Management Policy', fund: 'Real Estate Fund A', class: 'A', category: 'Policy', size: '1.2 MB' },
-          { date: '2026-02-10', title: 'Real Estate Fund B Report', fund: 'Real Estate Fund B', class: 'A', category: 'Report', size: '2.8 MB' },
-          { date: '2026-02-05', title: 'Real Estate Fund B Prospectus', fund: 'Real Estate Fund B', class: 'A', category: 'Prospectus', size: '1.8 MB' },
-          { date: '2026-01-30', title: 'Development Risk Assessment', fund: 'Real Estate Fund B', class: 'A', category: 'Policy', size: '1.5 MB' }
-        ],
-        transactions: [
-          { date: '2026-03-16', type: 'Investment', fund: 'Real Estate Fund A', class: 'A', units: 50, pricePerUnit: 1200.00, value: 60000, status: 'complete' },
-          { date: '2026-03-12', type: 'Distribution', fund: 'Real Estate Fund A', class: 'A', units: 100, pricePerUnit: 1200.00, value: 120000, status: 'complete' },
-          { date: '2026-02-28', type: 'Investment', fund: 'Real Estate Fund B', class: 'A', units: 75, pricePerUnit: 850.00, value: 63750, status: 'pending' },
-          { date: '2026-02-20', type: 'Fee', fund: 'Real Estate Fund B', class: 'A', units: 0, pricePerUnit: 0, value: 2000, status: 'processing' },
-          { date: '2026-02-10', type: 'Distribution', fund: 'Real Estate Fund B', class: 'B', units: 150, pricePerUnit: 820.00, value: 123000, status: 'complete' },
-          { date: '2026-01-25', type: 'Investment', fund: 'Real Estate Fund A', class: 'B', units: 80, pricePerUnit: 1150.00, value: 92000, status: 'complete' }
-        ]
-      },
-      charterhall: {
-        name: 'Charter Hall',
-        color: '#2A6EBB',
-        holdings: [
-          { id: 'h11', fund: 'Listed Fund', class: 'A', entity: 'Entity K', units: 15000, unitValue: 3.50, access: 'full' },
-          { id: 'h12', fund: 'Listed Fund', class: 'B', entity: 'Entity L', units: 8000, unitValue: 3.45, access: 'read' },
-          { id: 'h13', fund: 'Unlisted Fund', class: 'A', entity: 'Entity M', units: 5000, unitValue: 5.25, access: 'full' }
-        ],
-        documents: [
-          { date: '2026-03-14', title: 'Listed Fund Performance', fund: 'Listed Fund', class: 'A', category: 'Report', size: '1.9 MB' },
-          { date: '2026-03-08', title: 'Listed Fund Prospectus', fund: 'Listed Fund', class: 'A', category: 'Prospectus', size: '1.1 MB' },
-          { date: '2026-02-28', title: 'Compliance Report', fund: 'Listed Fund', class: 'A', category: 'Policy', size: '0.7 MB' },
-          { date: '2026-02-18', title: 'Unlisted Fund Report', fund: 'Unlisted Fund', class: 'A', category: 'Report', size: '2.2 MB' },
-          { date: '2026-02-10', title: 'Unlisted Fund Prospectus', fund: 'Unlisted Fund', class: 'A', category: 'Prospectus', size: '1.4 MB' }
-        ],
-        transactions: [
-          { date: '2026-03-17', type: 'Investment', fund: 'Listed Fund', class: 'A', units: 1000, pricePerUnit: 3.50, value: 3500, status: 'complete' },
-          { date: '2026-03-10', type: 'Distribution', fund: 'Listed Fund', class: 'A', units: 2000, pricePerUnit: 3.50, value: 7000, status: 'complete' },
-          { date: '2026-02-25', type: 'Investment', fund: 'Unlisted Fund', class: 'A', units: 500, pricePerUnit: 5.25, value: 2625, status: 'processing' },
-          { date: '2026-02-15', type: 'Investment', fund: 'Listed Fund', class: 'B', units: 1500, pricePerUnit: 3.45, value: 5175, status: 'complete' },
-          { date: '2026-01-30', type: 'Fee', fund: 'Unlisted Fund', class: 'A', units: 0, pricePerUnit: 0, value: 1500, status: 'complete' }
-        ]
-      }
-    };
-
-    // Current state
-    let currentFundManager = 'ventura';
-    let currentPage = 'portfolioPage';
-    let currentPortfolioView = 'summary'; // for Caruso view
-    let currentPortfolioPage = 1; // pagination
-    let currentPortfolioRows = 10;
-
-    const fundManagerRows = {
-      ventura: fundManagers.ventura.holdings,
-      mackersy: fundManagers.mackersy.holdings,
-      charterhall: fundManagers.charterhall.holdings
-    };
-
-    // ─────────────────────────────────────────────────────────────────
-    // INIT
-    // ─────────────────────────────────────────────────────────────────
-
-    function init() {
-      populateSidebar();
-      populateTopbar();
-      renderPortfolioPage();
-      setupDropdowns();
-      setupFilterListeners();
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // SIDEBAR & TOPBAR
-    // ─────────────────────────────────────────────────────────────────
-
-    function populateSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const fm = fundManagers[currentFundManager];
-      const isCaruso = currentFundManager === 'caruso';
-
-      let sections = ``;
-
-      if (!isCaruso) {
-        sections += `
-          <div class="sidebar-section">
-            <div class="sidebar-section-label">Navigation</div>
-            <div class="sidebar-nav">
-              <a class="nav-item active" onclick="goToPage('portfolioPage')">Portfolio</a>
-              <a class="nav-item" onclick="goToPage('investPage')">Invest</a>
-              <a class="nav-item" onclick="goToPage('documentsPage')">Documents</a>
-              <a class="nav-item" onclick="goToPage('transactionsPage')">Transactions</a>
-              <a class="nav-item" onclick="goToPage('notificationsPage')">Notifications<span class="sidebar-badge">2</span></a>
-            </div>
-          </div>
-        `;
-      } else {
-        sections += `
-          <div class="sidebar-section">
-            <div class="sidebar-section-label">Navigation</div>
-            <div class="sidebar-nav">
-              <a class="nav-item active" onclick="goToPage('portfolioPage')">Investments</a>
-              <a class="nav-item" onclick="goToPage('documentsPage')">Documents</a>
-              <a class="nav-item" onclick="goToPage('transactionsPage')">Transactions</a>
-            </div>
-          </div>
-        `;
-      }
-
-      sidebar.innerHTML = sections;
-    }
-
-    function populateTopbar() {
-      const topbar = document.getElementById('topbar');
-      const fm = fundManagers[currentFundManager];
-
-      // Update topbar color
-      topbar.style.background = fm.color;
-
-      // Update nav
-      const navContainer = document.getElementById('topbarNav');
-      const isCaruso = currentFundManager === 'caruso';
-
-      let navHTML = '';
-      if (!isCaruso) {
-        navHTML = `
-          <a class="nav-item active" onclick="goToPage('portfolioPage')">Portfolio</a>
-          <a class="nav-item" onclick="goToPage('investPage')">Invest</a>
-          <a class="nav-item" onclick="goToPage('documentsPage')">Documents</a>
-          <a class="nav-item" onclick="goToPage('transactionsPage')">Transactions</a>
-        `;
-      } else {
-        navHTML = `
-          <a class="nav-item active" onclick="goToPage('portfolioPage')">Investments</a>
-          <a class="nav-item" onclick="goToPage('documentsPage')">Documents</a>
-          <a class="nav-item" onclick="goToPage('transactionsPage')">Transactions</a>
-        `;
-      }
-      navContainer.innerHTML = navHTML;
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // PAGE NAVIGATION
-    // ─────────────────────────────────────────────────────────────────
-
-    function goToPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      currentPage = pageId;
-
-      // Update sidebar/topbar active state
-      document.querySelectorAll('.sidebar-nav .nav-item, .topbar-nav a').forEach(el => {
-        el.classList.remove('active');
-      });
-      document.querySelectorAll(`.sidebar-nav [onclick*="${pageId}"], .topbar-nav [onclick*="${pageId}"]`).forEach(el => {
-        el.classList.add('active');
-      });
-
-      if (pageId === 'portfolioPage') renderPortfolioPage();
-      else if (pageId === 'documentsPage') renderDocumentsPage();
-      else if (pageId === 'transactionsPage') renderTransactionsPage();
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // FUND MANAGER SWITCHER
-    // ─────────────────────────────────────────────────────────────────
-
-    function openFundSwitcher() {
-      const modal = document.getElementById('fundSwitcherModal');
-      const body = document.getElementById('fundSwitcherBody');
-
-      let html = '';
-      Object.keys(fundManagers).forEach(key => {
-        const fm = fundManagers[key];
-        const active = key === currentFundManager ? 'active' : '';
-        html += `<div class="dropdown-item ${active}" onclick="switchFundManager('${key}')">${fm.name}</div>`;
-      });
-
-      body.innerHTML = html;
-      modal.classList.add('active');
-    }
-
-    function closeFundSwitcher() {
-      document.getElementById('fundSwitcherModal').classList.remove('active');
-    }
-
-    function switchFundManager(fmKey) {
-      currentFundManager = fmKey;
-      currentPortfolioPage = 1;
-      currentPortfolioView = 'summary';
-      populateSidebar();
-      populateTopbar();
-      closeFundSwitcher();
-      goToPage('portfolioPage');
-      renderPortfolioPage();
-      // Also refresh documents and transactions when switching
-    }
-
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.id === 'fundManagerSwitcher') {
-        openFundSwitcher();
-      }
-    });
-
-    // ─────────────────────────────────────────────────────────────────
-    // PORTFOLIO / INVESTMENTS PAGE
-    // ─────────────────────────────────────────────────────────────────
-
-    function renderPortfolioPage() {
-      const isCaruso = currentFundManager === 'caruso';
-      const fmView = document.getElementById('fmPortfolioView');
-      const carusoView = document.getElementById('carusoPortfolioView');
-
-      if (!isCaruso) {
-        fmView.style.display = 'block';
-        carusoView.style.display = 'none';
-        renderFMPortfolio();
-      } else {
-        fmView.style.display = 'none';
-        carusoView.style.display = 'block';
-        renderCarusoPortfolio();
-      }
-    }
-
-    function renderFMPortfolio() {
-      const rows = fundManagerRows[currentFundManager];
-      document.getElementById('tableBody').innerHTML = buildTableRows(rows);
-      updatePagination(rows.length);
-    }
-
-    function buildTableRows(rows) {
-      const start = (currentPortfolioPage - 1) * currentPortfolioRows;
-      const end = start + currentPortfolioRows;
-      const paginatedRows = rows.slice(start, end);
-
-      return paginatedRows.map(row => {
-        const holding = row;
-        const accessBadge = holding.access === 'full'
-          ? '<span class="badge adviser">Full Access</span>'
-          : '<span class="badge investor">Read Only</span>';
-
-        return `
-          <tr>
-            <td>${holding.fund}</td>
-            <td>${holding.class}</td>
-            <td>${holding.entity}</td>
-            <td>${holding.units.toLocaleString()}</td>
-            <td>$${holding.unitValue.toFixed(2)}</td>
-            <td>$${(holding.units * holding.unitValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>${accessBadge}</td>
-            <td><button class="btn" onclick="goToHoldingDetail('${holding.id}')">View</button></td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function updatePagination(total) {
-      const totalPages = Math.ceil(total / currentPortfolioRows);
-      const start = (currentPortfolioPage - 1) * currentPortfolioRows + 1;
-      const end = Math.min(start + currentPortfolioRows - 1, total);
-
-      document.getElementById('paginationInfo').textContent = `Showing ${start}-${end} of ${total} holdings`;
-      document.getElementById('prevBtn').disabled = currentPortfolioPage === 1;
-      document.getElementById('nextBtn').disabled = currentPortfolioPage === totalPages;
-    }
-
-    function nextPage() {
-      const rows = fundManagerRows[currentFundManager];
-      const totalPages = Math.ceil(rows.length / currentPortfolioRows);
-      if (currentPortfolioPage < totalPages) {
-        currentPortfolioPage++;
-        renderFMPortfolio();
-      }
-    }
-
-    function previousPage() {
-      if (currentPortfolioPage > 1) {
-        currentPortfolioPage--;
-        renderFMPortfolio();
-      }
-    }
-
-    // Caruso Portfolio Views
-    function renderCarusoPortfolio() {
-      const views = ['summary', 'detailed', 'grouped'];
-      views.forEach(view => {
-        const container = document.getElementById(view + 'View');
-        container.style.display = currentPortfolioView === view ? 'block' : 'none';
-      });
-
-      if (currentPortfolioView === 'summary') renderSummaryView();
-      else if (currentPortfolioView === 'detailed') renderDetailedView();
-      else if (currentPortfolioView === 'grouped') renderGroupedView();
-    }
-
-    function switchView(viewType) {
-      currentPortfolioView = viewType;
-      document.querySelectorAll('.view-toggle-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.view === viewType);
-      });
-      renderCarusoPortfolio();
-    }
-
-    function renderSummaryView() {
-      const tbody = document.getElementById('summaryTableBody');
-      const fms = ['ventura', 'mackersy', 'charterhall'];
-
-      tbody.innerHTML = fms.map(fmKey => {
-        const fm = fundManagers[fmKey];
-        const holdings = fm.holdings;
-        const totalValue = holdings.reduce((sum, h) => sum + (h.units * h.unitValue), 0);
-
-        return `
-          <tr>
-            <td style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 20px; height: 20px; background: ${fm.color}; border-radius: 3px;"></div>
-              ${fm.name}
-            </td>
-            <td>${holdings.length}</td>
-            <td>$${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td><button class="btn" onclick="goToFundManagerDetail('${fmKey}')">View</button></td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderDetailedView() {
-      const tbody = document.getElementById('detailedTableBody');
-      const fms = ['ventura', 'mackersy', 'charterhall'];
-
-      let html = '';
-      fms.forEach(fmKey => {
-        const fm = fundManagers[fmKey];
-        const holdings = fm.holdings;
-
-        holdings.forEach((holding, idx) => {
-          const isFirstRow = idx === 0;
-          const rowspan = isFirstRow ? `rowspan="${holdings.length}"` : '';
-
-          const fmCell = isFirstRow
-            ? `<td ${rowspan} style="display: flex; align-items: center; gap: 8px;"><div style="width: 20px; height: 20px; background: ${fm.color}; border-radius: 3px;"></div> ${fm.name}</td>`
-            : '';
-
-          const accessBadge = holding.access === 'full'
-            ? '<span class="badge adviser">Full Access</span>'
-            : '<span class="badge investor">Read Only</span>';
-
-          html += `
-            <tr>
-              ${fmCell}
-              <td>${holding.fund}</td>
-              <td>${holding.class}</td>
-              <td>${holding.entity}</td>
-              <td>${holding.units.toLocaleString()}</td>
-              <td>$${holding.unitValue.toFixed(2)}</td>
-              <td>$${(holding.units * holding.unitValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-              <td>${accessBadge}</td>
-              <td><button class="btn" onclick="goToHoldingDetail('${holding.id}')">View</button></td>
-            </tr>
-          `;
-        });
-      });
-
-      tbody.innerHTML = html;
-    }
-
-    function renderGroupedView() {
-      const tbody = document.getElementById('groupedTableBody');
-      const fms = ['ventura', 'mackersy', 'charterhall'];
-
-      let html = '';
-      fms.forEach(fmKey => {
-        const fm = fundManagers[fmKey];
-        const holdings = fm.holdings;
-
-        // Subheader row
-        html += `
-          <tr class="subheader">
-            <td colspan="7" style="padding: 0; display: flex; align-items: center; padding-left: 16px;">
-              <div class="subheader-icon" style="background: ${fm.color}; border-radius: 3px; width: 16px; height: 16px;"></div>
-              <span style="margin-left: 8px;">${fm.name}</span>
-            </td>
-          </tr>
-        `;
-
-        // Holdings rows
-        holdings.forEach(holding => {
-          const accessBadge = holding.access === 'full'
-            ? '<span class="badge adviser">Full Access</span>'
-            : '<span class="badge investor">Read Only</span>';
-
-          html += `
-            <tr>
-              <td>${holding.fund}</td>
-              <td>${holding.class}</td>
-              <td>${holding.entity}</td>
-              <td>${holding.units.toLocaleString()}</td>
-              <td>$${(holding.units * holding.unitValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-              <td>${accessBadge}</td>
-              <td><button class="btn" onclick="goToHoldingDetail('${holding.id}')">View</button></td>
-            </tr>
-          `;
-        });
-      });
-
-      tbody.innerHTML = html;
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // HOLDING DETAIL PAGE
-    // ─────────────────────────────────────────────────────────────────
-
-    function goToHoldingDetail(holdingId) {
-      const holding = findHoldingById(holdingId);
-      if (!holding) return;
-
-      document.getElementById('holdingDetailBreadcrumb').textContent = holding.fund;
-      document.getElementById('holdingDetailTitle').textContent = `${holding.fund} - ${holding.class} Class`;
-      document.getElementById('detailFund').textContent = holding.fund;
-      document.getElementById('detailClass').textContent = holding.class;
-      document.getElementById('detailEntity').textContent = holding.entity;
-      document.getElementById('detailUnits').textContent = holding.units.toLocaleString();
-      document.getElementById('detailUnitValue').textContent = `$${holding.unitValue.toFixed(2)}`;
-      document.getElementById('detailHoldingValue').textContent = `$${(holding.units * holding.unitValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-      const accessBadge = holding.access === 'full'
-        ? '<span class="badge adviser">Full Access</span>'
-        : '<span class="badge investor">Read Only</span>';
-      document.getElementById('detailAccess').innerHTML = accessBadge;
-
-      goToPage('holdingDetailPage');
-    }
-
-    function findHoldingById(holdingId) {
-      for (const fmKey of Object.keys(fundManagers)) {
-        const holding = fundManagers[fmKey].holdings.find(h => h.id === holdingId);
-        if (holding) return holding;
-      }
-      return null;
-    }
-
-    function backToPortfolio() {
-      goToPage('portfolioPage');
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // FUND MANAGER DETAIL PAGE (Caruso view)
-    // ─────────────────────────────────────────────────────────────────
-
-    function goToFundManagerDetail(fmKey) {
-      const fm = fundManagers[fmKey];
-      const holdings = fm.holdings;
-      const totalValue = holdings.reduce((sum, h) => sum + (h.units * h.unitValue), 0);
-
-      document.getElementById('fmDetailBreadcrumb').textContent = fm.name;
-      document.getElementById('fmDetailTitle').textContent = fm.name;
-      document.getElementById('fmTotalHoldings').textContent = holdings.length;
-      document.getElementById('fmConsolidatedValue').textContent = `$${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-      // Populate holdings table
-      const tbody = document.getElementById('fmHoldingsTable');
-      tbody.innerHTML = holdings.map(holding => {
-        const accessBadge = holding.access === 'full'
-          ? '<span class="badge adviser">Full Access</span>'
-          : '<span class="badge investor">Read Only</span>';
-
-        return `
-          <tr>
-            <td>${holding.fund}</td>
-            <td>${holding.class}</td>
-            <td>${holding.entity}</td>
-            <td>${holding.units.toLocaleString()}</td>
-            <td>$${holding.unitValue.toFixed(2)}</td>
-            <td>$${(holding.units * holding.unitValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>${accessBadge}</td>
-            <td><button class="btn" onclick="goToHoldingDetail('${holding.id}')">View</button></td>
-          </tr>
-        `;
-      }).join('');
-
-      goToPage('fundManagerDetailPage');
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // DOCUMENTS PAGE
-    // ─────────────────────────────────────────────────────────────────
-
-    function renderDocumentsPage() {
-      const isCaruso = currentFundManager === 'caruso';
-      const fmFilterContainer = document.getElementById('fmFilterContainer');
-      fmFilterContainer.style.display = isCaruso ? 'block' : 'none';
-
-      if (isCaruso) {
-        populateFMDocFilter();
-      }
-
-      renderDocumentsTable();
-    }
-
-    function populateFMDocFilter() {
-      const menu = document.getElementById('fmDocMenu');
-      menu.innerHTML = `<div class="dropdown-item active" data-value="">All Fund Managers</div>`;
-
-      ['ventura', 'mackersy', 'charterhall'].forEach(fmKey => {
-        const fm = fundManagers[fmKey];
-        menu.innerHTML += `<div class="dropdown-item" data-value="${fmKey}">${fm.name}</div>`;
-      });
-    }
-
-    function renderDocumentsTable() {
-      const isCaruso = currentFundManager === 'caruso';
-      let docs = [];
-
-      if (!isCaruso) {
-        docs = fundManagers[currentFundManager].documents;
-      } else {
-        const fmFilter = document.querySelector('#fmDocMenu .dropdown-item.active')?.dataset.value || '';
-        if (fmFilter === '') {
-          ['ventura', 'mackersy', 'charterhall'].forEach(fmKey => {
-            docs = docs.concat(fundManagers[fmKey].documents);
-          });
-        } else {
-          docs = fundManagers[fmFilter].documents;
-        }
-      }
-
-      // Apply search and category filters
-      const searchTerm = document.getElementById('docsSearch').value.toLowerCase();
-      const categoryFilter = document.querySelector('#categoryMenu .dropdown-item.active')?.dataset.value || '';
-      const fundFilter = document.querySelector('#fundMenu .dropdown-item.active')?.dataset.value || '';
-
-      docs = docs.filter(doc => {
-        const matchSearch = doc.title.toLowerCase().includes(searchTerm);
-        const matchCategory = categoryFilter === '' || doc.category.toLowerCase() === categoryFilter;
-        const matchFund = fundFilter === '' || doc.fund === fundFilter;
-        return matchSearch && matchCategory && matchFund;
-      });
-
-      const tbody = document.getElementById('docsTableBody');
-      if (docs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="no-data">No documents found</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = docs.map(doc => `
-        <tr>
-          <td>${doc.date}</td>
-          <td>${doc.title}</td>
-          <td>${doc.fund}</td>
-          <td>${doc.class}</td>
-          <td>${doc.category}</td>
-          <td>${doc.size}</td>
-          <td><button class="btn">View</button></td>
-        </tr>
-      `).join('');
-
-      document.getElementById('docsPaginationInfo').textContent = `Showing ${docs.length} document${docs.length !== 1 ? 's' : ''}`;
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // TRANSACTIONS PAGE
-    // ─────────────────────────────────────────────────────────────────
-
-    function renderTransactionsPage() {
-      const isCaruso = currentFundManager === 'caruso';
-      const fmFilterContainer = document.getElementById('fmTxFilterContainer');
-      fmFilterContainer.style.display = isCaruso ? 'block' : 'none';
-
-      if (isCaruso) {
-        populateFMTxFilter();
-      }
-
-      renderTransactionsTable();
-    }
-
-    function populateFMTxFilter() {
-      const menu = document.getElementById('fmTxMenu');
-      menu.innerHTML = `<div class="dropdown-item active" data-value="">All Fund Managers</div>`;
-
-      ['ventura', 'mackersy', 'charterhall'].forEach(fmKey => {
-        const fm = fundManagers[fmKey];
-        menu.innerHTML += `<div class="dropdown-item" data-value="${fmKey}">${fm.name}</div>`;
-      });
-    }
-
-    function renderTransactionsTable() {
-      const isCaruso = currentFundManager === 'caruso';
-      let txs = [];
-
-      if (!isCaruso) {
-        txs = fundManagers[currentFundManager].transactions;
-      } else {
-        const fmFilter = document.querySelector('#fmTxMenu .dropdown-item.active')?.dataset.value || '';
-        if (fmFilter === '') {
-          ['ventura', 'mackersy', 'charterhall'].forEach(fmKey => {
-            txs = txs.concat(fundManagers[fmKey].transactions);
-          });
-        } else {
-          txs = fundManagers[fmFilter].transactions;
-        }
-      }
-
-      // Apply filters
-      const searchTerm = document.getElementById('txSearch').value.toLowerCase();
-      const fundFilter = document.querySelector('#fundTxMenu .dropdown-item.active')?.dataset.value || '';
-      const typeFilter = document.querySelector('#typeTxMenu .dropdown-item.active')?.dataset.value || '';
-      const statusFilter = document.querySelector('#statusTxMenu .dropdown-item.active')?.dataset.value || '';
-
-      txs = txs.filter(tx => {
-        const matchSearch = tx.fund.toLowerCase().includes(searchTerm) || tx.type.toLowerCase().includes(searchTerm);
-        const matchFund = fundFilter === '' || tx.fund === fundFilter;
-        const matchType = typeFilter === '' || tx.type.toLowerCase() === typeFilter;
-        const matchStatus = statusFilter === '' || tx.status === statusFilter;
-        return matchSearch && matchFund && matchType && matchStatus;
-      });
-
-      const tbody = document.getElementById('txTableBody');
-      if (txs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="no-data">No transactions found</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = txs.map(tx => {
-        const statusClass = 'status-' + tx.status;
-        return `
-          <tr>
-            <td>${tx.date}</td>
-            <td>${tx.type}</td>
-            <td>${tx.fund}</td>
-            <td>${tx.class}</td>
-            <td>${tx.units ? tx.units.toLocaleString() : '-'}</td>
-            <td>${tx.pricePerUnit ? '$' + tx.pricePerUnit.toFixed(2) : '-'}</td>
-            <td>$${tx.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td><span class="status-badge ${statusClass}">${tx.status}</span></td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById('txPaginationInfo').textContent = `Showing ${txs.length} transaction${txs.length !== 1 ? 's' : ''}`;
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // DROPDOWNS & FILTERS
-    // ─────────────────────────────────────────────────────────────────
-
-    function setupDropdowns() {
-      const dropdowns = [
-        { toggle: 'statusToggle', menu: 'statusMenu' },
-        { toggle: 'fundToggle', menu: 'fundMenu' },
-        { toggle: 'categoryToggle', menu: 'categoryMenu' },
-        { toggle: 'fmDocFilter', menu: 'fmDocMenu' },
-        { toggle: 'fundTxToggle', menu: 'fundTxMenu' },
-        { toggle: 'typeTxToggle', menu: 'typeTxMenu' },
-        { toggle: 'statusTxToggle', menu: 'statusTxMenu' },
-        { toggle: 'fmTxFilter', menu: 'fmTxMenu' }
-      ];
-
-      dropdowns.forEach(({ toggle, menu }) => {
-        const toggleBtn = document.getElementById(toggle);
-        const menuEl = document.getElementById(menu);
-
-        if (toggleBtn && menuEl) {
-          toggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
-            menuEl.classList.add('active');
-          });
-
-          menuEl.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-              menuEl.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-              item.classList.add('active');
-              toggleBtn.textContent = item.textContent || 'Select';
-              menuEl.classList.remove('active');
-
-              // Refresh relevant table
-              if (toggle.includes('status')) renderFMPortfolio();
-              else if (toggle.includes('Doc') || toggle.includes('fund')) renderDocumentsTable();
-              else if (toggle.includes('Tx')) renderTransactionsTable();
-            });
-          });
-        }
-      });
-
-      document.addEventListener('click', () => {
-        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
-      });
-    }
-
-    function setupFilterListeners() {
-      document.getElementById('portfolioSearch')?.addEventListener('input', renderFMPortfolio);
-      document.getElementById('docsSearch')?.addEventListener('input', renderDocumentsTable);
-      document.getElementById('txSearch')?.addEventListener('input', renderTransactionsTable);
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // INIT ON LOAD
-    // ─────────────────────────────────────────────────────────────────
-
-    window.addEventListener('DOMContentLoaded', init);
-  </script>
+<div class="topbar" id="topbar">
+<div class="topbar-logo" id="logoContainer"></div>
+<button class="topbar-switcher" id="fundSwitcher" title="Switch Fund Manager">▼</button>
+<div id="fundManagerMenu" class="dropdown-menu hidden"></div>
+<div class="topbar-spacer"></div>
+<div class="topbar-nav" id="topbarNav"></div>
+<div class="topbar-right"><div class="topbar-avatar"></div></div>
+</div>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="main-container">
+<div class="content" id="content"></div>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-content" id="modalContent">
+<button class="close-modal" id="closeModal">×</button>
+<div id="modalBody"></div>
+<div class="modal-footer" id="modalFooter"></div>
+</div>
+</div>
+
+<script>
+const fundManagers = [
+{ id: 'caruso', name: 'Caruso – All Investments', topbarColor: '#112c37', sidebarColor: '#112c37', logo: 'Caruso', nav: ['Investments', 'Documents', 'Transactions'] },
+{ id: 'ventura', name: 'Ventura', topbarColor: '#042246', sidebarColor: '#042246', logo: 'Ventura', nav: ['Portfolio', 'Invest', 'Trade', 'Documents', 'Transactions', 'Notifications'] },
+{ id: 'mackersy', name: 'Mackersy Property', topbarColor: '#1a1a2e', sidebarColor: '#1a1a2e', logo: 'Mackersy', nav: ['Portfolio', 'Invest', 'Trade', 'Documents', 'Transactions', 'Notifications'] },
+{ id: 'charter', name: 'Charter Hall', topbarColor: '#2A6EBB', sidebarColor: '#2A6EBB', logo: 'Charter Hall', nav: ['Portfolio', 'Invest', 'Trade', 'Documents', 'Transactions', 'Notifications'] }
+];
+
+const logos = {
+Caruso: '<svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="24" font-weight="bold" fill="white">Caruso</text></svg>',
+Ventura: '<svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="24" font-weight="bold" fill="white">Ventura</text></svg>',
+Mackersy: '<svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="24" font-weight="bold" fill="white">Mackersy</text></svg>',
+'Charter Hall': '<svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="24" font-weight="bold" fill="white">Charter Hall</text></svg>'
+};
+
+const sampleData = {
+ventura: {
+portfolio: [
+{id: 'VEN001', fund: 'Ventura Fund I', class: 'Class A', entity: 'ABC Corp', units: 10000, unitValue: 25.50, value: 255000, access: 'Full Access'},
+{id: 'VEN002', fund: 'Ventura Fund II', class: 'Class B', entity: 'XYZ Ltd', units: 5000, unitValue: 45.00, value: 225000, access: 'Full Access'},
+{id: 'VEN003', fund: 'Ventura Fund I', class: 'Class C', entity: 'Tech Startup Inc', units: 2000, unitValue: 100.00, value: 200000, access: 'Read Only'},
+{id: 'VEN004', fund: 'Ventura Opportunity Fund', class: 'Class A', entity: 'Global Holdings', units: 8000, unitValue: 32.75, value: 262000, access: 'Full Access'},
+{id: 'VEN005', fund: 'Ventura Growth Fund', class: 'Class B', entity: 'Innovation Partners', units: 3500, unitValue: 55.00, value: 192500, access: 'Full Access'},
+{id: 'VEN006', fund: 'Ventura Stable Income', class: 'Class A', entity: 'Trust Holdings', units: 12000, unitValue: 18.00, value: 216000, access: 'Read Only'}
+],
+documents: [
+{id: 'DOC001', date: '2024-03-15', title: 'Annual Report 2024', fund: 'Ventura Fund I', class: 'Class A', category: 'Report', size: '2.4 MB'},
+{id: 'DOC002', date: '2024-03-10', title: 'Quarterly Statement Q1 2024', fund: 'Ventura Fund II', class: 'Class B', category: 'Statement', size: '1.8 MB'},
+{id: 'DOC003', date: '2024-02-28', title: 'Investment Policy Document', fund: 'Ventura Fund I', class: 'Class C', category: 'Policy', size: '3.2 MB'},
+{id: 'DOC004', date: '2024-02-15', title: 'Risk Assessment Report', fund: 'Ventura Opportunity Fund', class: 'Class A', category: 'Report', size: '2.1 MB'},
+{id: 'DOC005', date: '2024-01-30', title: 'Fund Overview Brochure', fund: 'Ventura Growth Fund', class: 'Class B', category: 'Brochure', size: '1.5 MB'},
+{id: 'DOC006', date: '2024-01-20', title: 'Historical Performance Data', fund: 'Ventura Stable Income', class: 'Class A', category: 'Data', size: '0.9 MB'},
+{id: 'DOC007', date: '2024-01-10', title: 'Compliance Certificate', fund: 'Ventura Fund I', class: 'Class B', category: 'Certificate', size: '0.4 MB'},
+{id: 'DOC008', date: '2023-12-28', title: 'Year-End Summary', fund: 'Ventura Opportunity Fund', class: 'Class C', category: 'Summary', size: '2.8 MB'}
+],
+transactions: [
+{id: 'TXN001', date: '2024-03-18', type: 'Purchase', fund: 'Ventura Fund I', class: 'Class A', units: 500, price: 25.50, value: 12750, status: 'COMPLETE'},
+{id: 'TXN002', date: '2024-03-16', type: 'Redemption', fund: 'Ventura Fund II', class: 'Class B', units: 200, price: 45.00, value: 9000, status: 'COMPLETE'},
+{id: 'TXN003', date: '2024-03-14', type: 'Distribution', fund: 'Ventura Fund I', class: 'Class C', units: 2000, price: 100.00, value: 5000, status: 'PENDING'},
+{id: 'TXN004', date: '2024-03-10', type: 'Purchase', fund: 'Ventura Opportunity Fund', class: 'Class A', units: 300, price: 32.75, value: 9825, status: 'COMPLETE'},
+{id: 'TXN005', date: '2024-03-05', type: 'Redemption', fund: 'Ventura Growth Fund', class: 'Class B', units: 100, price: 55.00, value: 5500, status: 'PROCESSING'},
+{id: 'TXN006', date: '2024-02-28', type: 'Distribution', fund: 'Ventura Stable Income', class: 'Class A', units: 12000, price: 18.00, value: 8640, status: 'COMPLETE'},
+{id: 'TXN007', date: '2024-02-20', type: 'Purchase', fund: 'Ventura Fund II', class: 'Class A', units: 150, price: 45.00, value: 6750, status: 'CANCELLED'},
+{id: 'TXN008', date: '2024-02-15', type: 'Redemption', fund: 'Ventura Stable Income', class: 'Class B', units: 500, price: 18.00, value: 9000, status: 'COMPLETE'}
+]
+},
+mackersy: {
+portfolio: [
+{id: 'MAC001', fund: 'Mackersy Property Fund', class: 'Class A', entity: 'Property Holdings Ltd', units: 2000, unitValue: 500.00, value: 1000000, access: 'Full Access'},
+{id: 'MAC002', fund: 'Mackersy Development Fund', class: 'Class B', entity: 'Urban Investment Corp', units: 1500, unitValue: 400.00, value: 600000, access: 'Full Access'},
+{id: 'MAC003', fund: 'Mackersy Residential Fund', class: 'Class A', entity: 'Residential Trust', units: 3000, unitValue: 250.00, value: 750000, access: 'Read Only'},
+{id: 'MAC004', fund: 'Mackersy Commercial Fund', class: 'Class C', entity: 'Commercial Partners', units: 800, unitValue: 350.00, value: 280000, access: 'Full Access'}
+],
+documents: [
+{id: 'MDOC001', date: '2024-03-15', title: 'Property Appraisal Report', fund: 'Mackersy Property Fund', class: 'Class A', category: 'Appraisal', size: '4.2 MB'},
+{id: 'MDOC002', date: '2024-03-10', title: 'Development Plan 2024', fund: 'Mackersy Development Fund', class: 'Class B', category: 'Plan', size: '5.1 MB'},
+{id: 'MDOC003', date: '2024-02-28', title: 'Market Analysis Report', fund: 'Mackersy Residential Fund', class: 'Class A', category: 'Analysis', size: '3.8 MB'},
+{id: 'MDOC004', date: '2024-02-15', title: 'Portfolio Overview', fund: 'Mackersy Commercial Fund', class: 'Class C', category: 'Overview', size: '2.9 MB'},
+{id: 'MDOC005', date: '2024-01-31', title: 'Quarterly Update Q1', fund: 'Mackersy Property Fund', class: 'Class B', category: 'Update', size: '1.6 MB'},
+{id: 'MDOC006', date: '2024-01-15', title: 'Investment Strategy', fund: 'Mackersy Development Fund', class: 'Class A', category: 'Strategy', size: '2.4 MB'}
+],
+transactions: [
+{id: 'MTXN001', date: '2024-03-18', type: 'Investment', fund: 'Mackersy Property Fund', class: 'Class A', units: 100, price: 500.00, value: 50000, status: 'COMPLETE'},
+{id: 'MTXN002', date: '2024-03-12', type: 'Distribution', fund: 'Mackersy Development Fund', class: 'Class B', units: 1500, price: 400.00, value: 12000, status: 'COMPLETE'},
+{id: 'MTXN003', date: '2024-02-28', type: 'Withdrawal', fund: 'Mackersy Residential Fund', class: 'Class A', units: 200, price: 250.00, value: 50000, status: 'PROCESSING'},
+{id: 'MTXN004', date: '2024-02-10', type: 'Investment', fund: 'Mackersy Commercial Fund', class: 'Class C', units: 50, price: 350.00, value: 17500, status: 'CANCELLED'},
+{id: 'MTXN005', date: '2024-01-30', type: 'Distribution', fund: 'Mackersy Property Fund', class: 'Class A', units: 2000, price: 500.00, value: 8000, status: 'COMPLETE'},
+{id: 'MTXN006', date: '2024-01-15', type: 'Investment', fund: 'Mackersy Development Fund', class: 'Class B', units: 75, price: 400.00, value: 30000, status: 'PENDING'}
+]
+},
+charter: {
+portfolio: [
+{id: 'CH001', fund: 'Charter Hall Retail REIT', class: 'Class A', entity: 'Retail Investment Corp', units: 5000, unitValue: 1.85, value: 9250, access: 'Full Access'},
+{id: 'CH002', fund: 'Charter Hall Long WALE REIT', class: 'Class B', entity: 'Long Term Holdings', units: 3000, unitValue: 2.15, value: 6450, access: 'Full Access'},
+{id: 'CH003', fund: 'Charter Hall Social Infrastructure REIT', class: 'Class A', entity: 'Infrastructure Trust', units: 2500, unitValue: 1.95, value: 4875, access: 'Read Only'}
+],
+documents: [
+{id: 'CDOC001', date: '2024-03-15', title: 'Annual Report 2024', fund: 'Charter Hall Retail REIT', class: 'Class A', category: 'Report', size: '6.2 MB'},
+{id: 'CDOC002', date: '2024-03-10', title: 'Quarterly Distribution', fund: 'Charter Hall Long WALE REIT', class: 'Class B', category: 'Distribution', size: '1.2 MB'},
+{id: 'CDOC003', date: '2024-02-28', title: 'Property Portfolio List', fund: 'Charter Hall Social Infrastructure REIT', class: 'Class A', category: 'List', size: '2.8 MB'},
+{id: 'CDOC004', date: '2024-02-15', title: 'Investor Presentation', fund: 'Charter Hall Retail REIT', class: 'Class B', category: 'Presentation', size: '4.5 MB'},
+{id: 'CDOC005', date: '2024-01-31', title: 'Market Outlook', fund: 'Charter Hall Long WALE REIT', class: 'Class A', category: 'Outlook', size: '1.9 MB'}
+],
+transactions: [
+{id: 'CTXN001', date: '2024-03-18', type: 'Dividend', fund: 'Charter Hall Retail REIT', class: 'Class A', units: 5000, price: 1.85, value: 2312.50, status: 'COMPLETE'},
+{id: 'CTXN002', date: '2024-03-12', type: 'Dividend', fund: 'Charter Hall Long WALE REIT', class: 'Class B', units: 3000, price: 2.15, value: 1935, status: 'PENDING'},
+{id: 'CTXN003', date: '2024-02-28', type: 'Distribution', fund: 'Charter Hall Social Infrastructure REIT', class: 'Class A', units: 2500, price: 1.95, value: 975, status: 'COMPLETE'},
+{id: 'CTXN004', date: '2024-02-10', type: 'Purchase', fund: 'Charter Hall Retail REIT', class: 'Class A', units: 500, price: 1.85, value: 925, status: 'PROCESSING'},
+{id: 'CTXN005', date: '2024-01-30', type: 'Dividend', fund: 'Charter Hall Long WALE REIT', class: 'Class A', units: 3000, price: 2.15, value: 1612.50, status: 'COMPLETE'}
+]
+}
+};
+
+let currentFM = 'caruso';
+let currentTab = 'portfolio';
+let previousPage = null;
+
+function updateTopbar() {
+const fm = fundManagers.find(x => x.id === currentFM);
+const topbar = document.getElementById('topbar');
+topbar.style.background = fm.topbarColor;
+
+const logo = document.getElementById('logoContainer');
+logo.innerHTML = logos[fm.logo];
+
+const nav = document.getElementById('topbarNav');
+nav.innerHTML = '';
+fm.nav.forEach(item => {
+const a = document.createElement('a');
+a.textContent = item;
+a.className = 'active';
+a.onclick = () => handleNavClick(item);
+nav.appendChild(a);
+});
+}
+
+function updateSidebar() {
+const fm = fundManagers.find(x => x.id === currentFM);
+const sidebar = document.getElementById('sidebar');
+sidebar.style.background = fm.sidebarColor;
+sidebar.innerHTML = '';
+}
+
+function handleNavClick(item) {
+switch(item) {
+case 'Portfolio':
+case 'Investments':
+currentTab = 'portfolio';
+renderfundManagerPortfolio();
+break;
+case 'Documents':
+currentTab = 'documents';
+renderfundManagerDocuments();
+break;
+case 'Transactions':
+currentTab = 'transactions';
+renderfundManagerTransactions();
+break;
+}
+}
+
+function renderfundManagerPortfolio() {
+const fm = fundManagers.find(x => x.id === currentFM);
+const content = document.getElementById('content');
+
+if (fm.id === 'caruso') {
+const html = `
+<div class="page-header">
+<div class="page-title">All Investments</div>
+<div class="page-subtitle">View all holdings across fund managers</div>
+</div>
+<div class="tabs-container">
+<div class="tabs" id="investmentTabs">
+<div class="tab active" onclick="switchInvestmentView('summary')">Summary</div>
+<div class="tab" onclick="switchInvestmentView('detailed')">Detailed</div>
+<div class="tab" onclick="switchInvestmentView('grouped')">Grouped</div>
+</div>
+</div>
+<div class="page-content">
+<div id="investmentViewContainer"></div>
+</div>
+`;
+content.innerHTML = html;
+switchInvestmentView('summary');
+} else {
+const data = sampleData[currentFM].portfolio;
+const html = `
+<div class="page-header">
+<div class="page-title">Portfolio Holdings</div>
+<div class="page-subtitle">Your holdings across all funds</div>
+</div>
+<div class="page-content">
+<div class="controls-row">
+<input type="text" class="search-bar" placeholder="Search holdings..." onkeyup="filterPortfolio(this.value)">
+<select class="filter-button" onchange="filterByStatus(this.value)">
+<option value="">All Holdings</option>
+<option value="Full Access">Full Access</option>
+<option value="Read Only">Read Only</option>
+</select>
+</div>
+<table class="table" id="portfolioTable">
+<thead>
+<tr>
+<th>Fund</th>
+<th>Class</th>
+<th>Investing Entity</th>
+<th>No. Units</th>
+<th>Unit Value</th>
+<th>Holding Value</th>
+<th>Access</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="portfolioTableBody"></tbody>
+</table>
+</div>
+`;
+content.innerHTML = html;
+renderPortfolioTable(data);
+}
+}
+
+function renderPortfolioTable(data) {
+const tbody = document.getElementById('portfolioTableBody');
+tbody.innerHTML = data.map(row => `
+<tr class="table-row" onclick="entityPage('${row.id}', '${row.entity}')" style="cursor: pointer;">
+<td>${row.fund}</td>
+<td>${row.class}</td>
+<td>${row.entity}</td>
+<td>${row.units.toLocaleString()}</td>
+<td>$${row.unitValue.toFixed(2)}</td>
+<td>$${row.value.toLocaleString()}</td>
+<td><span class="badge ${row.access === 'Full Access' ? 'badge-green' : 'badge-blue'}">${row.access}</span></td>
+<td><button class="btn-small" onclick="event.stopPropagation(); holdingPage('${row.id}', '${row.fund}')">View</button></td>
+</tr>
+`).join('');
+}
+
+function switchInvestmentView(view) {
+const tabs = document.querySelectorAll('.tabs .tab');
+tabs.forEach((t, i) => t.classList.remove('active'));
+tabs[view === 'summary' ? 0 : view === 'detailed' ? 1 : 2].classList.add('active');
+
+const container = document.getElementById('investmentViewContainer');
+
+if (view === 'summary') {
+const fms = [{id: 'ventura', name: 'Ventura', holdings: 6, value: 1351000}, {id: 'mackersy', name: 'Mackersy Property', holdings: 4, value: 2630000}, {id: 'charter', name: 'Charter Hall', holdings: 3, value: 20575}];
+container.innerHTML = `
+<table class="table">
+<thead><tr><th>Fund Manager</th><th>Holdings</th><th>Consolidated Value</th><th></th></tr></thead>
+<tbody>
+${fms.map(fm => `<tr class="table-row" onclick="switchFundManager('${fm.id}')" style="cursor: pointer;"><td style="font-weight: 500;">${fm.name}</td><td>${fm.holdings}</td><td>$${fm.value.toLocaleString()}</td><td><button class="btn-small" onclick="event.stopPropagation();">View</button></td></tr>`).join('')}
+</tbody>
+</table>
+`;
+} else if (view === 'detailed') {
+const allHoldings = [{fmName: 'Ventura', fmId: 'ventura', data: sampleData.ventura.portfolio}, {fmName: 'Mackersy Property', fmId: 'mackersy', data: sampleData.mackersy.portfolio}, {fmName: 'Charter Hall', fmId: 'charter', data: sampleData.charter.portfolio}];
+let html = '<table class="table"><thead><tr><th>Fund Manager</th><th>Fund</th><th>Class</th><th>Entity</th><th>Units</th><th>Unit Value</th><th>Value</th><th>Access</th><th></th></tr></thead><tbody>';
+allHoldings.forEach(fmGroup => {
+fmGroup.data.forEach(row => {
+html += `<tr class="table-row"><td style="font-weight: 500;">${fmGroup.fmName}</td><td>${row.fund}</td><td>${row.class}</td><td>${row.entity}</td><td>${row.units.toLocaleString()}</td><td>$${row.unitValue.toFixed(2)}</td><td>$${row.value.toLocaleString()}</td><td><span class="badge ${row.access === 'Full Access' ? 'badge-green' : 'badge-blue'}">${row.access}</span></td><td><button class="btn-small" onclick="event.stopPropagation(); switchFundManager('${fmGroup.fmId}'); holdingPage('${row.id}', '${row.fund}')">View</button></td></tr>`;
+});
+});
+html += '</tbody></table>';
+container.innerHTML = html;
+} else {
+const allHoldings = [{fmName: 'Ventura', fmId: 'ventura', fmIcon: '▼', data: sampleData.ventura.portfolio}, {fmName: 'Mackersy Property', fmId: 'mackersy', fmIcon: '▼', data: sampleData.mackersy.portfolio}, {fmName: 'Charter Hall', fmId: 'charter', fmIcon: '▼', data: sampleData.charter.portfolio}];
+let html = '<table class="table"><thead><tr><th>Fund</th><th>Class</th><th>Entity</th><th>Units</th><th>Value</th><th>Access</th><th></th></tr></thead><tbody>';
+allHoldings.forEach(fmGroup => {
+html += `<tr style="background: #f3f4f6; font-weight: 500; height: 40px;"><td colspan="7" style="padding: 8px 16px;">${fmGroup.fmIcon} ${fmGroup.fmName}</td></tr>`;
+fmGroup.data.forEach(row => {
+html += `<tr class="table-row"><td>${row.fund}</td><td>${row.class}</td><td>${row.entity}</td><td>${row.units.toLocaleString()}</td><td>$${row.value.toLocaleString()}</td><td><span class="badge ${row.access === 'Full Access' ? 'badge-green' : 'badge-blue'}">${row.access}</span></td><td><button class="btn-small" onclick="event.stopPropagation(); switchFundManager('${fmGroup.fmId}'); holdingPage('${row.id}', '${row.fund}')">View</button></td></tr>`;
+});
+});
+html += '</tbody></table>';
+container.innerHTML = html;
+}
+}
+
+function fundManagerDocs() {
+const content = document.getElementById('content');
+const data = currentFM === 'caruso' ? [] : sampleData[currentFM].documents;
+
+if (currentFM === 'caruso') {
+const allDocs = [];
+['ventura', 'mackersy', 'charter'].forEach(fmId => {
+const fmDocs = sampleData[fmId].documents.map(doc => ({...doc, fm: fmId, fmName: fundManagers.find(x => x.id === fmId).name}));
+allDocs.push(...fmDocs);
+});
+
+const html = `
+<div class="page-header">
+<div class="page-title">Documents</div>
+<div class="page-subtitle">Access all documents across your fund managers</div>
+</div>
+<div class="page-content">
+<div class="controls-row">
+<input type="text" class="search-bar" placeholder="Search documents..." onkeyup="filterDocuments(this.value)">
+<select class="filter-button" onchange="filterDocsByFM(this.value)" id="fmFilterSelect">
+<option value="">All Fund Managers</option>
+<option value="ventura">Ventura</option>
+<option value="mackersy">Mackersy Property</option>
+<option value="charter">Charter Hall</option>
+</select>
+<select class="filter-button" onchange="filterDocsByCategory(this.value)">
+<option value="">All Categories</option>
+<option value="Report">Report</option>
+<option value="Statement">Statement</option>
+<option value="Policy">Policy</option>
+<option value="Brochure">Brochure</option>
+</select>
+</div>
+<table class="table" id="documentsTable">
+<thead>
+<tr>
+<th>Date</th>
+<th>Title</th>
+<th>Fund</th>
+<th>Class</th>
+<th>Category</th>
+<th>Size</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="documentsTableBody"></tbody>
+</table>
+</div>
+`;
+content.innerHTML = html;
+renderDocumentsTable(allDocs);
+} else {
+const html = `
+<div class="page-header">
+<div class="page-title">Documents</div>
+<div class="page-subtitle">Access your fund documents</div>
+</div>
+<div class="page-content">
+<div class="controls-row">
+<input type="text" class="search-bar" placeholder="Search documents..." onkeyup="filterDocuments(this.value)">
+<select class="filter-button" onchange="filterDocsByCategory(this.value)">
+<option value="">All Categories</option>
+<option value="Report">Report</option>
+<option value="Statement">Statement</option>
+<option value="Policy">Policy</option>
+</select>
+</div>
+<table class="table" id="documentsTable">
+<thead>
+<tr>
+<th>Date</th>
+<th>Title</th>
+<th>Fund</th>
+<th>Class</th>
+<th>Category</th>
+<th>Size</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="documentsTableBody"></tbody>
+</table>
+</div>
+`;
+content.innerHTML = html;
+renderDocumentsTable(data);
+}
+}
+
+function renderDocumentsTable(data) {
+const tbody = document.getElementById('documentsTableBody');
+tbody.innerHTML = data.map(row => `
+<tr class="table-row">
+<td>${row.date}</td>
+<td>${row.title}</td>
+<td>${row.fund}</td>
+<td>${row.class}</td>
+<td>${row.category}</td>
+<td>${row.size}</td>
+<td><button class="btn-small" onclick="downloadDoc('${row.id}')">Download</button></td>
+</tr>
+`).join('');
+}
+
+function renderfundManagerTransactions() {
+const content = document.getElementById('content');
+const data = currentFM === 'caruso' ? [] : sampleData[currentFM].transactions;
+
+if (currentFM === 'caruso') {
+const allTxns = [];
+['ventura', 'mackersy', 'charter'].forEach(fmId => {
+const fmTxns = sampleData[fmId].transactions.map(txn => ({...txn, fm: fmId, fmName: fundManagers.find(x => x.id === fmId).name}));
+allTxns.push(...fmTxns);
+});
+
+const html = `
+<div class="page-header">
+<div class="page-title">Transactions</div>
+<div class="page-subtitle">All transactions across your investments</div>
+</div>
+<div class="page-content">
+<div class="controls-row">
+<input type="text" class="search-bar" placeholder="Search transactions..." onkeyup="filterTransactions(this.value)">
+<select class="filter-button" onchange="filterTxnsByFM(this.value)">
+<option value="">All Fund Managers</option>
+<option value="ventura">Ventura</option>
+<option value="mackersy">Mackersy Property</option>
+<option value="charter">Charter Hall</option>
+</select>
+<select class="filter-button" onchange="filterTxnsByType(this.value)">
+<option value="">All Types</option>
+<option value="Purchase">Purchase</option>
+<option value="Redemption">Redemption</option>
+<option value="Distribution">Distribution</option>
+</select>
+<select class="filter-button" onchange="filterTxnsByStatus(this.value)">
+<option value="">All Status</option>
+<option value="COMPLETE">Complete</option>
+<option value="PENDING">Pending</option>
+<option value="PROCESSING">Processing</option>
+<option value="CANCELLED">Cancelled</option>
+</select>
+</div>
+<table class="table" id="transactionsTable">
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Fund</th>
+<th>Class</th>
+<th>Units</th>
+<th>Price/Unit</th>
+<th>Value</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="transactionsTableBody"></tbody>
+</table>
+</div>
+`;
+content.innerHTML = html;
+renderTransactionsTable(allTxns);
+} else {
+const html = `
+<div class="page-header">
+<div class="page-title">Transactions</div>
+<div class="page-subtitle">Your transaction history</div>
+</div>
+<div class="page-content">
+<div class="controls-row">
+<input type="text" class="search-bar" placeholder="Search transactions..." onkeyup="filterTransactions(this.value)">
+<select class="filter-button" onchange="filterTxnsByType(this.value)">
+<option value="">All Types</option>
+<option value="Purchase">Purchase</option>
+<option value="Redemption">Redemption</option>
+<option value="Distribution">Distribution</option>
+</select>
+<select class="filter-button" onchange="filterTxnsByStatus(this.value)">
+<option value="">All Status</option>
+<option value="COMPLETE">Complete</option>
+<option value="PENDING">Pending</option>
+<option value="PROCESSING">Processing</option>
+<option value="CANCELLED">Cancelled</option>
+</select>
+</div>
+<table class="table" id="transactionsTable">
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Fund</th>
+<th>Class</th>
+<th>Units</th>
+<th>Price/Unit</th>
+<th>Value</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="transactionsTableBody"></tbody>
+</table>
+</div>
+`;
+content.innerHTML = html;
+renderTransactionsTable(data);
+}
+}
+
+function renderTransactionsTable(data) {
+const tbody = document.getElementById('transactionsTableBody');
+tbody.innerHTML = data.map(row => {
+const statusClass = row.status === 'COMPLETE' ? 'badge-green' : row.status === 'PENDING' ? 'badge-yellow' : row.status === 'PROCESSING' ? 'badge-blue' : 'badge-red';
+return `
+<tr class="table-row">
+<td>${row.date}</td>
+<td>${row.type}</td>
+<td>${row.fund}</td>
+<td>${row.class}</td>
+<td>${row.units.toLocaleString()}</td>
+<td>$${row.price.toFixed(2)}</td>
+<td>$${row.value.toLocaleString()}</td>
+<td><span class="badge ${statusClass}">${row.status}</span></td>
+</tr>
+`;
+}).join('');
+}
+
+function switchFundManager(fmId) {
+if (fmId !== currentFM) {
+currentFM = fmId;
+updateTopbar();
+updateSidebar();
+renderfundManagerPortfolio();
+}
+}
+
+function initializeFundSwitcher() {
+const switcher = document.getElementById('fundSwitcher');
+const menu = document.getElementById('fundManagerMenu');
+
+switcher.addEventListener('click', () => {
+menu.classList.toggle('hidden');
+menu.innerHTML = fundManagers.map(fm => `
+<div class="dropdown-item" onclick="switchFundManager('${fm.id}')">${fm.name}</div>
+`).join('');
+});
+
+document.addEventListener('click', (e) => {
+if (!e.target.closest('.topbar-switcher') && !e.target.closest('.dropdown-menu')) {
+menu.classList.add('hidden');
+}
+});
+}
+
+function downloadDoc(docId) {
+alert('Downloading document ' + docId);
+}
+
+function filterPortfolio(value) {
+const rows = document.querySelectorAll('#portfolioTableBody tr');
+rows.forEach(row => {
+row.style.display = row.textContent.toLowerCase().includes(value.toLowerCase()) ? '' : 'none';
+});
+}
+
+function filterByStatus(value) {
+const rows = document.querySelectorAll('#portfolioTableBody tr');
+if (!value) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+rows.forEach(row => {
+row.style.display = row.textContent.includes(value) ? '' : 'none';
+});
+}
+
+function filterDocuments(value) {
+const rows = document.querySelectorAll('#documentsTableBody tr');
+rows.forEach(row => {
+row.style.display = row.textContent.toLowerCase().includes(value.toLowerCase()) ? '' : 'none';
+});
+}
+
+function filterDocsByFM(fmId) {
+const rows = document.querySelectorAll('#documentsTableBody tr');
+if (!fmId) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+const allDocs = [];
+['ventura', 'mackersy', 'charter'].forEach(id => {
+const fmDocs = sampleData[id].documents.map(doc => ({...doc, fm: id}));
+allDocs.push(...fmDocs);
+});
+rows.forEach((row, idx) => {
+row.style.display = allDocs[idx] && allDocs[idx].fm === fmId ? '' : 'none';
+});
+}
+
+function filterDocsByCategory(value) {
+const rows = document.querySelectorAll('#documentsTableBody tr');
+if (!value) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+rows.forEach(row => {
+row.style.display = row.textContent.includes(value) ? '' : 'none';
+});
+}
+
+function filterTransactions(value) {
+const rows = document.querySelectorAll('#transactionsTableBody tr');
+rows.forEach(row => {
+row.style.display = row.textContent.toLowerCase().includes(value.toLowerCase()) ? '' : 'none';
+});
+}
+
+function filterTxnsByFM(fmId) {
+const rows = document.querySelectorAll('#transactionsTableBody tr');
+if (!fmId) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+const allTxns = [];
+['ventura', 'mackersy', 'charter'].forEach(id => {
+const fmTxns = sampleData[id].transactions.map(txn => ({...txn, fm: id}));
+allTxns.push(...fmTxns);
+});
+rows.forEach((row, idx) => {
+row.style.display = allTxns[idx] && allTxns[idx].fm === fmId ? '' : 'none';
+});
+}
+
+function filterTxnsByType(value) {
+const rows = document.querySelectorAll('#transactionsTableBody tr');
+if (!value) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+rows.forEach(row => {
+row.style.display = row.textContent.includes(value) ? '' : 'none';
+});
+}
+
+function filterTxnsByStatus(value) {
+const rows = document.querySelectorAll('#transactionsTableBody tr');
+if (!value) {
+rows.forEach(row => row.style.display = '');
+return;
+}
+rows.forEach(row => {
+row.style.display = row.textContent.includes(value) ? '' : 'none';
+});
+}
+
+function entityPage(id, name) {
+const fm = fundManagers.find(x => x.id === currentFM);
+const modalContent = document.getElementById('modalBody');
+const modal = document.getElementById('modal');
+previousPage = 'portfolio';
+
+const html = `
+<div class="entity-detail-header">
+<h2 class="entity-detail-title">${name}</h2>
+<p class="entity-detail-subtitle">Entity Overview</p>
+</div>
+<div class="entity-detail-body">
+<div class="entity-info-grid">
+<div class="entity-info-row"><div class="entity-info-label">Entity Type</div><div class="entity-info-value">Investment Entity</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Status</div><div class="entity-info-value"><span class="badge badge-green">ACTIVE</span></div></div>
+<div class="entity-info-row"><div class="entity-info-label">Fund Manager</div><div class="entity-info-value">${fm.name}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Total Holdings</div><div class="entity-info-value">$2,156,750</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Primary Contact</div><div class="entity-info-value">John Smith</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Last Activity</div><div class="entity-info-value">2024-03-18</div></div>
+</div>
+<div class="info-divider"></div>
+<div class="tabs-section">
+<div class="tabs-horizontal">
+<div class="tabs-horizontal-item active" onclick="switchEntityTab('accounts')">Accounts</div>
+<div class="tabs-horizontal-item" onclick="switchEntityTab('documents')">Documents</div>
+<div class="tabs-horizontal-item" onclick="switchEntityTab('transactions')">Transactions</div>
+</div>
+<div class="entity-tab-content" id="entityTabContent">
+<div class="account-row">
+<div class="account-name">Operating Account</div>
+<div class="account-value">$845,250</div>
+</div>
+<div class="account-row">
+<div class="account-name">Investment Account</div>
+<div class="account-value">$1,311,500</div>
+</div>
+</div>
+</div>
+</div>
+`;
+modalContent.innerHTML = html;
+modal.classList.add('active');
+}
+
+function holdingPage(id, fundName) {
+const fm = fundManagers.find(x => x.id === currentFM);
+const data = sampleData[currentFM].portfolio.find(h => h.id === id);
+const modalContent = document.getElementById('modalBody');
+const modal = document.getElementById('modal');
+previousPage = 'portfolio';
+
+const html = `
+<div class="entity-detail-header">
+<h2 class="entity-detail-title">${fundName}</h2>
+<p class="entity-detail-subtitle">Holding Details</p>
+</div>
+<div class="entity-detail-body">
+<div class="entity-info-grid">
+<div class="entity-info-row"><div class="entity-info-label">Holding ID</div><div class="entity-info-value">${id}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Fund Class</div><div class="entity-info-value">${data.class}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Entity Name</div><div class="entity-info-value">${data.entity}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Access Level</div><div class="entity-info-value"><span class="badge ${data.access === 'Full Access' ? 'badge-green' : 'badge-blue'}">${data.access}</span></div></div>
+<div class="entity-info-row"><div class="entity-info-label">Number of Units</div><div class="entity-info-value">${data.units.toLocaleString()}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Unit Value</div><div class="entity-info-value">$${data.unitValue.toFixed(2)}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Holding Value</div><div class="entity-info-value">$${data.value.toLocaleString()}</div></div>
+<div class="entity-info-row"><div class="entity-info-label">Fund Manager</div><div class="entity-info-value">${fm.name}</div></div>
+</div>
+<div class="info-divider"></div>
+<div class="tabs-section">
+<div class="tabs-horizontal">
+<div class="tabs-horizontal-item active" onclick="switchHoldingTab('details')">Details</div>
+<div class="tabs-horizontal-item" onclick="switchHoldingTab('history')">History</div>
+<div class="tabs-horizontal-item" onclick="switchHoldingTab('documents')">Documents</div>
+</div>
+<div class="holding-tab-content" id="holdingTabContent" style="margin-top: 16px;">
+<p>Acquisition Date: 2023-06-15</p>
+<p>Initial Investment: $${(data.value * 0.85).toLocaleString()}</p>
+<p>Current Performance: +15.2%</p>
+</div>
+</div>
+</div>
+`;
+modalContent.innerHTML = html;
+modal.classList.add('active');
+}
+
+function switchEntityTab(tab) {
+const items = document.querySelectorAll('.tabs-horizontal-item');
+items.forEach(i => i.classList.remove('active'));
+event.target.classList.add('active');
+}
+
+function switchHoldingTab(tab) {
+const items = document.querySelectorAll('.tabs-horizontal-item');
+items.forEach(i => i.classList.remove('active'));
+event.target.classList.add('active');
+}
+
+document.getElementById('closeModal').addEventListener('click', () => {
+document.getElementById('modal').classList.remove('active');
+});
+
+document.getElementById('modal').addEventListener('click', (e) => {
+if (e.target.id === 'modal') {
+e.target.classList.remove('active');
+}
+});
+
+// Initialize
+updateTopbar();
+updateSidebar();
+initializeFundSwitcher();
+renderfundManagerPortfolio();
+</script>
 </body>
 </html>
