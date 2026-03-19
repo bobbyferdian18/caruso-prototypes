@@ -1,1 +1,1334 @@
-dummy_placeholder
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investor Portal – Ventura</title>
+  <style>
+    /* Font: Using system -apple-system stack as SF Pro Text fallback */
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      color: #1e2332;
+      background: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* ─── TOP NAV BAR ─── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: #042246;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      z-index: 50;
+      transition: background 0.25s ease;
+      gap: 16px;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      flex-shrink: 0;
+    }
+
+    .topbar-logo svg { height: 29px; width: auto; }
+
+    .topbar-switcher {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      width: 20px; height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .topbar-switcher svg { width: 10px; height: 10px; }
+    .topbar-switcher:hover { background: rgba(255,255,255,0.1); }
+
+    .topbar-spacer { flex: 1; }
+
+    /* Horizontal nav links */
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 60px;
+    }
+    .topbar-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.15s;
+      border-bottom: 2px solid transparent;
+    }
+    .topbar-nav a:hover { color: rgba(255,255,255,0.8); }
+    .topbar-nav a.active {
+      color: #ffffff;
+      border-bottom-color: #ffffff;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .topbar-btn:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: #ffffff;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 60px;
+      width: 220px;
+      height: calc(100vh - 60px);
+      background: #112c37;
+      padding: 24px 16px;
+      overflow-y: auto;
+      z-index: 40;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-top: 24px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-section-title:first-child { margin-top: 0; }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sidebar-nav a:hover {
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .sidebar-nav a.active {
+      background: #7f6df1;
+      color: #ffffff;
+    }
+
+    .sidebar-badge {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .main {
+      margin-left: 220px;
+      margin-top: 60px;
+      padding: 32px;
+      background: #ffffff;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: #8c95a6;
+      margin-bottom: 12px;
+    }
+
+    .breadcrumb .active {
+      color: #7f6df1;
+      font-weight: 600;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #0a0a0a;
+      margin-bottom: 24px;
+    }
+
+    /* ─── CONTROLS BAR ─── */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(104,122,144,0.06);
+      border: 1px solid #d8dae5;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #0a0a0a;
+    }
+
+    .search-box::placeholder {
+      color: #8c95a6;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid #d8dae5;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #0a0a0a;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: #7f6df1;
+      background: #f9f7ff;
+    }
+
+    .primary-btn {
+      background: #7f6df1;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .primary-btn:hover {
+      background: #6b5dd4;
+    }
+
+    /* ─── VIEW TOGGLE (CARUSO ONLY) ─── */
+    .view-toggle {
+      display: flex;
+      background: #f0f2f5;
+      border-radius: 6px;
+      padding: 4px;
+      gap: 0;
+    }
+
+    .view-toggle-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #8c95a6;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .view-toggle-btn.active {
+      background: #ffffff;
+      color: #0a0a0a;
+      font-weight: 600;
+    }
+
+    /* ─── TABLES ─── */
+    .table-wrapper {
+      background: #ffffff;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #d8dae5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background: #f9fafb;
+      border-bottom: 1px solid #e6e8f0;
+    }
+
+    th {
+      padding: 12px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #8c95a6;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px;
+      color: #0a0a0a;
+      border-bottom: 1px solid #f0f2f5;
+      height: 56px;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Sticky left column (ID/Fund) */
+    td:first-child, th:first-child {
+      position: sticky;
+      left: 0;
+      background: #ffffff;
+      z-index: 10;
+      border-right: 1px solid #e6e8f0;
+    }
+
+    thead th:first-child {
+      background: #f9fafb;
+    }
+
+    /* Sticky right column (View button or AI summary) */
+    td:last-child, th:last-child {
+      position: sticky;
+      right: 0;
+      background: #ffffff;
+      z-index: 10;
+    }
+
+    thead th:last-child {
+      background: #f9fafb;
+    }
+
+    td:last-child::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #e6e8f0;
+    }
+
+    /* Subheader row (for Grouped view) */
+    .subheader {
+      background: #f9fafb;
+      height: 40px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8c95a6;
+      text-transform: uppercase;
+    }
+
+    .subheader td {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid #e6e8f0;
+    }
+
+    .subheader-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* BADGE STYLES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.key-contact {
+      background: #ede9fd;
+      color: #7f6df1;
+    }
+
+    .badge.adviser {
+      background: #e7f5ee;
+      color: #2e7d57;
+    }
+
+    .badge.investor {
+      background: #e3f0fb;
+      color: #1a6ea8;
+    }
+
+    .badge.prospect {
+      background: #fef3e8;
+      color: #c07514;
+    }
+
+    .badge.full-access {
+      background: #e7f5ee;
+      color: #2e7d57;
+    }
+
+    .badge.read-only {
+      background: #e3f0fb;
+      color: #1a6ea8;
+    }
+
+    .badge.complete {
+      background: #e7f5ee;
+      color: #2e7d57;
+    }
+
+    .badge.pending {
+      background: #fef3e8;
+      color: #c07514;
+    }
+
+    .badge.processing {
+      background: #e3f0fb;
+      color: #1a6ea8;
+    }
+
+    .badge.cancelled {
+      background: #fce8e8;
+      color: #c03744;
+    }
+
+    /* VIEW BUTTON */
+    .view-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid #e0e4ea;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #0a0a0a;
+      font-size: 12px;
+    }
+
+    .view-btn:hover {
+      border-color: #d8dae5;
+      background: #f9fafb;
+    }
+
+    /* AI SUMMARY BUTTON */
+    .ai-summary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid #e0e4ea;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .ai-summary-btn:hover {
+      border-color: #d8dae5;
+      background: #f9fafb;
+    }
+
+    .ai-summary-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #949AB0;
+    }
+
+    /* VIEW BUTTON BADGE */
+    .view-btn-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #d6e0ff;
+      color: #2952cc;
+      border-radius: 8px;
+      padding: 0 8px;
+      height: 24px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    /* EMAIL BUTTON */
+    .email-btn {
+      background: #ffffff;
+      border: 1px solid #d8dae5;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: #0a0a0a;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .email-btn:hover {
+      border-color: #7f6df1;
+      background: #f9f7ff;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .pagination-btn {
+      background: #ffffff;
+      border: 1px solid #d8dae5;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #0a0a0a;
+      transition: all 0.15s;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      border-color: #7f6df1;
+      background: #f9f7ff;
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-btn.active {
+      background: #7f6df1;
+      color: #ffffff;
+      border-color: #7f6df1;
+    }
+
+    /* DROPDOWNS */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #ffffff;
+      border: 1px solid #d8dae5;
+      border-radius: 6px;
+      margin-top: 4px;
+      z-index: 1000;
+      min-width: 200px;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .dropdown-menu.hidden {
+      display: none;
+    }
+
+    .dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      color: #0a0a0a;
+      font-size: 13px;
+      border-bottom: 1px solid #f0f2f5;
+      transition: background 0.15s;
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: #f9fafb;
+    }
+
+    .dropdown-item.active {
+      background: #f0f2f5;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar" id="topbar">
+  <div class="topbar-logo">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
+      <text x="2" y="18" font-size="16" font-weight="bold">Caruso</text>
+    </svg>
+  </div>
+  <div class="topbar-switcher" id="fmSwitcher">
+    <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="1">
+      <path d="M2 2l6 6M8 2l-6 6" stroke-linecap="round"/>
+    </svg>
+    <div class="dropdown-menu hidden" id="fmDropdown">
+      <div class="dropdown-item active" data-fm="caruso">Caruso (All Investments)</div>
+      <div class="dropdown-item" data-fm="ventura">Ventura</div>
+      <div class="dropdown-item" data-fm="mackersy">Mackersy Property</div>
+      <div class="dropdown-item" data-fm="charter">Charter Hall</div>
+    </div>
+  </div>
+  <div class="topbar-spacer"></div>
+  <nav class="topbar-nav" id="topbarNav">
+    <a href="#" data-tab="portfolio" class="nav-link active">Portfolio</a>
+    <a href="#" data-tab="documents" class="nav-link">Documents</a>
+    <a href="#" data-tab="transactions" class="nav-link">Transactions</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="topbar-btn">Chat</button>
+    <button class="topbar-btn">+ Create</button>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section-title">Navigation</div>
+  <nav class="sidebar-nav">
+    <a href="#" class="active">Home</a>
+    <a href="#">My Holdings</a>
+    <a href="#">Reports</a>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="active">Portfolio</span>
+    </div>
+    <h1 class="page-title" id="pageTitle">Ventura Holdings</h1>
+  </div>
+
+  <!-- CONTROLS BAR -->
+  <div class="controls-bar">
+    <input type="text" class="search-box" id="searchInput" placeholder="Search holdings...">
+    <select class="filter-btn" id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+    <div id="viewToggleContainer"></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table id="portfolioTable">
+      <thead>
+        <tr id="tableHeader"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<!-- FUND MANAGER CONFIG -->
+<script>
+  const fundManagers = {
+    caruso: {
+      name: 'Caruso',
+      color: '#112c37',
+      logo: 'Caruso',
+      isCaruso: true,
+      navTabs: ['portfolio', 'documents', 'transactions']
+    },
+    ventura: {
+      name: 'Ventura',
+      color: '#042246',
+      logo: 'VNT',
+      isCaruso: false,
+      navTabs: ['portfolio', 'documents', 'transactions', 'invest', 'trade', 'notifications']
+    },
+    mackersy: {
+      name: 'Mackersy Property',
+      color: '#1a1a2e',
+      logo: 'MKY',
+      isCaruso: false,
+      navTabs: ['portfolio', 'documents', 'transactions', 'invest', 'trade', 'notifications']
+    },
+    charter: {
+      name: 'Charter Hall',
+      color: '#2A6EBB',
+      logo: 'CTH',
+      isCaruso: false,
+      navTabs: ['portfolio', 'documents', 'transactions', 'invest', 'trade', 'notifications']
+    }
+  };
+
+  // Hardcoded mock data
+  const mockData = {
+    caruso: {
+      portfolio: {
+        summary: [
+          { fm: 'ventura', fmName: 'Ventura', icon: 'VNT', holdings: 6, value: '$2,450,000' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', icon: 'MKY', holdings: 4, value: '$1,280,000' },
+          { fm: 'charter', fmName: 'Charter Hall', icon: 'CTH', holdings: 3, value: '$890,000' }
+        ],
+        detailed: [
+          // Ventura
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'ABC Corp', units: 1000, unitValue: '$245.00', value: '$245,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'XYZ Ltd', units: 800, unitValue: '$245.00', value: '$196,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Tech Fund', units: 500, unitValue: '$420.00', value: '$210,000', access: 'read-only' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'Corp Inc', units: 2000, unitValue: '$245.00', value: '$490,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Emerging', class: 'Class C', investingEntity: 'New Fund', units: 1500, unitValue: '$165.00', value: '$247,500', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Growth Ventures', units: 600, unitValue: '$420.00', value: '$252,000', access: 'full-access' },
+          // Mackersy
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Retail', class: 'Class A', investingEntity: 'Retail Co', units: 800, unitValue: '$315.00', value: '$252,000', access: 'full-access' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Office', class: 'Class B', investingEntity: 'Office Fund', units: 600, unitValue: '$355.00', value: '$213,000', access: 'read-only' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Industrial', class: 'Class A', investingEntity: 'Industrial Assets', units: 450, unitValue: '$600.00', value: '$270,000', access: 'full-access' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Retail', class: 'Class B', investingEntity: 'Retail Partners', units: 350, unitValue: '$315.00', value: '$110,250', access: 'full-access' },
+          // Charter
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Retail', class: 'Class A', investingEntity: 'Charter Retail', units: 1200, unitValue: '$280.00', value: '$336,000', access: 'full-access' },
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Office', class: 'Class B', investingEntity: 'Charter Office', units: 400, unitValue: '$425.00', value: '$170,000', access: 'read-only' },
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Diversified', class: 'Class A', investingEntity: 'Charter Diversified', units: 750, unitValue: '$315.00', value: '$236,250', access: 'full-access' }
+        ],
+        grouped: [
+          // Ventura
+          { fm: 'ventura', fmName: 'Ventura', icon: 'VNT', isSubheader: true },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'ABC Corp', units: 1000, value: '$245,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'XYZ Ltd', units: 800, value: '$196,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Tech Fund', units: 500, value: '$210,000', access: 'read-only' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Growth', class: 'Class A', investingEntity: 'Corp Inc', units: 2000, value: '$490,000', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Emerging', class: 'Class C', investingEntity: 'New Fund', units: 1500, value: '$247,500', access: 'full-access' },
+          { fm: 'ventura', fmName: 'Ventura', fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Growth Ventures', units: 600, value: '$252,000', access: 'full-access' },
+          // Mackersy
+          { fm: 'mackersy', fmName: 'Mackersy Property', icon: 'MKY', isSubheader: true },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Retail', class: 'Class A', investingEntity: 'Retail Co', units: 800, value: '$252,000', access: 'full-access' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Office', class: 'Class B', investingEntity: 'Office Fund', units: 600, value: '$213,000', access: 'read-only' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Industrial', class: 'Class A', investingEntity: 'Industrial Assets', units: 450, value: '$270,000', access: 'full-access' },
+          { fm: 'mackersy', fmName: 'Mackersy Property', fund: 'Mackersy Retail', class: 'Class B', investingEntity: 'Retail Partners', units: 350, value: '$110,250', access: 'full-access' },
+          // Charter
+          { fm: 'charter', fmName: 'Charter Hall', icon: 'CTH', isSubheader: true },
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Retail', class: 'Class A', investingEntity: 'Charter Retail', units: 1200, value: '$336,000', access: 'full-access' },
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Office', class: 'Class B', investingEntity: 'Charter Office', units: 400, value: '$170,000', access: 'read-only' },
+          { fm: 'charter', fmName: 'Charter Hall', fund: 'Charter Hall Diversified', class: 'Class A', investingEntity: 'Charter Diversified', units: 750, value: '$236,250', access: 'full-access' }
+        ]
+      },
+      documents: [
+        { date: '2026-03-15', title: 'Q4 2025 Performance Report', fm: 'ventura', category: 'Performance', size: '2.4 MB' },
+        { date: '2026-02-28', title: 'Annual Audited Accounts', fm: 'ventura', category: 'Accounts', size: '5.1 MB' },
+        { date: '2026-02-15', title: 'Fund Factsheet - March 2026', fm: 'ventura', category: 'Factsheet', size: '1.2 MB' },
+        { date: '2026-01-30', title: 'Tax Certificate 2025', fm: 'ventura', category: 'Tax', size: '0.8 MB' },
+        { date: '2026-01-15', title: 'Distribution Payment Advice', fm: 'ventura', category: 'Distributions', size: '0.5 MB' },
+        { date: '2025-12-20', title: 'Annual Investor Update', fm: 'ventura', category: 'Updates', size: '3.2 MB' },
+        { date: '2025-12-01', title: 'Q3 2025 Performance Report', fm: 'ventura', category: 'Performance', size: '2.1 MB' },
+        { date: '2025-11-15', title: 'Corporate Governance Policy', fm: 'ventura', category: 'Governance', size: '1.5 MB' },
+        { date: '2026-03-12', title: 'Quarterly Update - Q4', fm: 'mackersy', category: 'Updates', size: '2.8 MB' },
+        { date: '2026-02-25', title: 'Property Valuation Report', fm: 'mackersy', category: 'Valuations', size: '4.2 MB' },
+        { date: '2026-02-01', title: 'Lease Summary', fm: 'mackersy', category: 'Leases', size: '1.8 MB' },
+        { date: '2026-01-20', title: 'Capex Plan 2026', fm: 'mackersy', category: 'Plans', size: '0.9 MB' },
+        { date: '2025-12-15', title: 'Tenant Handbook', fm: 'mackersy', category: 'Handbooks', size: '2.1 MB' },
+        { date: '2025-11-30', title: 'Maintenance Report', fm: 'mackersy', category: 'Maintenance', size: '1.4 MB' },
+        { date: '2026-03-10', title: 'Charter Hall 2026 Outlook', fm: 'charter', category: 'Outlook', size: '1.7 MB' },
+        { date: '2026-02-20', title: 'Investment Committee Minutes', fm: 'charter', category: 'Minutes', size: '0.6 MB' },
+        { date: '2026-02-05', title: 'Capital Call Notice', fm: 'charter', category: 'Calls', size: '0.3 MB' },
+        { date: '2026-01-25', title: 'Distribution Schedule', fm: 'charter', category: 'Distributions', size: '0.4 MB' },
+        { date: '2025-12-10', title: 'Year-End Compliance Report', fm: 'charter', category: 'Compliance', size: '3.5 MB' }
+      ],
+      transactions: [
+        { date: '2026-03-15', type: 'Distribution', fm: 'ventura', fund: 'Ventura Growth', class: 'Class A', units: 1000, price: '$12.50', value: '$12,500', status: 'complete' },
+        { date: '2026-03-14', type: 'Capital Call', fm: 'ventura', fund: 'Ventura Tech', class: 'Class B', units: 500, price: '$420.00', value: '$210,000', status: 'processing' },
+        { date: '2026-03-10', type: 'Reinvestment', fm: 'mackersy', fund: 'Mackersy Retail', class: 'Class A', units: 800, price: '$315.00', value: '$252,000', status: 'complete' },
+        { date: '2026-03-08', type: 'Partial Exit', fm: 'charter', fund: 'Charter Hall Retail', class: 'Class A', units: 600, price: '$280.00', value: '$168,000', status: 'pending' },
+        { date: '2026-03-05', type: 'Distribution', fm: 'mackersy', fund: 'Mackersy Office', class: 'Class B', units: 600, price: '$21.75', value: '$13,050', status: 'complete' },
+        { date: '2026-03-01', type: 'Capital Call', fm: 'charter', fund: 'Charter Hall Office', class: 'Class B', units: 0, price: '$0.00', value: '$85,000', status: 'processing' },
+        { date: '2026-02-25', type: 'Distribution', fm: 'ventura', fund: 'Ventura Emerging', class: 'Class C', units: 1500, price: '$8.25', value: '$12,375', status: 'complete' },
+        { date: '2026-02-20', type: 'Reinvestment', fm: 'mackersy', fund: 'Mackersy Industrial', class: 'Class A', units: 450, price: '$600.00', value: '$270,000', status: 'complete' },
+        { date: '2026-02-15', type: 'Fee Payment', fm: 'ventura', fund: 'Ventura Growth', class: 'Class A', units: 0, price: '$0.00', value: '$3,600', status: 'complete' },
+        { date: '2026-02-10', type: 'Distributions', fm: 'charter', fund: 'Charter Hall Diversified', class: 'Class A', units: 750, price: '$15.50', value: '$11,625', status: 'cancelled' }
+      ]
+    },
+    ventura: {
+      portfolio: [
+        { fund: 'Ventura Growth', class: 'Class A', investingEntity: 'ABC Corp', units: 1000, unitValue: '$245.00', value: '$245,000', access: 'full-access' },
+        { fund: 'Ventura Growth', class: 'Class A', investingEntity: 'XYZ Ltd', units: 800, unitValue: '$245.00', value: '$196,000', access: 'full-access' },
+        { fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Tech Fund', units: 500, unitValue: '$420.00', value: '$210,000', access: 'read-only' },
+        { fund: 'Ventura Growth', class: 'Class A', investingEntity: 'Corp Inc', units: 2000, unitValue: '$245.00', value: '$490,000', access: 'full-access' },
+        { fund: 'Ventura Emerging', class: 'Class C', investingEntity: 'New Fund', units: 1500, unitValue: '$165.00', value: '$247,500', access: 'full-access' },
+        { fund: 'Ventura Tech', class: 'Class B', investingEntity: 'Growth Ventures', units: 600, unitValue: '$420.00', value: '$252,000', access: 'full-access' }
+      ],
+      documents: [
+        { date: '2026-03-15', title: 'Q4 2025 Performance Report', category: 'Performance', size: '2.4 MB' },
+        { date: '2026-02-28', title: 'Annual Audited Accounts', category: 'Accounts', size: '5.1 MB' },
+        { date: '2026-02-15', title: 'Fund Factsheet - March 2026', category: 'Factsheet', size: '1.2 MB' },
+        { date: '2026-01-30', title: 'Tax Certificate 2025', category: 'Tax', size: '0.8 MB' },
+        { date: '2026-01-15', title: 'Distribution Payment Advice', category: 'Distributions', size: '0.5 MB' },
+        { date: '2025-12-20', title: 'Annual Investor Update', category: 'Updates', size: '3.2 MB' },
+        { date: '2025-12-01', title: 'Q3 2025 Performance Report', category: 'Performance', size: '2.1 MB' },
+        { date: '2025-11-15', title: 'Corporate Governance Policy', category: 'Governance', size: '1.5 MB' }
+      ],
+      transactions: [
+        { date: '2026-03-15', type: 'Distribution', fund: 'Ventura Growth', class: 'Class A', units: 1000, price: '$12.50', value: '$12,500', status: 'complete' },
+        { date: '2026-03-14', type: 'Capital Call', fund: 'Ventura Tech', class: 'Class B', units: 500, price: '$420.00', value: '$210,000', status: 'processing' },
+        { date: '2026-02-25', type: 'Distribution', fund: 'Ventura Emerging', class: 'Class C', units: 1500, price: '$8.25', value: '$12,375', status: 'complete' },
+        { date: '2026-02-15', type: 'Fee Payment', fund: 'Ventura Growth', class: 'Class A', units: 0, price: '$0.00', value: '$3,600', status: 'complete' },
+        { date: '2026-01-28', type: 'Reinvestment', fund: 'Ventura Tech', class: 'Class B', units: 600, price: '$420.00', value: '$252,000', status: 'complete' },
+        { date: '2026-01-15', type: 'Distribution', fund: 'Ventura Growth', class: 'Class A', units: 1000, price: '$10.00', value: '$10,000', status: 'complete' },
+        { date: '2025-12-30', type: 'Contribution', fund: 'Ventura Emerging', class: 'Class C', units: 300, price: '$165.00', value: '$49,500', status: 'complete' },
+        { date: '2025-12-15', type: 'Distribution', fund: 'Ventura Growth', class: 'Class A', units: 1000, price: '$14.25', value: '$14,250', status: 'complete' }
+      ]
+    },
+    mackersy: {
+      portfolio: [
+        { fund: 'Mackersy Retail', class: 'Class A', investingEntity: 'Retail Co', units: 800, unitValue: '$315.00', value: '$252,000', access: 'full-access' },
+        { fund: 'Mackersy Office', class: 'Class B', investingEntity: 'Office Fund', units: 600, unitValue: '$355.00', value: '$213,000', access: 'read-only' },
+        { fund: 'Mackersy Industrial', class: 'Class A', investingEntity: 'Industrial Assets', units: 450, unitValue: '$600.00', value: '$270,000', access: 'full-access' },
+        { fund: 'Mackersy Retail', class: 'Class B', investingEntity: 'Retail Partners', units: 350, unitValue: '$315.00', value: '$110,250', access: 'full-access' }
+      ],
+      documents: [
+        { date: '2026-03-12', title: 'Quarterly Update - Q4', category: 'Updates', size: '2.8 MB' },
+        { date: '2026-02-25', title: 'Property Valuation Report', category: 'Valuations', size: '4.2 MB' },
+        { date: '2026-02-01', title: 'Lease Summary', category: 'Leases', size: '1.8 MB' },
+        { date: '2026-01-20', title: 'Capex Plan 2026', category: 'Plans', size: '0.9 MB' },
+        { date: '2025-12-15', title: 'Tenant Handbook', category: 'Handbooks', size: '2.1 MB' },
+        { date: '2025-11-30', title: 'Maintenance Report', category: 'Maintenance', size: '1.4 MB' }
+      ],
+      transactions: [
+        { date: '2026-03-10', type: 'Reinvestment', fund: 'Mackersy Retail', class: 'Class A', units: 800, price: '$315.00', value: '$252,000', status: 'complete' },
+        { date: '2026-03-05', type: 'Distribution', fund: 'Mackersy Office', class: 'Class B', units: 600, price: '$21.75', value: '$13,050', status: 'complete' },
+        { date: '2026-02-20', type: 'Reinvestment', fund: 'Mackersy Industrial', class: 'Class A', units: 450, price: '$600.00', value: '$270,000', status: 'complete' },
+        { date: '2026-02-01', type: 'Capital Call', fund: 'Mackersy Office', class: 'Class B', units: 0, price: '$0.00', value: '$125,000', status: 'processing' },
+        { date: '2026-01-15', type: 'Distribution', fund: 'Mackersy Retail', class: 'Class A', units: 800, price: '$18.50', value: '$14,800', status: 'complete' },
+        { date: '2025-12-20', type: 'Fee Payment', fund: 'Mackersy Retail', class: 'Class A', units: 0, price: '$0.00', value: '$2,100', status: 'complete' }
+      ]
+    },
+    charter: {
+      portfolio: [
+        { fund: 'Charter Hall Retail', class: 'Class A', investingEntity: 'Charter Retail', units: 1200, unitValue: '$280.00', value: '$336,000', access: 'full-access' },
+        { fund: 'Charter Hall Office', class: 'Class B', investingEntity: 'Charter Office', units: 400, unitValue: '$425.00', value: '$170,000', access: 'read-only' },
+        { fund: 'Charter Hall Diversified', class: 'Class A', investingEntity: 'Charter Diversified', units: 750, unitValue: '$315.00', value: '$236,250', access: 'full-access' }
+      ],
+      documents: [
+        { date: '2026-03-10', title: 'Charter Hall 2026 Outlook', category: 'Outlook', size: '1.7 MB' },
+        { date: '2026-02-20', title: 'Investment Committee Minutes', category: 'Minutes', size: '0.6 MB' },
+        { date: '2026-02-05', title: 'Capital Call Notice', category: 'Calls', size: '0.3 MB' },
+        { date: '2026-01-25', title: 'Distribution Schedule', category: 'Distributions', size: '0.4 MB' },
+        { date: '2025-12-10', title: 'Year-End Compliance Report', category: 'Compliance', size: '3.5 MB' }
+      ],
+      transactions: [
+        { date: '2026-03-08', type: 'Partial Exit', fund: 'Charter Hall Retail', class: 'Class A', units: 600, price: '$280.00', value: '$168,000', status: 'pending' },
+        { date: '2026-03-01', type: 'Capital Call', fund: 'Charter Hall Office', class: 'Class B', units: 0, price: '$0.00', value: '$85,000', status: 'processing' },
+        { date: '2026-02-10', type: 'Distribution', fund: 'Charter Hall Diversified', class: 'Class A', units: 750, price: '$15.50', value: '$11,625', status: 'cancelled' },
+        { date: '2026-01-30', type: 'Distribution', fund: 'Charter Hall Retail', class: 'Class A', units: 1200, price: '$22.00', value: '$26,400', status: 'complete' },
+        { date: '2025-12-20', type: 'Fee Payment', fund: 'Charter Hall Office', class: 'Class B', units: 0, price: '$0.00', value: '$1,800', status: 'complete' }
+      ]
+    }
+  };
+
+  // STATE
+  let currentFM = 'ventura';
+  let currentTab = 'portfolio';
+  let currentView = 'default'; // for caruso portfolio
+  let currentPage = 1;
+  const ROWS_PER_PAGE = 10;
+  let fundManagerRows = {
+    ventura: mockData.ventura.portfolio,
+    mackersy: mockData.mackersy.portfolio,
+    charter: mockData.charter.portfolio
+  };
+
+  // INIT
+  init();
+
+  function init() {
+    setupEventListeners();
+    switchFundManager('ventura');
+  }
+
+  function setupEventListeners() {
+    // FM Switcher
+    document.getElementById('fmSwitcher').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const menu = document.getElementById('fmDropdown');
+      menu.classList.toggle('hidden');
+    });
+
+    document.getElementById('fmDropdown').addEventListener('click', (e) => {
+      const fm = e.target.dataset.fm;
+      if (fm) {
+        document.querySelectorAll('#fmDropdown .dropdown-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        e.target.classList.add('active');
+        document.getElementById('fmDropdown').classList.add('hidden');
+        switchFundManager(fm);
+      }
+    });
+
+    // Tab navigation
+    document.querySelectorAll('.topbar-nav .nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = e.target.dataset.tab;
+        if (tab) {
+          document.querySelectorAll('.topbar-nav .nav-link').forEach(l => {
+            l.classList.remove('active');
+          });
+          e.target.classList.add('active');
+          switchTab(tab);
+        }
+      });
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      currentPage = 1;
+      renderTable();
+    });
+
+    // Status filter
+    document.getElementById('statusFilter').addEventListener('change', (e) => {
+      currentPage = 1;
+      renderTable();
+    });
+  }
+
+  function switchFundManager(fm) {
+    currentFM = fm;
+    currentPage = 1;
+
+    const config = fundManagers[fm];
+    const topbar = document.getElementById('topbar');
+    topbar.style.background = config.color;
+
+    document.getElementById('pageTitle').textContent = `${config.name} Holdings`;
+
+    // Update nav tabs
+    const navLinks = document.querySelectorAll('.topbar-nav .nav-link');
+    navLinks.forEach((link, i) => {
+      if (i < config.navTabs.length) {
+        link.dataset.tab = config.navTabs[i];
+        link.textContent = config.navTabs[i].charAt(0).toUpperCase() + config.navTabs[i].slice(1);
+        link.style.display = 'flex';
+      } else {
+        link.style.display = 'none';
+      }
+    });
+
+    // Reset active tab
+    document.querySelectorAll('.topbar-nav .nav-link').forEach(l => l.classList.remove('active'));
+    document.querySelector('[data-tab="portfolio"]').classList.add('active');
+    currentTab = 'portfolio';
+    currentView = 'default';
+
+    // Show/hide view toggle for caruso
+    const viewToggleContainer = document.getElementById('viewToggleContainer');
+    viewToggleContainer.innerHTML = '';
+    if (config.isCaruso) {
+      const toggle = document.createElement('div');
+      toggle.className = 'view-toggle';
+      toggle.innerHTML = `
+        <button class="view-toggle-btn active" data-view="summary">Summary</button>
+        <button class="view-toggle-btn" data-view="detailed">Detailed</button>
+        <button class="view-toggle-btn" data-view="grouped">Grouped</button>
+      `;
+      toggle.addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-toggle-btn')) {
+          document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          e.target.classList.add('active');
+          currentView = e.target.dataset.view;
+          currentPage = 1;
+          renderTable();
+        }
+      });
+      viewToggleContainer.appendChild(toggle);
+    }
+
+    renderTable();
+  }
+
+  function switchTab(tab) {
+    currentTab = tab;
+    currentPage = 1;
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('searchInput').value = '';
+    renderTable();
+  }
+
+  function renderTable() {
+    const thead = document.querySelector('thead tr');
+    const tbody = document.getElementById('tableBody');
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    let data = [];
+    let columns = [];
+
+    if (currentFM === 'caruso') {
+      if (currentTab === 'portfolio') {
+        const portfolioData = mockData.caruso.portfolio;
+
+        if (currentView === 'summary') {
+          columns = ['Fund Manager', 'Holdings', 'Total Value', 'View'];
+          data = portfolioData.summary;
+
+          columns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = col;
+            thead.appendChild(th);
+          });
+
+          data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${row.fmName}</td>
+              <td>${row.holdings}</td>
+              <td>${row.value}</td>
+              <td><button class="view-btn">→</button></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else if (currentView === 'detailed') {
+          columns = ['Fund', 'Class', 'Investing Entity', 'No. Units', 'Unit Value', 'Holding Value', 'Access', 'View'];
+          data = portfolioData.detailed;
+
+          columns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = col;
+            thead.appendChild(th);
+          });
+
+          data.forEach(row => {
+            const tr = document.createElement('tr');
+            const accessBadge = row.access === 'full-access'
+              ? '<span class="badge full-access">Full Access</span>'
+              : '<span class="badge read-only">Read Only</span>';
+            tr.innerHTML = `
+              <td>${row.fund}</td>
+              <td>${row.class}</td>
+              <td>${row.investingEntity}</td>
+              <td>${row.units.toLocaleString()}</td>
+              <td>${row.unitValue}</td>
+              <td>${row.value}</td>
+              <td>${accessBadge}</td>
+              <td><button class="view-btn">→</button></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else if (currentView === 'grouped') {
+          columns = ['Fund', 'Class', 'Investing Entity', 'No. Units', 'Holding Value', 'Access', 'View'];
+          data = portfolioData.grouped;
+
+          columns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = col;
+            thead.appendChild(th);
+          });
+
+          data.forEach((row, idx) => {
+            const tr = document.createElement('tr');
+            if (row.isSubheader) {
+              tr.className = 'subheader';
+              tr.innerHTML = `<td colspan="7"><div class="subheader-icon">${row.icon}</div>${row.fmName}</td>`;
+            } else {
+              const accessBadge = row.access === 'full-access'
+                ? '<span class="badge full-access">Full Access</span>'
+                : '<span class="badge read-only">Read Only</span>';
+              tr.innerHTML = `
+                <td>${row.fund}</td>
+                <td>${row.class}</td>
+                <td>${row.investingEntity}</td>
+                <td>${row.units.toLocaleString()}</td>
+                <td>${row.value}</td>
+                <td>${accessBadge}</td>
+                <td><button class="view-btn">→</button></td>
+              `;
+            }
+            tbody.appendChild(tr);
+          });
+        }
+      } else if (currentTab === 'documents') {
+        columns = ['Date', 'Title', 'Fund Manager', 'Category', 'Size', 'View'];
+        data = mockData.caruso.documents;
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          thead.appendChild(th);
+        });
+
+        const filteredData = filterData(data);
+        const paginatedData = paginate(filteredData);
+
+        paginatedData.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.title}</td>
+            <td>${row.fm ? fundManagers[row.fm].name : 'N/A'}</td>
+            <td>${row.category}</td>
+            <td>${row.size}</td>
+            <td><button class="view-btn">→</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentTab === 'transactions') {
+        columns = ['Date', 'Type', 'Fund', 'Class', 'No. Units', 'Price/Unit', 'Value', 'Status', 'View'];
+        data = mockData.caruso.transactions;
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          thead.appendChild(th);
+        });
+
+        const filteredData = filterData(data);
+        const paginatedData = paginate(filteredData);
+
+        paginatedData.forEach(row => {
+          const tr = document.createElement('tr');
+          const statusBadge = `<span class="badge ${row.status}">${row.status.toUpperCase()}</span>`;
+          tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.type}</td>
+            <td>${row.fund}</td>
+            <td>${row.class}</td>
+            <td>${row.units.toLocaleString()}</td>
+            <td>${row.price}</td>
+            <td>${row.value}</td>
+            <td>${statusBadge}</td>
+            <td><button class="view-btn">→</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } else {
+      // FM-specific views
+      if (currentTab === 'portfolio') {
+        columns = ['Fund', 'Class', 'Investing Entity', 'No. Units', 'Unit Value', 'Holding Value', 'Access', 'View'];
+        data = mockData[currentFM].portfolio;
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          thead.appendChild(th);
+        });
+
+        const filteredData = filterData(data);
+        const paginatedData = paginate(filteredData);
+
+        paginatedData.forEach(row => {
+          const tr = document.createElement('tr');
+          const accessBadge = row.access === 'full-access'
+            ? '<span class="badge full-access">Full Access</span>'
+            : '<span class="badge read-only">Read Only</span>';
+          tr.innerHTML = `
+            <td>${row.fund}</td>
+            <td>${row.class}</td>
+            <td>${row.investingEntity}</td>
+            <td>${row.units.toLocaleString()}</td>
+            <td>${row.unitValue}</td>
+            <td>${row.value}</td>
+            <td>${accessBadge}</td>
+            <td><button class="view-btn">→</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentTab === 'documents') {
+        columns = ['Date', 'Title', 'Category', 'Size', 'View'];
+        data = mockData[currentFM].documents;
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          thead.appendChild(th);
+        });
+
+        const filteredData = filterData(data);
+        const paginatedData = paginate(filteredData);
+
+        paginatedData.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.title}</td>
+            <td>${row.category}</td>
+            <td>${row.size}</td>
+            <td><button class="view-btn">→</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentTab === 'transactions') {
+        columns = ['Date', 'Type', 'Fund', 'Class', 'No. Units', 'Price/Unit', 'Value', 'Status', 'View'];
+        data = mockData[currentFM].transactions;
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          thead.appendChild(th);
+        });
+
+        const filteredData = filterData(data);
+        const paginatedData = paginate(filteredData);
+
+        paginatedData.forEach(row => {
+          const tr = document.createElement('tr');
+          const statusBadge = `<span class="badge ${row.status}">${row.status.toUpperCase()}</span>`;
+          tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.type}</td>
+            <td>${row.fund}</td>
+            <td>${row.class}</td>
+            <td>${row.units.toLocaleString()}</td>
+            <td>${row.price}</td>
+            <td>${row.value}</td>
+            <td>${statusBadge}</td>
+            <td><button class="view-btn">→</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    updatePagination(filterData(data).length);
+  }
+
+  function filterData(data) {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const statusValue = document.getElementById('statusFilter').value;
+
+    return data.filter(row => {
+      const matchesSearch = Object.values(row).some(val =>
+        String(val).toLowerCase().includes(searchValue)
+      );
+      // Status filter logic - can be extended
+      return matchesSearch;
+    });
+  }
+
+  function paginate(data) {
+    const start = (currentPage - 1) * ROWS_PER_PAGE;
+    const end = start + ROWS_PER_PAGE;
+    return data.slice(start, end);
+  }
+
+  function updatePagination(totalRows) {
+    const totalPages = Math.ceil(totalRows / ROWS_PER_PAGE);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pagination-btn';
+    prevBtn.textContent = '← Prev';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+    pagination.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+      btn.textContent = i;
+      btn.addEventListener('click', () => {
+        currentPage = i;
+        renderTable();
+      });
+      pagination.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pagination-btn';
+    nextBtn.textContent = 'Next →';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+    pagination.appendChild(nextBtn);
+  }
+</script>
+
+<script>
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('fmDropdown');
+    const switcher = document.getElementById('fmSwitcher');
+    if (!switcher.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>
